@@ -1,12 +1,32 @@
-# agentnativeengineering.com
+<p align="center">
+  <img src="public/logo-mark.svg" alt="AN/" width="56"><br><br>
+  <img src="public/logo.svg" alt="Agent-Native Engineering" width="300">
+</p>
 
-Open engineering knowledge for **operating** AI agents in production: a versioned, sourced
-[field guide](https://agentnativeengineering.com/guide/) organised by engineering domain
-(durability, reliability, security, access control, observability, evals), plus field notes and
-reference architectures. Notes are drafted by an agent and edited by a human.
+<p align="center">
+  Open knowledge for building, operating, and engineering with AI agents in production.<br>
+  <a href="https://agentnativeengineering.com"><strong>agentnativeengineering.com</strong></a>
+</p>
+
+---
+
+Open engineering knowledge for building, operating, and engineering **with** AI agents in
+production: a versioned, sourced [field guide](https://agentnativeengineering.com/guide/) across
+eleven engineering domains (scope, durable execution, reliability, security, access control,
+observability, evals, and more), plus notes and reference architectures built from open-source
+systems. Notes are drafted by an agent and edited by a human.
 
 **Live:** https://agentnativeengineering.com · **Stack:** [Astro](https://astro.build) static →
 GitHub Pages.
+
+## Logos
+
+| | File | Use |
+|---|---|---|
+| <img src="public/logo.svg" alt="agentnativeengineering/" width="220"> | [`public/logo.svg`](public/logo.svg) | Long wordmark — headers, README, social |
+| <img src="public/logo-mark.svg" alt="AN/" width="44"> | [`public/logo-mark.svg`](public/logo-mark.svg) | Short mark — favicon, avatar, compact spots |
+
+Set in IBM Plex Mono · ink `#1a1a18` + faint `#938a7b` + oxblood `/` `#9a2d1f` on warm paper `#fbfaf7`.
 
 ## Quick start
 
