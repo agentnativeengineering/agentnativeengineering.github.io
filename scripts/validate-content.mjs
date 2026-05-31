@@ -73,6 +73,34 @@ for (const file of files) {
     errors.push(`${file}: body is empty`);
   }
 
+  // 6.5 read time — every Note is a ~2-minute read (house guardrail).
+  // Count visible words (strip code, links→text, bare URLs, md symbols); ~220 wpm.
+  const wordsOf = (md) =>
+    (md
+      .replace(/```[\s\S]*?```/g, ' ')
+      .replace(/`[^`]*`/g, ' ')
+      .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+      .replace(/https?:\/\/\S+/g, ' ')
+      .replace(/[#>*_~|]/g, ' ')
+      .match(/\b[\w''-]+\b/g) || []).length;
+  if (body && get('draft') !== 'true') {
+    const words = wordsOf(body);
+    const mins = words / 220;
+    // Existing notes run 272–400 words. A 2-min read tops out ~480 words; hard-fail past 550.
+    if (words > 550) {
+      errors.push(`${file}: ${words} words (~${mins.toFixed(1)} min) — not a 2-min read; trim to ≤ ~480 words (one sharp takeaway, not a survey)`);
+    } else if (words > 480) {
+      warnings.push(`${file}: ${words} words (~${mins.toFixed(1)} min) — a touch long for a 2-min read; aim ≤ ~450`);
+    } else if (words < 200) {
+      warnings.push(`${file}: only ${words} words — thin; make sure it lands one genuinely useful, sourced point`);
+    }
+  }
+
+  // 6.6 house language guardrail — never the word "toy" (use "demo").
+  if (get('draft') !== 'true' && /\btoys?\b/i.test(body)) {
+    errors.push(`${file}: uses the banned word "toy" — use "demo" (house rule)`);
+  }
+
   // 7. duplicate slug detection
   const slug = file.replace(/\.mdx?$/, '');
   if (slugs.has(slug)) errors.push(`${file}: duplicate slug "${slug}"`);
