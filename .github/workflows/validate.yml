@@ -1,0 +1,27 @@
+name: Validate
+
+# Gate for every PR (including the daily editor agent's drafts) and every push.
+# A red check here blocks merge, so the live site can never break.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Lint content frontmatter
+        run: npm run lint:content
+      - name: Type + content-schema check
+        run: npm run check
+      - name: Production build
+        run: npm run build

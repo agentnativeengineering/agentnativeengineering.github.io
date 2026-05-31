@@ -1,0 +1,169 @@
+---
+import Base from '../../layouts/Base.astro';
+
+// The composed reference stack. Each layer answers a Field Guide domain and names the
+// open-source default + runner-up, with foundation status. Tool names link to their projects
+// (every claim sourced). Flags: CNCF / LF (Linux Foundation) / OpenInfra / OpenID = neutral
+// foundation governance; open-core / AGPL = licensing caution.
+interface Pick { n: string; u: string; flag?: string; }
+interface Layer { layer: string; domain: string; domainLabel: string; what: string; def: Pick[]; alt: Pick[]; }
+const layers: Layer[] = [
+  {
+    layer: 'Orchestration & control flow',
+    domain: '/guide/scope-and-simplicity/', domainLabel: '→ Scope',
+    what: 'Two roles that pair, not compete: author the agent logic in an SDK, then run and govern it as a Kubernetes workload (CRDs, GitOps, OTel, sandboxing, HITL). kagent and Dapr Agents are the K8s runtimes — they wrap a LangGraph (or CrewAI / ADK) agent, they don’t replace it.',
+    def: [{ n: 'LangGraph', u: 'https://github.com/langchain-ai/langgraph', flag: 'authoring SDK' }, { n: 'kagent', u: 'https://kagent.dev/', flag: 'CNCF · K8s runtime' }],
+    alt: [{ n: 'Dapr Agents', u: 'https://github.com/dapr/dapr-agents', flag: 'CNCF · runtime' }],
+  },
+  {
+    layer: 'Durable execution',
+    domain: '/guide/durable-execution/', domainLabel: '→ Durable Execution',
+    what: 'Checkpoint every step and replay to resume after a crash — exactly-once side effects, and signals that pause for human approval for hours or days.',
+    def: [{ n: 'Temporal', u: 'https://temporal.io/' }],
+    alt: [{ n: 'Restate', u: 'https://restate.dev/', flag: 'BUSL' }, { n: 'DBOS', u: 'https://www.dbos.dev/' }],
+  },
+  {
+    layer: 'Memory & durable context',
+    domain: '/guide/memory-and-context/', domainLabel: '→ Memory & Context',
+    what: 'Cross-session facts that change over time, kept outside the context window. Bi-temporal stores invalidate contradicted facts instead of deleting them.',
+    def: [{ n: 'Graphiti', u: 'https://github.com/getzep/graphiti', flag: 'Apache-2.0, MCP v1.0' }],
+    alt: [{ n: 'mem0', u: 'https://github.com/mem0ai/mem0' }, { n: 'Letta', u: 'https://github.com/letta-ai/letta' }],
+  },
+  {
+    layer: 'Model gateway',
+    domain: '/guide/autonomy-and-cost/', domainLabel: '→ Autonomy & Cost',
+    what: 'One chokepoint for routing, fallback, rate limits, and per-key/per-session budget enforcement. The multi-vendor, Kubernetes-native path is the Envoy ecosystem (Envoy → Envoy Gateway → Envoy AI Gateway, by Tetrate + Bloomberg); LiteLLM is the single-vendor option with the strongest per-key budget enforcement today.',
+    def: [{ n: 'Envoy AI Gateway', u: 'https://aigateway.envoyproxy.io/', flag: 'CNCF · multi-vendor' }, { n: 'LiteLLM', u: 'https://github.com/BerriAI/litellm', flag: 'single-vendor · budget enforcement' }],
+    alt: [{ n: 'kgateway', u: 'https://kgateway.dev/', flag: 'CNCF · Envoy' }],
+  },
+  {
+    layer: 'Inference serving (self-host)',
+    domain: '/guide/reliability/', domainLabel: '→ Reliability',
+    what: 'High-throughput model serving on Kubernetes: paged KV cache, continuous batching, KV-cache-aware routing, autoscaling, and canary.',
+    def: [{ n: 'vLLM', u: 'https://github.com/vllm-project/vllm' }, { n: 'KServe', u: 'https://kserve.github.io/website/', flag: 'CNCF Incubating' }],
+    alt: [{ n: 'SGLang', u: 'https://github.com/sgl-project/sglang' }],
+  },
+  {
+    layer: 'Identity & authorization',
+    domain: '/guide/access-and-identity/', domainLabel: '→ Access & Identity',
+    what: 'Per-agent (non-human) identity, OAuth 2.1 token exchange (RFC 8693) with audience-scoped tokens (RFC 8707), and query-time relationship-based authz for agentic RAG.',
+    def: [{ n: 'SPIFFE/SPIRE', u: 'https://spiffe.io/', flag: 'CNCF Graduated' }, { n: 'OpenFGA', u: 'https://openfga.dev/', flag: 'CNCF Incubating' }],
+    alt: [{ n: 'Keycloak', u: 'https://www.keycloak.org/', flag: 'CNCF' }],
+  },
+  {
+    layer: 'Tool & inter-agent protocol',
+    domain: '/guide/access-and-identity/', domainLabel: '→ Access & Identity',
+    what: 'Front every MCP/A2A server with a gateway that enforces OAuth 2.1, audience validation, and no token passthrough — never expose a raw MCP server. agentgateway is the Envoy-ecosystem agent data plane (paired with the kgateway control plane), speaking both MCP and A2A.',
+    def: [{ n: 'agentgateway', u: 'https://agentgateway.dev/', flag: 'Linux Foundation · Envoy' }, { n: 'MCP', u: 'https://modelcontextprotocol.io/', flag: 'AAIF · Anthropic-led' }, { n: 'A2A', u: 'https://a2a-protocol.org/', flag: 'LF' }],
+    alt: [{ n: 'Docker MCP Gateway', u: 'https://github.com/docker/mcp-gateway' }],
+  },
+  {
+    layer: 'Sandbox & guardrails',
+    domain: '/guide/security/', domainLabel: '→ Security',
+    what: 'Run agent-generated code in a microVM with default-deny egress, and wrap the model in injection/guardrail layers. The Kubernetes Agent Sandbox (SIG) is standardizing this.',
+    def: [{ n: 'Kata Containers', u: 'https://katacontainers.io/', flag: 'OpenInfra' }, { n: 'gVisor', u: 'https://gvisor.dev/', flag: 'Google' }],
+    alt: [{ n: 'LlamaFirewall', u: 'https://meta-llama.github.io/PurpleLlama/LlamaFirewall/', flag: 'Meta · guardrail' }, { n: 'E2B', u: 'https://e2b.dev/', flag: 'hosted' }],
+  },
+  {
+    layer: 'Knowledge & RAG',
+    domain: '/guide/access-and-identity/', domainLabel: '→ Access & Identity',
+    what: 'Permission-aware retrieval — ACLs enforced at query time — with hybrid (vector + keyword) search and provenance. Add GraphRAG / a knowledge graph for the multi-hop and corpus-wide questions plain vector search misses. Mirror source-system permissions; don’t leak docs via the agent.',
+    def: [{ n: 'Qdrant', u: 'https://github.com/qdrant/qdrant', flag: 'Apache-2.0' }, { n: 'OpenSearch', u: 'https://opensearch.org/', flag: 'LF · hybrid' }],
+    alt: [{ n: 'Onyx', u: 'https://github.com/onyx-dot-app/onyx', flag: 'open-core · ACL-aware' }, { n: 'Microsoft GraphRAG', u: 'https://github.com/microsoft/graphrag', flag: 'MIT · graph' }],
+  },
+  {
+    layer: 'Observability',
+    domain: '/guide/observability/', domainLabel: '→ Observability',
+    what: 'Full gen_ai.* traces of reasoning, tool calls, and tokens. Instrument to the OpenTelemetry standard first; choose a backend second.',
+    def: [{ n: 'OpenTelemetry GenAI', u: 'https://opentelemetry.io/docs/specs/semconv/gen-ai/', flag: 'CNCF' }, { n: 'Langfuse', u: 'https://github.com/langfuse/langfuse', flag: 'MIT' }],
+    alt: [{ n: 'Arize Phoenix', u: 'https://github.com/Arize-ai/phoenix' }, { n: 'Grafana LGTM', u: 'https://grafana.com/oss/', flag: 'CNCF' }],
+  },
+  {
+    layer: 'Evaluation',
+    domain: '/guide/evaluation/', domainLabel: '→ Evaluation',
+    what: 'Golden sets, calibrated judges, trajectory evals, and CI gates that block the merge on regression — plus red-team probes as a security gate.',
+    def: [{ n: 'DeepEval', u: 'https://github.com/confident-ai/deepeval' }, { n: 'Promptfoo', u: 'https://github.com/promptfoo/promptfoo' }],
+    alt: [{ n: 'Inspect AI', u: 'https://inspect.aisi.org.uk/', flag: 'UK AISI' }, { n: 'Garak', u: 'https://github.com/NVIDIA/garak', flag: 'red-team' }],
+  },
+  {
+    layer: 'Runtime, policy & secrets',
+    domain: '/guide/reliability/', domainLabel: '→ Reliability',
+    what: 'Agents are production infrastructure: HA and autoscaling, policy-as-code on agent actions, managed secrets, automated TLS. Surface it through a developer portal such as Backstage.',
+    def: [{ n: 'Kubernetes', u: 'https://kubernetes.io/', flag: 'CNCF' }, { n: 'Kyverno', u: 'https://kyverno.io/', flag: 'CNCF Graduated' }],
+    alt: [{ n: 'external-secrets', u: 'https://external-secrets.io/', flag: 'CNCF' }, { n: 'Vault', u: 'https://www.vaultproject.io/' }],
+  },
+];
+---
+
+<Base
+  title="Reference Architectures — Agent Native Engineering"
+  description="Vendor-neutral, open-source reference architecture for running agents in production — each layer mapped to a Field Guide domain, with the recommended default and runner-up and foundation status. Durable execution, model gateway, identity, sandboxing, observability, evals."
+>
+  <section class="wrap masthead">
+    <p class="doc-id">Reference Architectures</p>
+    <h1>Reference architectures</h1>
+    <p class="subtitle">The field-guide domains, composed into a running system from open-source building blocks. A starting point to fork, not a product to buy.</p>
+    <div class="rule"></div>
+  </section>
+
+  <section class="wrap abstract">
+    <h2>Abstract</h2>
+    <p>
+      No single project gives you a production agent platform; you compose one. This is a
+      vendor-neutral reference stack where every layer answers a <a href="/guide/">Field Guide</a>
+      domain and names a tight set — a default plus a runner-up. Two criteria decide what makes the
+      list: <strong>multi-vendor, foundation-governed</strong> over single-vendor open-core (it
+      survives any one company's strategy), and <strong>proven production adoption</strong> over the
+      promising-but-unproven. A notable shift: an entire cloud-native agent tier reached the
+      foundations in roughly twelve months — kagent, KServe, the Kubernetes Agent Sandbox, the Envoy
+      AI Gateway and agentgateway, Dapr Agents. It stays deliberately infrastructure-focused: model
+      selection, browser / computer-use, and agent-payments protocols are real concerns but out of
+      scope for this stack.
+    </p>
+    <p class="status" style="margin-top:1.4rem;padding-top:1.1rem;border-top:1px solid var(--rule)">
+      <span class="k">Status</span> living document, expanding — each layer becomes its own page
+      (what it does, why this pick, how it wires to the domain, tradeoffs, sources). Tool names link
+      to their projects. <span class="k">Governance</span> CNCF / LF / OpenInfra / multi-vendor =
+      diverse maintainers, hardest to capture; <span class="k">single-vendor</span> / <span class="k">open-core</span> / <span class="k">AGPL</span> = one steward or a licensing caution.
+    </p>
+  </section>
+
+  <section class="wrap section" id="stack">
+    <div class="section-head">
+      <h2>The composed stack</h2>
+    </div>
+    <p class="section-intro">Top to bottom. Each layer links to the domain that justifies it. Start read-only and knowledge-first; add write actions behind a human gate as evidence accrues.</p>
+    <div class="repos">
+      {layers.map((l) => (
+        <div class="repo-row" style="display:block">
+          <div style="display:flex;justify-content:space-between;gap:1rem;align-items:baseline">
+            <span class="name">{l.layer}</span>
+            <a class="lang" href={l.domain}>{l.domainLabel}</a>
+          </div>
+          <p class="desc">{l.what}</p>
+          <p class="meta" style="display:block;margin-top:0.35rem">
+            <span style="color:var(--faint)">Default</span>{' '}
+            {l.def.map((t, i) => (
+              <>{i > 0 && ' · '}<a href={t.u}>{t.n}</a>{t.flag && <span style="color:var(--faint)"> ({t.flag})</span>}</>
+            ))}
+            {l.alt.length > 0 && (
+              <>{'  ·  '}<span style="color:var(--faint)">also</span>{' '}
+              {l.alt.map((t, i) => (
+                <>{i > 0 && ' · '}<a href={t.u}>{t.n}</a>{t.flag && <span style="color:var(--faint)"> ({t.flag})</span>}</>
+              ))}</>
+            )}
+          </p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="wrap section" id="contribute">
+    <p class="status">
+      <span class="k">Status</span> living document &nbsp;·&nbsp;
+      <span class="k">License</span> CC&nbsp;BY&nbsp;4.0 &nbsp;·&nbsp;
+      <span class="k">Contribute</span> a stack or a correction on
+      <a href="https://github.com/agentnativeengineering">GitHub</a>.
+    </p>
+  </section>
+</Base>

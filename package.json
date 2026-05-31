@@ -1,0 +1,27 @@
+{
+  "name": "agentnativeengineering",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "lint:content": "node scripts/validate-content.mjs",
+    "validate": "npm run lint:content && npm run check && npm run build",
+    "new": "node scripts/new-note.mjs",
+    "hooks": "git config core.hooksPath .githooks && echo 'git hooks installed (core.hooksPath=.githooks)'",
+    "prepare": "git config core.hooksPath .githooks 2>/dev/null || true"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^6.4.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "typescript": "^6.0.3"
+  }
+}

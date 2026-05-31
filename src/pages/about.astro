@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="About — Agent Native Engineering" description="What this site is and who writes it.">
+  <article class="note">
+    <div class="wrap">
+      <a class="backlink" href="/">← home</a>
+      <h1>About</h1>
+      <div class="prose">
+        <p>
+          <strong>Agent Native Engineering</strong> is open engineering knowledge for building and
+          operating AI agents in production — agents that work under real load, not bolt-ons and
+          not demos.
+        </p>
+        <p>
+          Build-time guidance for agents is well covered; <em>operating</em> them is not. So the
+          centre of this project is the <a href="/guide/">field guide</a> — eleven engineering
+          domains, from scope and durable execution through security and observability to engineering
+          with agents, each grounded in real-world practice rather than theory. Around it sit
+          <a href="/field-notes/">notes</a> from the work,
+          <a href="/architectures/">reference architectures</a> built from open-source systems, and
+          a podcast.
+        </p>
+        <p>
+          One rule holds the whole thing together: <strong>every claim ships with a source.</strong>
+          The incidents are real, cited, and linked — the $47K runaway loop, the Replit production
+          wipe, EchoLeak, the multi-agent cascade studies. If we can't source it, we don't say it.
+        </p>
+        <h2>How this site is made</h2>
+        <p>
+          It's dogfooding the premise. A scheduled agent drafts each day's note from the previous
+          day's actual engineering work and opens a pull request. A human edits and merges. The
+          site you're reading is, quite literally, built by agents and edited by a person — which
+          is the whole point.
+        </p>
+        <p>
+          Find the source and follow along at
+          <a href="https://github.com/agentnativeengineering">github.com/agentnativeengineering</a>,
+          or subscribe via <a href="/rss.xml">RSS</a>.
+        </p>
+      </div>
+    </div>
+  </article>
+</Base>

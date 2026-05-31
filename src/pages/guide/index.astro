@@ -1,0 +1,116 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { GUIDE_VERSION, guideRevisedLabel } from '../../data/site';
+
+const domains = (await getCollection('guide', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<Base
+  title="The Field Guide — Agent Native Engineering"
+  description="An open field guide to building and operating AI agents in production — eleven engineering domains, each with its principles, grounded in real-world practice, every claim sourced."
+>
+  <section class="wrap masthead">
+    <p class="doc-id">The Field Guide</p>
+    <h1>Building and operating agents in production</h1>
+    <p class="subtitle">
+      The engineering domains that separate an agent that holds up in production from a demo —
+      organised by failure mode, grounded in real-world practice, every claim sourced.
+    </p>
+    <p class="byline">
+      <span class="k">Version</span> {GUIDE_VERSION} · <span class="k">revised</span> {guideRevisedLabel} ·
+      <span class="k">domains</span> 11 · <span class="k">status</span> living document
+    </p>
+    <div class="rule"></div>
+  </section>
+
+  <section class="wrap abstract">
+    <h2>Abstract</h2>
+    <p>
+      Open knowledge for building, operating, and engineering with AI agents in production. Each
+      domain follows the same anatomy — the pain (a real-world scenario), what production demands,
+      the patterns, the open-source building blocks, and the line between a demo and a production
+      system — with sources for everything. The principles below are the high-level points each
+      domain expands.
+    </p>
+  </section>
+
+  <section class="wrap section" id="domains">
+    <div class="section-head">
+      <h2>The eleven domains</h2>
+    </div>
+    <p class="section-intro">
+      Read in order or jump to the failure you're fighting. They compose: cost depends on
+      bounding autonomy, security on identity, reliability on durability.
+    </p>
+    <div class="gdomains">
+      {domains.map((d) => (
+        <div class="grow">
+          <span class="gnum">Domain {d.data.order}</span>
+          <div class="gbody">
+            <a class="gttl" href={`/guide/${d.id}/`}>{d.data.title}</a>
+            {d.data.principles.length > 0 && (
+              <ul class="gp">
+                {d.data.principles.map((p, i) => (
+                  <li><span class="gpn">P{i + 1}</span><span>{p}</span></li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .grow {
+    display: grid;
+    grid-template-columns: 8.5rem 1fr;
+    gap: 0 1.1rem;
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--rule);
+  }
+  .grow:first-child { border-top: none; }
+  .gnum {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+    padding-top: 0.18rem;
+  }
+  .gttl {
+    display: inline-block;
+    margin-bottom: 0.55rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .gttl:hover { color: var(--accent); text-decoration: underline; }
+  .gq {
+    color: var(--muted);
+    font-size: 0.92rem;
+    font-style: italic;
+    margin: 0.2rem 0 0.7rem;
+    max-width: 60ch;
+  }
+  .gp { list-style: none; margin: 0; padding: 0; max-width: 64ch; }
+  .gp li {
+    display: grid;
+    grid-template-columns: 1.8rem 1fr;
+    gap: 0.5rem;
+    align-items: baseline;
+    font-size: 0.95rem;
+    color: var(--ink-2);
+    margin-bottom: 0.35rem;
+  }
+  .gp li:last-child { margin-bottom: 0; }
+  .gpn { font-family: var(--mono); font-size: 0.76rem; color: var(--accent); }
+  @media (max-width: 560px) {
+    .grow { grid-template-columns: 1fr; gap: 0.3rem; }
+    .gnum { font-size: 0.74rem; }
+  }
+</style>

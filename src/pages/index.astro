@@ -1,0 +1,112 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const domains = (await getCollection('guide', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const notes = (await getCollection('notes', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 5);
+
+const fmt = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: '2-digit' });
+---
+
+<Base>
+  <!-- Masthead -->
+  <section class="wrap masthead" style="padding:clamp(1.6rem,4vw,2.6rem) 0 1rem">
+    <p class="doc-id">Open knowledge</p>
+    <h1>Agent-Native Engineering</h1>
+    <p class="subtitle">The open knowledge for building and operating AI agents in production — and for engineering where agents are first-class operators.</p>
+    <div class="rule"></div>
+  </section>
+
+  <!-- Abstract -->
+  <section class="wrap abstract" style="margin-top:1rem">
+    <p>
+      Agent-Native Engineering is an open community for building, operating, and engineering with AI
+      agents in production, built on existing open protocols and open-source projects. The work is a
+      loop: <strong>build</strong> agents, <strong>operate</strong> them reliably, and let them take
+      on the <strong>engineering</strong> that builds and runs the next ones.
+    </p>
+  </section>
+
+  <!-- The Field Guide -->
+  <section class="wrap section" id="guide">
+    <div class="section-head">
+      <h2>The Field Guide</h2>
+    </div>
+    <p class="section-intro">Eleven engineering domains, each grounded in real-world practice. What it takes for an agent to hold up in production, not just a demo.</p>
+    <div class="gdomains">
+      {domains.map((d) => (
+        <div class="grow">
+          <span class="gnum">Domain {d.data.order}</span>
+          <div class="gbody">
+            <a class="gttl" href={`/guide/${d.id}/`}>{d.data.title}</a>
+            {d.data.principles.length > 0 && (
+              <ul class="gp">
+                {d.data.principles.map((p, i) => (
+                  <li><span class="gpn">P{i + 1}</span><span>{p}</span></li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+    <a class="more" href="/guide/">Read the field guide →</a>
+  </section>
+
+  <!-- Notes -->
+  <section class="wrap section" id="notes">
+    <div class="section-head">
+      <h2>Notes</h2>
+    </div>
+    <p class="section-intro">Dated notes from the work — what was tried, what broke, what was learned.</p>
+    <div class="entries">
+      {notes.map((note) => (
+        <a class="entry-row" href={`/field-notes/${note.id}/`}>
+          <span class="date">{fmt(note.data.date)}</span>
+          <span class="ttl">{note.data.title}</span>
+        </a>
+      ))}
+    </div>
+    <a class="more" href="/field-notes/">All notes →</a>
+  </section>
+
+  <!-- Reference architectures -->
+  <section class="wrap section" id="architectures">
+    <div class="section-head">
+      <h2>Reference Architectures</h2>
+    </div>
+    <p class="section-intro">The domains, composed into running systems from open-source building blocks — durable execution, gateways, identity, eval and tracing.</p>
+    <a class="more" href="/architectures/">See reference architectures →</a>
+  </section>
+</Base>
+
+<style>
+  .grow {
+    display: grid;
+    grid-template-columns: 8.5rem 1fr;
+    gap: 0 1.1rem;
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--rule);
+  }
+  .grow:first-child { border-top: none; }
+  .gnum { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); padding-top: 0.18rem; }
+  .gttl { display: inline-block; margin-bottom: 0.55rem; font-size: 1.1rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
+  .gttl:hover { color: var(--accent); text-decoration: underline; }
+  .gq { color: var(--muted); font-size: 0.92rem; font-style: italic; margin: 0.2rem 0 0.7rem; max-width: 60ch; }
+  .gp { list-style: none; margin: 0; padding: 0; max-width: 64ch; }
+  .gp li {
+    display: grid; grid-template-columns: 1.8rem 1fr; gap: 0.5rem; align-items: baseline;
+    font-size: 0.95rem; color: var(--ink-2); margin-bottom: 0.35rem;
+  }
+  .gp li:last-child { margin-bottom: 0; }
+  .gpn { font-family: var(--mono); font-size: 0.76rem; color: var(--accent); }
+  @media (max-width: 560px) {
+    .grow { grid-template-columns: 1fr; gap: 0.3rem; }
+    .gnum { font-size: 0.74rem; }
+  }
+</style>

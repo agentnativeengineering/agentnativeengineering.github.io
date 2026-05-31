@@ -1,0 +1,25 @@
+---
+import Base from './Base.astro';
+
+interface Props {
+  label: string;
+  title: string;
+  blurb: string;
+}
+const { label, title, blurb } = Astro.props;
+---
+
+<Base title={`${title} — Agent Native Engineering`} description={blurb}>
+  <section class="wrap ph">
+    <p class="doc-id">{label} · forthcoming</p>
+    <h1>{title}</h1>
+    <p class="lede">{blurb}</p>
+    <p class="status">
+      <span class="k">Section</span> {label} &nbsp;·&nbsp;
+      <span class="k">Status</span> draft / in progress &nbsp;·&nbsp;
+      <span class="k">Track</span> open knowledge<br /><br />
+      Help shape it on <a href="https://github.com/agentnativeengineering">GitHub</a>, or
+      read the <a href="/guide/">field guide</a>.
+    </p>
+  </section>
+</Base>

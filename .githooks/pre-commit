@@ -1,0 +1,13 @@
+#!/bin/sh
+# Local CI gate: never commit a site that doesn't build.
+# Install once with:  npm run hooks   (sets core.hooksPath=.githooks)
+set -e
+
+# Only run when site files are staged.
+if git diff --cached --name-only | grep -qE '^(src/|public/|astro\.config|package\.json|tsconfig)'; then
+  echo "▶ pre-commit: validating site (lint:content → check → build)…"
+  npm run validate
+  echo "✓ pre-commit: site validated"
+else
+  echo "· pre-commit: no site changes staged, skipping validation"
+fi

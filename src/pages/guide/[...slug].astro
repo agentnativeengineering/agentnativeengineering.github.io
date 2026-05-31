@@ -1,0 +1,73 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { GUIDE_VERSION, GUIDE_REVISED } from '../../data/site';
+
+export async function getStaticPaths() {
+  const domains = (await getCollection('guide', ({ data }) => !data.draft)).sort(
+    (a, b) => a.data.order - b.data.order,
+  );
+  return domains.map((domain, i) => ({
+    params: { slug: domain.id },
+    props: {
+      domain,
+      prev: domains[i - 1] ?? null,
+      next: domains[i + 1] ?? null,
+    },
+  }));
+}
+
+const { domain, prev, next } = Astro.props;
+const { Content } = await render(domain);
+const { title, order, question, principles, tools, updated } = domain.data;
+
+const revised = (updated ?? new Date(GUIDE_REVISED)).toLocaleDateString('en-GB', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<Base
+  title={`${title} — Agent Native Engineering`}
+  description={domain.data.summary ?? question}
+>
+  <article class="wrap note">
+    <a class="backlink" href="/guide/">← The Field Guide</a>
+    <div class="art-head">
+      <p class="doc-id">Field Guide · Domain {order}</p>
+      <h1>{title}</h1>
+      <p class="subtitle" style="text-align:left;margin:0.4rem 0 0.9rem;max-width:60ch">{question}</p>
+      <div class="art-meta">
+        <span><span class="k">Guide</span> v{GUIDE_VERSION}</span>
+        <span><span class="k">Revised</span> {revised}</span>
+      </div>
+    </div>
+
+    {principles.length > 0 && (
+      <div class="principles" style="margin-bottom:2.2rem">
+        {principles.map((p, i) => (
+          <div class="principle">
+            <span class="pn">P{i + 1}</span>
+            <h3 style="font-weight:600">{p}</h3>
+          </div>
+        ))}
+      </div>
+    )}
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    {tools.length > 0 && (
+      <p class="status" style="font-family:var(--mono);font-size:0.78rem;color:var(--muted);margin-top:2.4rem;padding-top:1.2rem;border-top:1px solid var(--rule)">
+        <span style="color:var(--faint)">Building blocks</span> &nbsp;{tools.join(' · ')}
+      </p>
+    )}
+
+    <nav class="foot-links" style="margin-top:2rem;display:flex;justify-content:space-between;gap:1rem;font-family:var(--mono);font-size:0.82rem">
+      <span>{prev && <a href={`/guide/${prev.id}/`}>← {prev.data.title}</a>}</span>
+      <span>{next && <a href={`/guide/${next.id}/`}>{next.data.title} →</a>}</span>
+    </nav>
+  </article>
+</Base>

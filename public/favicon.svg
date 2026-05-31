@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="3" fill="#fbfaf7" stroke="#d8d2c4"/>
+  <text x="6" y="22" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="15"
+        font-weight="600" fill="#1a1a18">AN</text>
+  <text x="24.5" y="22" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="15"
+        font-weight="600" fill="#9a2d1f">/</text>
+</svg>
