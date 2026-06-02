@@ -4,8 +4,8 @@ date: 2026-06-02
 summary: "When AI writes most of your pull requests, the slow part stops being writing code and becomes reviewing it — so PyTorch sorts every AI change into three buckets and gives each its own review rule."
 takeaways:
   - "When AI writes most of your pull requests, your bottleneck flips from writing code to reviewing it. A human still has to read and own every line, and that review is now the slow, expensive part."
-  - "PyTorch's fix is one simple rule: sort every AI change into three buckets by how much human review it needs before it can merge."
-  - "The buckets are normal AI help (a human reads every line), bulk AI pull requests (allowed only if the time saved beats the review hours), and unreviewed 'slop' (kept out of the main repo — sandbox only)."
+  - "PyTorch's fix is one simple rule. Sort every AI change into three buckets by how much human review it needs before it can merge."
+  - "There are three buckets. Normal AI help (a human reads every line), bulk AI pull requests (only if the time saved beats the review hours), and unreviewed 'slop' kept out of the main repo — sandbox only."
 tags: ["harness-engineering", "agents-md", "code-review"]
 draft: false
 ---

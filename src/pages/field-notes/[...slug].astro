@@ -31,7 +31,8 @@ const readMin = Math.max(1, Math.round(words / 200));
       <aside class="takeaways">
         <h2>Key Takeaways</h2>
         <ul>
-          {note.data.takeaways.slice(0, 3).map((t) => {
+          {note.data.takeaways.slice(0, 3).map((t0) => {
+            const t = t0.replace(/\*\*/g, '');   // strip stray markdown bold — we bold the lead sentence ourselves
             const i = t.search(/[.!?]\s/);
             const lead = i === -1 ? t : t.slice(0, i + 1);
             const rest = i === -1 ? '' : t.slice(i + 2);
