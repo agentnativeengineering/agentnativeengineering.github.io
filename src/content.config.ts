@@ -9,6 +9,10 @@ const notes = defineCollection({
     title: z.string(),
     date: z.coerce.date(),
     summary: z.string().optional(),
+    // Key Takeaways — up to 3 plain-language bullets at the top of a note (the learn-it-in-
+    // 10-seconds layer, written so you never need a second tool to decode the point). The
+    // first sentence of each renders bold; the rest is the muted explanation.
+    takeaways: z.array(z.string()).max(3).optional(),
     tags: z.array(z.string()).default([]),
     // Drafts are built locally but excluded from the published stream, RSS, and sitemap.
     draft: z.boolean().default(false),

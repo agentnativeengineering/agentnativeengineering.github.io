@@ -173,6 +173,15 @@ article.note .art-meta .k { color: var(--faint); }
 .prose ul, .prose ol { padding-left: 1.5rem; }
 .prose li::marker { color: var(--accent); }
 .prose li + li { margin-top: 0.4rem; }
+
+/* ---------- Key Takeaways — the learn-it-fast block at the top of a note ---------- */
+.takeaways { background: var(--paper-2); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 2px; padding: 0.9rem 1.15rem 1rem; margin: 1.7rem 0 0.2rem; }
+.takeaways h2 { font-family: var(--mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin: 0 0 0.65rem; }
+.takeaways ul { list-style: none; margin: 0; padding: 0; }
+.takeaways li { position: relative; padding-left: 1.1rem; color: var(--muted); font-size: 0.94rem; line-height: 1.56; }
+.takeaways li + li { margin-top: 0.55rem; }
+.takeaways li::before { content: "▪"; position: absolute; left: 0.05rem; top: 0; color: var(--accent); }
+.takeaways li b { color: var(--ink); font-weight: 600; }
 .prose hr { border: none; border-top: 1px solid var(--rule); margin: 2.4rem 0; }
 .prose img { max-width: 100%; }
 .prose table { border-collapse: collapse; width: 100%; font-size: 0.9rem; display: block; overflow-x: auto; }

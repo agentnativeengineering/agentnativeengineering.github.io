@@ -24,6 +24,14 @@ stacks), and a podcast. Audience: senior engineers, AI-infra practitioners, plat
 a Sources section. If it can't be sourced, it doesn't go in. Derive from real incidents, not
 theory; do **not** re-create a "12 factors" numbered manifesto — this is a field guide by domain.
 
+**HARD RULE — Write Notes to be learned.** A Note must simplify its source so a reader understands it
+in ONE pass and can act tomorrow, with no second tool — never a denser summary layered on the original.
+Lead with why the reader cares; define every term at first use, inline; no floating abstractions;
+explain plainly (no slogans); end with one concrete "what to do"; simplify, don't re-compress; never put
+words in the source's mouth (flag your own extensions, keep the source's hedges). Each Note opens with a
+`takeaways:` block (≤3 plain bullets, first sentence bold) so the point lands in 10 seconds. (Full rule
++ examples: the `write-field-note` skill, §4a.)
+
 **HARD RULE — Notes recency: every Note's headline example/citation MUST be from within the last
 1–2 weeks of its publish date.** Notes are a current, alive stream — a Note about agents in
 production must anchor on something that *just* happened (a this-week incident, talk, release, or

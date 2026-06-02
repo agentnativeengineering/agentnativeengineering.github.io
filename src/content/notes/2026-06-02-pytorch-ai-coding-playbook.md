@@ -1,25 +1,25 @@
 ---
-title: "PyTorch wrote down the rules its repo gives coding agents"
+title: "When AI writes the code, review becomes the bottleneck"
 date: 2026-06-02
-summary: "When many of a repo's PRs are AI-authored, the bottleneck moves to human review, so PyTorch published a playbook that sorts AI code on a slop spectrum and gives each band its own rule."
+summary: "When AI writes most of your pull requests, the slow part stops being writing code and becomes reviewing it — so PyTorch sorts every AI change into three buckets and gives each its own review rule."
+takeaways:
+  - "When AI writes most of your pull requests, your bottleneck flips from writing code to reviewing it. A human still has to read and own every line, and that review is now the slow, expensive part."
+  - "PyTorch's fix is one simple rule: sort every AI change into three buckets by how much human review it needs before it can merge."
+  - "The buckets are normal AI help (a human reads every line), bulk AI pull requests (allowed only if the time saved beats the review hours), and unreviewed 'slop' (kept out of the main repo — sandbox only)."
 tags: ["harness-engineering", "agents-md", "code-review"]
 draft: false
 ---
 
-Many PRs to PyTorch are now AI-authored, and that changed where the work piles up. At the May 2026 compiler offsite the core team assembled a playbook for the repo, written up by Edward Yang on the [PyTorch devlog](https://docs.pytorch.org/devlogs/ai-agents/2026-05-30-ai-coding-playbook/) (30 May 2026). Its central observation is operational: "In an age of cheap code, we are human review bottlenecked." Generating code is cheap. Reviewing and owning it is not.
+**Why this matters to you.** This is a general process rule for any team — nothing here is specific to PyTorch or machine learning. The moment your team lets AI write a lot of code, you hit a wall that has nothing to do with writing code. Generating a pull request — a PR, one proposed change submitted for review — becomes nearly free, but a human still has to read it, understand it, and take responsibility for it, and *that* review is now your bottleneck. PyTorch, one of the largest open-source projects, hit this first and [wrote down how they handle it](https://docs.pytorch.org/devlogs/ai-agents/2026-05-30-ai-coding-playbook/) (Edward Yang, 30 May 2026) so you can copy the rule instead of inventing it. In their words: "In an age of cheap code, we are human review bottlenecked."
 
-So the playbook treats AI-generated code as a spectrum and gives each band its own rule.
+**The rule: sort every AI change by how much review it needs.** PyTorch stopped treating all AI code the same and split it into three bands, each with its own requirement before it's allowed in:
 
-The first band is **AI as a substitution for human-written code**: a human reads every line and owns every line. The norms that follow are about making that review cheap — write the read order for a big PR, do not mix cosmetic and semantic changes, and answer human review comments yourself rather than auto-replying with an agent. Reviewers are told to consult AI first and escalate only unresolved questions to humans. An agent may autonomously fix nits, but the author still verifies each fix.
+- **AI as a normal helper.** A person reads every line and owns every line. To keep that review cheap: tell the reviewer what order to read a big change in, never mix cosmetic edits and logic changes in one PR, and answer review comments yourself instead of letting a bot reply for you.
+- **Bulk AI pull requests** — an agent working through a backlog, opening many PRs in parallel, for example to burn down a list of tracker issues. Allowed only when the team decides the hours the agent saves beat the hours humans will spend reviewing its PRs — so estimate that trade up front and have a named owner sign off, because every one of those PRs still needs a person to read it.
+- **Unreviewed "slop"** — their blunt word for AI code *nobody has read*. For now, PyTorch keeps it out of the main repository — sandbox only. It can only live in a separate, throwaway space, walled off so the rest of the code only touches it through one human-designed boundary you could rip out and rewrite from scratch.
 
-The second band is **mass AI PRs** — agents burning down an issue tracker in parallel. Those are allowed only when there is "high-level agreement that these fixes, in aggregate have an ROI that justifies the human time spent," because a wave of PRs raises reviewer burden and the operator owns those initial reviews.
+**The point underneath:** give each change the lightest review it can safely get — no more than it needs, never less — and never let code nobody has read into the code everyone depends on.
 
-The third band is **unreviewed code**, and here the rule is blunt: "As of today, we do not accept unreviewed AI generated code (aka slop) to the main pytorch/pytorch repo." Live experiments live out-of-tree. Even there, unreviewed is not unowned: the owner reviews the design, the code sits behind a human-designed API boundary, it must be throw-away-and-rewrite-able, ideally its output is verifiable, and it must pass AI code review for security, tests, and global invariants.
-
-The playbook also names a tooling roadmap — an open-source reimplementation of Meta's RADAR (risk-aware auto-review for low-risk PRs from trusted maintainers), automatic AI linting with subsystem-specific criteria, and automated fbcode-to-OSS test generation. Those are explicitly on the roadmap and have not shipped yet. The norms above are what is in force today.
-
-The reusable, open-source path for carrying these conventions is [`AGENTS.md`](https://github.com/agentsmd/agents.md), the AAIF-hosted format for a per-repo agent-context file. It is the versioned, reviewable artifact where a team encodes exactly this kind of rule so it travels with the repo instead of living as tribal knowledge.
-
-The move that generalizes: classify each AI change before you merge it, route it to the cheapest correct review path, and keep unreviewed output out-of-tree behind an API boundary until it is encapsulated and verifiable.
+**What to do.** PyTorch doesn't say where to record these rules; a natural home is an [`AGENTS.md`](https://github.com/agentsmd/agents.md) file in your repository — a plain text file that is handed to every coding agent that works there. It's the versioned, reviewable place to keep these conventions so they travel with the code instead of living in one person's head.
 
 [Harness Engineering](/guide/harness-engineering/)
