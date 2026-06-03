@@ -4,15 +4,40 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  ogType?: 'website' | 'article';
+  image?: string;
+  jsonLd?: Record<string, unknown>[];
 }
 
 const {
   title = 'Agent Native Engineering — operating agents in production',
   description = 'Open engineering knowledge for building and operating AI agents in production: durability, reliability, security, access control, observability, and evals — every claim sourced.',
+  ogType = 'website',
+  image = '/logo.png',
+  jsonLd = [],
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(image, Astro.site).href;
 const year = new Date().getFullYear();
+
+// Site-wide structured data — tells Google what this site is. Per-page schema
+// (Article/BreadcrumbList) is appended via the `jsonLd` prop.
+const siteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Agent Native Engineering',
+  url: new URL('/', Astro.site).href,
+  description:
+    'An open, versioned, sourced field guide for building, operating, and engineering with AI agents in production.',
+  publisher: {
+    '@type': 'Organization',
+    name: 'Agent Native Engineering',
+    url: new URL('/', Astro.site).href,
+    logo: { '@type': 'ImageObject', url: new URL('/logo.png', Astro.site).href },
+  },
+};
+const schemas = [siteSchema, ...jsonLd];
 ---
 
 <!doctype html>
@@ -28,11 +53,19 @@ const year = new Date().getFullYear();
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="alternate" type="application/rss+xml" title="Agent Native Engineering" href="/rss.xml" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Agent Native Engineering" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    {schemas.map((s) => (
+      <script type="application/ld+json" set:html={JSON.stringify(s)} />
+    ))}
   </head>
   <body>
     <header class="site-head">

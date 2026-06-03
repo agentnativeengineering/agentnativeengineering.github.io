@@ -1,0 +1,7 @@
+# Agent Native Engineering — agentnativeengineering.com
+# Search engines: crawl everything. The sitemap below lists every canonical page.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://agentnativeengineering.com/sitemap-index.xml
