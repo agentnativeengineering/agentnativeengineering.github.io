@@ -1,0 +1,21 @@
+---
+title: "No single frontier lab is your uptime"
+date: 2026-06-04
+summary: "Abridge's engineering lead says the frontier model APIs are 'not a pretty picture' — and in the two weeks around his talk, Anthropic's status page showed near-daily elevated-error incidents. If one model company is your only path to a model, its bad day is your outage. Two production teams route across multiple model companies and clouds; one of them also runs inference in-house."
+takeaways:
+  - "If all your AI calls go to one company's model, its bad day is your outage and your users find out first. Anthropic's status page logged elevated-error incidents on most days from May 22 to June 3, 2026, so depending on one model company is one point of failure."
+  - "Two production teams (Abridge and Replit) landed on the same fix: put a router in front of every model call that retries a second company's model when the first one errors. A third team, Hebia, did the opposite for its workload — it stays on the big providers to absorb traffic spikes."
+  - "You can build this today with the open-source gateway LiteLLM. Give it a ranked list of models, and when the first returns a rate-limit error, a server error (HTTP 500), or a timeout, it retries the next on the list — which can be a different company's model."
+tags: ["reliability", "model-routing"]
+draft: false
+---
+
+**Why this matters to you.** A *lab* is the company that trains a model — Anthropic, OpenAI, Google. If every call your agent makes goes to one model from one lab, then that lab's bad afternoon is your outage, and you find out from your users. This is not rare. On an [AI engineering panel at Temporal's Replay 2026 conference](https://www.youtube.com/watch?v=uC2m61JpyDs), Dan Kador — engineering lead at *Abridge*, the ambient-AI company that summarizes doctor-patient visits and, he said in the talk, powers "over 250" enterprise health systems including [Mayo Clinic](https://www.abridge.com/press-release/mayo-clinic-announcement) — put it plainly: "we've had a lot of challenges with the frontier APIs... status page is not a pretty picture." To make it concrete: Anthropic's [own status page](https://status.claude.com/) logged elevated-error or degraded-performance incidents on most days from May 22 to June 3, 2026 — the two weeks around his talk — across Opus, Sonnet, and Haiku.
+
+**What they actually do.** Two of the three panelists described the same fix. A platform engineering lead at Replit (which builds coding agents) said they route across "three different labs" plus "different cloud providers" behind an automatic fallback system. A *cloud* is where a model is served — the lab's own API, or Azure, or AWS Bedrock — so routing across both makes a lab outage and a cloud outage each survivable, though the panelists didn't detail their exact topology. Abridge goes further and runs its own in-house models for production inference — availability, that unpretty status page, among Kador's reasons alongside cost. The third panelist, Hebia (enterprise AI search), took a different answer for a different workload: it stays on the big providers to absorb spiky load rather than failing over across labs.
+
+**The idea underneath.** Treat a model API like any outside service you depend on — a payment provider, a database host — and the old rule holds: don't route 100% of your traffic to one provider with no alternative. Models add one wrinkle: two labs' outputs aren't drop-in identical, so the router needs per-model settings (which model to try next, which error codes count as a real failure), not one shared retry rule.
+
+**What to do.** Tomorrow, put one router in front of your model calls with at least two labs to choose from. The open-source [LiteLLM](https://github.com/BerriAI/litellm) gateway does this: its [fallbacks feature](https://docs.litellm.ai/docs/proxy/reliability) takes a ranked list of models, and on a general error — the docs name rate limits, server errors (HTTP 500s), and timeouts — it retries the next entry, which can be a different company's model (say, Anthropic's Claude first, OpenAI's GPT as backup). Set a sensible request timeout so a slow-but-healthy response doesn't trip a needless failover. You don't need three labs or an in-house model to remove that one point of failure.
+
+[Reliability](/guide/reliability/)
