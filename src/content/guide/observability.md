@@ -2,16 +2,17 @@
 title: "Observability"
 order: 9
 question: "Can you see exactly what your agent did, and why?"
-summary: "Classic latency-and-error metrics are necessary but insufficient for non-deterministic systems. You need the full trace of reasoning, tool calls, and tokens — to the OpenTelemetry GenAI standard — because the per-run trace, not the aggregate, tells you what happened."
+summary: "Classic latency-and-error metrics are necessary but insufficient for non-deterministic systems. You need the full trace of reasoning, tool calls, and tokens — to the OpenTelemetry GenAI standard — because the per-run trace, not the aggregate, tells you what happened. And when a compromise is what you're watching for, shrink time-to-detect: dwell time and coverage are the metrics that contain it."
 principles:
   - "You can't operate what you can't trace: capture reasoning, tool calls, and tokens per step."
   - "Instrument to the OpenTelemetry GenAI conventions, not a private dialect."
+  - "Shrink time-to-detect: put a model on the front of the alert queue for first-pass triage, and keep the human for the judgement call."
 tools:
   - "OpenTelemetry GenAI (gen_ai.*)"
   - "Langfuse"
   - "Arize Phoenix"
   - "LangSmith"
-updated: 2026-05-30
+updated: 2026-06-08
 draft: false
 ---
 
@@ -84,3 +85,4 @@ print statements after the fact? If not, you're operating on guesswork.
 - MLflow — [Top agent observability tools, 2026](https://mlflow.org/top-5-agent-observability-tools/) (agent observability ≠ APM).
 - Latitude — [Best LLM observability tools for agents](https://latitude.so/blog/best-llm-observability-tools-agents-latitude-vs-langfuse-langsmith) ("dashboards full of data they cannot act on"; the trace→eval→fix loop).
 - Microsoft — [Defense in depth for autonomous AI agents](https://www.microsoft.com/en-us/security/blog/2026/05/14/defense-in-depth-autonomous-ai-agents/) (identity enables observability).
+- Anthropic — [Zero Trust for AI Agents](https://cdn.prod.website-files.com/6889473510b50328dbb70ae6/6a1611a04085d7cd3dadc924_Claude-eBook-Zero-Trust-for-AI-Agents-05182026.pdf) (dwell time and coverage as the first metrics to move; a model on the front of the alert queue for first-pass triage; detection speed).

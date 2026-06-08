@@ -2,17 +2,18 @@
 title: "Memory & Context"
 order: 3
 question: "What does your agent actually remember, and what is it carrying in the window right now?"
-summary: "An agent's working memory is a small, leaky window; its real knowledge has to live somewhere durable. Production agents decide what to keep, where to keep it, and what to load back in."
+summary: "An agent's working memory is a small, leaky window; its real knowledge has to live somewhere durable. Production agents decide what to keep, where to keep it, what to load back in — and how to isolate it per session, check its integrity, and expire unverified context before it can be poisoned."
 principles:
   - "Keep durable state outside the context window."
   - "Pick the memory types the task needs; not every agent needs all four."
   - "Load context just in time; a full window is not a healthy one."
+  - "Isolate memory per session and user, validate its integrity on read, and expire unverified content — poisoned memory persists across every later session."
 tools:
   - "Graphiti"
   - "mem0"
   - "Letta"
   - "Redis"
-updated: 2026-05-30
+updated: 2026-06-08
 draft: false
 ---
 

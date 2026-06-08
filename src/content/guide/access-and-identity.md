@@ -2,16 +2,17 @@
 title: "Access & Identity"
 order: 8
 question: "Who is the agent, and what is it actually allowed to touch?"
-summary: "An agent is not its user. Give every agent its own verifiable identity, grant least-privilege scoped and short-lived access, delegate rather than pass credentials through, and put a human on every irreversible action."
+summary: "An agent is not its user. Give every agent its own verifiable, cryptographically-rooted identity; grant least-privilege scoped, short-lived, delegated access; treat a static API key as already stolen; and put a human on every irreversible action."
 principles:
-  - "Give every agent its own verifiable identity — it is not its user."
+  - "Give every agent its own verifiable, cryptographically-rooted identity — it is not its user."
   - "Grant least privilege: scoped, short-lived, delegated — never pass a token straight through."
+  - "Short-lived, hardware-rooted credentials are the baseline; rotating a long-lived API key is a known gap, not a control."
   - "Put a software-enforced human gate on every irreversible action."
 tools:
   - "OAuth 2.1 + token exchange (RFC 8693)"
   - "OpenFGA / ReBAC (Zanzibar)"
   - "Keycloak / OIDC"
-updated: 2026-05-30
+updated: 2026-06-08
 draft: false
 ---
 
@@ -89,3 +90,4 @@ irreversible action and confirm a human gate — enforced in code, not policy �
 - [MCP authorization spec](https://modelcontextprotocol.io/specification/draft/basic/authorization) (OAuth 2.1, RFC 8707/9728; token passthrough as confused-deputy anti-pattern).
 - OpenAI — [A practical guide to building agents](https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf) (rate tools by risk; human approval for high-risk actions).
 - [OpenFGA](https://openfga.dev/) (Zanzibar-style ReBAC) · Replit prod-DB deletion — [Fortune](https://fortune.com/2025/07/23/ai-coding-tool-replit-wiped-database-called-it-a-catastrophic-failure/).
+- Anthropic — [Zero Trust for AI Agents](https://cdn.prod.website-files.com/6889473510b50328dbb70ae6/6a1611a04085d7cd3dadc924_Claude-eBook-Zero-Trust-for-AI-Agents-05182026.pdf) (cryptographically-rooted identity; short-lived, hardware-bound credentials; static keys treated as already-compromised; JIT/JEA).

@@ -2,16 +2,17 @@
 title: "Multi-Agent Orchestration"
 order: 4
 question: "Before you split one agent into many, what have you actually bought — and what new failure surface did you just sign up for?"
-summary: "Going multi-agent multiplies both capability and failure surface and costs roughly 15x the tokens of a single agent. The work is in the seams: structured handoffs, isolated context, and a separate verifier that distrusts the agent it checks."
+summary: "Going multi-agent multiplies both capability and failure surface and costs roughly 15x the tokens of a single agent. The work is in the seams: structured handoffs, isolated context, explicit trust boundaries, and a separate verifier that distrusts the agent it checks."
 principles:
   - "Stay single-agent until a single agent provably can't do the job; multi-agent is the exception, not the default."
   - "Keep the creator and the verifier as separate agents with separate context — one model cannot optimise for doing and for judging at once."
-  - "Pass context explicitly between agents; sub-agents inherit nothing, and verification gates sit at every handoff."
+  - "Pass context explicitly between agents; sub-agents inherit nothing, verification gates sit at every handoff, and a delegate never inherits the delegator's full rights."
+  - "Verify a peer's identity and authority before accepting its handoff — a compromised low-privilege agent will relay valid-looking instructions to a high-privilege one."
 tools:
   - "LangGraph (supervisor)"
   - "A2A protocol"
   - "Claude Agent SDK subagents"
-updated: 2026-05-30
+updated: 2026-06-08
 draft: false
 ---
 

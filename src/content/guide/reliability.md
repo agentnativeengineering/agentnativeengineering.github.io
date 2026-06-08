@@ -2,16 +2,17 @@
 title: "Reliability"
 order: 5
 question: "When — not if — a tool fails, what does your agent do next?"
-summary: "For agents, errors are the common case, not the edge case, and the reliability gap is in the runtime around the model, not the model. Idempotent side effects, per-tool timeouts, and verification between steps are table stakes."
+summary: "For agents, errors are the common case, not the edge case, and the reliability gap is in the runtime around the model, not the model. Idempotent side effects, per-tool timeouts, verification between steps, and a tested path back to a known-good state are table stakes."
 principles:
   - "Treat failure as the default path: every tool call can time out, error, or return garbage."
   - "Make every side effect idempotent — safe to retry."
   - "Verify between steps and between agents; never accept upstream output as ground truth."
+  - "Keep a tested rollback to a known-good state; recovery you haven't rehearsed will fail when you need it."
 tools:
   - "Idempotency keys"
   - "Circuit breakers"
   - "Evaluator-optimiser / verifier loops"
-updated: 2026-05-30
+updated: 2026-06-08
 draft: false
 ---
 

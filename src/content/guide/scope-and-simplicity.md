@@ -2,16 +2,16 @@
 title: "Scope & Simplicity"
 order: 1
 question: "Should this even be an agent — or is a workflow enough?"
-summary: "The first operational decision is whether to use an agent at all. Most production failures are design failures: an agent where a workflow would do, broad autonomy where narrow scope was safer."
+summary: "The first operational decision is whether to use an agent at all. Most production failures are design failures: an agent where a workflow would do, broad autonomy where narrow scope and least agency were safer."
 principles:
   - "Use the simplest thing that works; add agency only when it pays for itself."
   - "Don't build an agent when a deterministic workflow will do the job."
-  - "Give each agent narrow responsibilities — not broad, open-ended autonomy."
+  - "Give each agent narrow responsibilities and the least agency that does the job — not broad, open-ended autonomy."
 tools:
   - "Deterministic workflows"
   - "LangGraph (explicit graphs)"
   - "Step Functions / Temporal workflows"
-updated: 2026-05-30
+updated: 2026-06-08
 draft: false
 ---
 

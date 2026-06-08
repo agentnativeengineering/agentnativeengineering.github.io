@@ -2,17 +2,18 @@
 title: "Harness Engineering"
 order: 11
 question: "When the agent is doing the engineering, what is the system around the model that makes its work reliable?"
-summary: "An agent is a model plus a harness: the tools, context, memory, sub-agents, prompts, and hooks that connect the model to the real world. Harness engineering is the craft of building and evolving that wrapper so an agent can do production engineering work, and it is one of the fastest-emerging skills in the field."
+summary: "An agent is a model plus a harness: the tools, context, memory, sub-agents, prompts, and hooks that connect the model to the real world. Harness engineering is the craft of building and evolving that wrapper so an agent can do production engineering work — kept in version control and under managed settings users can't override, because a modified config is as dangerous as modified code. It is one of the fastest-emerging skills in the field."
 principles:
   - "Treat every agent failure as a harness defect, not a model defect — encode the fix into the repo."
   - "Engineer the context, not just the prompt: keep sessions small, focused, and token-efficient."
+  - "Keep harness config in version control and under managed settings users can't override — treat a config change like a code change."
   - "Move work off your laptop and out of the loop only as fast as your governance and review can follow."
 tools:
   - "AGENTS.md"
   - "Skills"
   - "Claude Agent SDK / Claude Code"
   - "git worktrees"
-updated: 2026-05-30
+updated: 2026-06-08
 draft: false
 ---
 

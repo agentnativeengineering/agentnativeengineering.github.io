@@ -2,16 +2,16 @@
 title: "Autonomy, Cost & Control"
 order: 6
 question: "What stops a looping agent before it burns the weekend's budget?"
-summary: "An agent doesn't crash when it goes wrong — it spends. Bound autonomy in steps, time, and money with a hard cutoff enforced before the next call, and put rollout, policy, and spend behind one control plane."
+summary: "An agent doesn't crash when it goes wrong — it spends. Bound autonomy in steps, time, money, and agency with a hard cutoff enforced before the next call, and govern rollout, policy, spend, and acceptable-use from one control plane."
 principles:
   - "Cap autonomy in steps, time, and money — and enforce the cap before the next call."
   - "Alerts are not enforcement; a budget without a hard cutoff is a wish."
-  - "Govern rollout, policy, and spend from one control plane, not scattered scripts."
+  - "Govern rollout, policy, spend, and acceptable-use from one control plane — and automate the bookkeeping around incidents, not the containment decision."
 tools:
   - "LiteLLM (per-key/session budgets)"
   - "Durable-workflow cancellation"
   - "Agent gateway / control plane"
-updated: 2026-05-30
+updated: 2026-06-08
 draft: false
 ---
 
@@ -97,3 +97,4 @@ enforcement.
 - [LiteLLM budgets & rate limits](https://docs.litellm.ai/docs/proxy/users) (per-key/session `max_budget`, reject on exceed).
 - LaunchDarkly — [AgentControl: Real-time control for agents in production](https://www.youtube.com/watch?v=4dkFTXbXIYI) (guarded rollout, auto-rollback on latency/cost regression, per-model budgets; "one control plane, one single pane of glass").
 - Agentic AI Foundation — [How Uber Runs 60,000 AI Agent Tasks Per Week With MCP](https://www.youtube.com/watch?v=yVqMxBahjfA) (the MCP gateway as "the control plane for all MCP interactions").
+- Anthropic — [Zero Trust for AI Agents](https://cdn.prod.website-files.com/6889473510b50328dbb70ae6/6a1611a04085d7cd3dadc924_Claude-eBook-Zero-Trust-for-AI-Agents-05182026.pdf) (AI governance and acceptable-use policy from one control plane; "automate the bookkeeping around incidents, not the decisions").

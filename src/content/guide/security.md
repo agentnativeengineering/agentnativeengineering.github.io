@@ -2,16 +2,17 @@
 title: "Security"
 order: 7
 question: "What happens when the input your agent reads is hostile?"
-summary: "Prompt injection is unsolved: models follow instructions in content, and an agent with private data, untrusted input, and a way to communicate out can be turned into an exfiltration tool. Break the trifecta and contain the blast radius."
+summary: "Prompt injection is unsolved and the attacker is now AI-accelerated, so design for breach: an agent with private data, untrusted input, and a way to communicate out can be turned into an exfiltration tool. Break the trifecta, treat the model and tool supply chain as untrusted, and prefer controls that make an attack impossible over ones that only make it tedious."
 principles:
   - "Break the lethal trifecta — don't combine private data, untrusted content, and external communication."
-  - "Treat all model input, including tool descriptions, as untrusted."
+  - "Treat all model input — including tool descriptions and your model and tool supply chain — as untrusted."
+  - "Prefer a control that removes a capability over one that only adds friction; an agentic attacker has unlimited patience and near-zero per-attempt cost."
   - "Contain the blast radius: sandbox execution, deny network by default, keep agents away from production credentials."
 tools:
   - "Sandboxes (E2B, gVisor, microVMs)"
   - "Input/output guardrails"
   - "Egress allowlists"
-updated: 2026-05-30
+updated: 2026-06-08
 draft: false
 ---
 
@@ -89,3 +90,4 @@ one crafted prompt away from the same failure. Confirm a leg of the trifecta is 
 - Invariant Labs — [GitHub MCP exploit](https://invariantlabs.ai/blog/mcp-github-vulnerability) and [tool-poisoning attacks](https://invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks); Trail of Bits — [line jumping](https://blog.trailofbits.com/2025/04/21/jumping-the-line-how-mcp-servers-can-attack-you-before-you-ever-use-them/).
 - The Register — [Amazon Q extension shipped with a data-wiping prompt](https://www.theregister.com/2025/07/24/amazon_q_ai_prompt/) (malformed prompt prevented execution).
 - Microsoft — [Defense in depth for autonomous AI agents](https://www.microsoft.com/en-us/security/blog/2026/05/14/defense-in-depth-autonomous-ai-agents/) ("each layer reinforces the others").
+- Anthropic — [Zero Trust for AI Agents](https://cdn.prod.website-files.com/6889473510b50328dbb70ae6/6a1611a04085d7cd3dadc924_Claude-eBook-Zero-Trust-for-AI-Agents-05182026.pdf) (assume breach against AI-accelerated offense; the "impossible vs tedious" design test; tiered Foundation/Enterprise/Advanced controls; AI-BOM supply chain).
