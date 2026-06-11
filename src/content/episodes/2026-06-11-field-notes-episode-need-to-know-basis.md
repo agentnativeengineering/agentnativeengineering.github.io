@@ -3,7 +3,7 @@ title: "Keep the Model on a Need-to-Know Basis"
 date: 2026-06-11
 summary: "From Code Mode's jump from fifty-six to one hundred percent task delivery to Spotify's hand-curated context clusters, Amazon's frontier teams, Vending-Bench's lying agents, and the Perplexity injunction — one thread: treat the model's attention as the scarcest resource in your system."
 audio: /audio/field-notes-episode-need-to-know-basis.mp3
-seconds: 637
+seconds: 639
 covers:
   - 2026-06-06-session-based-search-cli-keeps-results-out-of-context
   - 2026-06-07-agent-memory-obsidian-vault-deepennode
