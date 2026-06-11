@@ -1,0 +1,67 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const episodes = (await getCollection('episodes', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const notes = await getCollection('notes', ({ data }) => !data.draft);
+const noteTitle = new Map(notes.map((n) => [n.id, n.data.title]));
+
+const fmt = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: '2-digit' });
+const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+
+const rendered = await Promise.all(
+  episodes.map(async (e) => ({ e, Content: (await render(e)).Content })),
+);
+---
+
+<Base
+  title="Field Audio — Agent Native Engineering"
+  description="Spoken digests of the field notes — production stories of building and operating AI agents, voiced as short episodes."
+>
+  <section class="wrap masthead" style="padding-bottom:1rem">
+    <p class="doc-id">Field Audio</p>
+    <h1 style="font-size:clamp(1.9rem,5vw,2.8rem)">Field Audio</h1>
+    <p class="subtitle">The field notes, spoken — short digests of what production taught us this week.</p>
+    <div class="rule"></div>
+  </section>
+
+  <section class="wrap section" style="padding-top:2rem">
+    {episodes.length === 0 && <p style="color:var(--faint);font-family:var(--mono)">No episodes yet.</p>}
+    {rendered.map(({ e, Content }) => (
+      <article class="episode">
+        <p class="art-meta" style="margin-bottom:0.4rem">
+          {fmt(e.data.date)} · {mmss(e.data.seconds)} · {e.data.covers.length} notes
+        </p>
+        <h2 style="font-family:var(--serif);font-weight:600;font-size:1.35rem;margin:0 0 0.5rem">
+          {e.data.title}
+        </h2>
+        {e.data.summary && <p style="color:var(--ink-2);max-width:var(--measure)">{e.data.summary}</p>}
+        <audio controls preload="none" src={e.data.audio} style="width:100%;max-width:var(--measure);margin:0.9rem 0 1.1rem;display:block">
+          Your browser does not support the audio element —
+          <a href={e.data.audio}>download the mp3</a>.
+        </audio>
+        <div class="prose" style="max-width:var(--measure)">
+          <Content />
+        </div>
+        {e.data.covers.length > 0 && (
+          <details style="max-width:var(--measure);margin-top:0.6rem">
+            <summary style="font-family:var(--mono);font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);cursor:pointer">
+              Show notes — the {e.data.covers.length} field notes in this episode
+            </summary>
+            <div class="entries" style="margin-top:0.6rem">
+              {e.data.covers.map((slug) => (
+                <a class="entry-row" href={`/field-notes/${slug}/`}>
+                  <span class="date">{slug.slice(0, 10)}</span>
+                  <span class="ttl">{noteTitle.get(slug) ?? slug.slice(11).replaceAll('-', ' ')}</span>
+                </a>
+              ))}
+            </div>
+          </details>
+        )}
+        <div class="asterism" style="margin:2.2rem 0">✳&nbsp;✳&nbsp;✳</div>
+      </article>
+    ))}
+  </section>
+</Base>

@@ -40,4 +40,23 @@ const guide = defineCollection({
   }),
 });
 
-export const collections = { notes, guide };
+// Field audio — podcast digest episodes. One markdown file per episode; the mp3 itself lives in
+// public/audio/<slug>.mp3 (committed by the publish skill). `covers` lists the field-note slugs the
+// episode voices, so the page can link its show notes.
+const episodes = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/episodes' }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    summary: z.string().optional(),
+    // Site-relative mp3 path, e.g. /audio/<slug>.mp3
+    audio: z.string(),
+    // Duration in seconds (from the audio master), rendered as mm:ss.
+    seconds: z.number().int().positive(),
+    // Field-note ids (YYYY-MM-DD-slug) this episode covers — its show notes.
+    covers: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { notes, guide, episodes };
