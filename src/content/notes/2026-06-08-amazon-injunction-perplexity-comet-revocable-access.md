@@ -7,6 +7,9 @@ takeaways:
   - "The user's permission to use their own account is not the same as the platform's authorization for your agent. The ruling treated continued automated access after a cease-and-desist as likely unauthorized, even though the user owned the account and asked for the shopping."
   - "Treat platform revocation as a production kill switch. Wire your browser or shopping agent to detect a block or terms-of-service cutoff and degrade gracefully rather than retry-loop into a system that has explicitly revoked it."
 tags: ["access-and-identity", "agentic-browser", "cfaa", "perplexity-comet"]
+domain: "access-and-identity"
+sourceName: "blog.ericgoldman.org"
+sourceUrl: "https://blog.ericgoldman.org/archives/2026/06/when-can-amazon-block-an-agentic-ai-service-amazon-v-perplexity-guest-blog-post.htm"
 draft: false
 ---
 **Why this matters to you.** An agentic browser — software that takes a loose goal like "buy a toaster under $100" and clicks through a site on your behalf — usually works by riding *your* logged-in session, reusing the cookies and credentials already in your browser. That feels safe: the user said yes, and the user owns the account. The wall you hit is that the *platform*, not the user, still controls authorization, and it can revoke it out from under your agent. On 2026-06-06, the Technology & Marketing Law Blog [published an analysis](https://blog.ericgoldman.org/archives/2026/06/when-can-amazon-block-an-agentic-ai-service-amazon-v-perplexity-guest-blog-post.htm) of the *Amazon v. Perplexity* injunction, where exactly that happened — Amazon told Perplexity's Comet agent to stop, Comet kept shopping through users' accounts, and a court shut it down.

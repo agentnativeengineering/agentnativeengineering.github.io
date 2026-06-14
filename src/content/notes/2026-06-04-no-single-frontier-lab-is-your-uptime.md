@@ -7,6 +7,9 @@ takeaways:
   - "Two production teams (Abridge and Replit) landed on the same fix: put a router in front of every model call that retries a second company's model when the first one errors. A third team, Hebia, did the opposite for its workload — it stays on the big providers to absorb traffic spikes."
   - "You can build this today with the open-source gateway LiteLLM. Give it a ranked list of models, and when the first returns a rate-limit error, a server error (HTTP 500), or a timeout, it retries the next on the list — which can be a different company's model."
 tags: ["reliability", "model-routing"]
+domain: "model-selection"
+sourceName: "youtube.com"
+sourceUrl: "https://www.youtube.com/watch?v=uC2m61JpyDs"
 draft: false
 ---
 

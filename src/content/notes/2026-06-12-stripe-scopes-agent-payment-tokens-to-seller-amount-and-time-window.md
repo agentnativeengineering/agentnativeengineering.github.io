@@ -7,6 +7,9 @@ takeaways:
   - "The pattern is to keep the LLM planner non-deterministic for discovery but make the payment path deterministic. Verifiable parties, scoped constraints, and structured checkout state bound the blast radius when the planner picks wrong."
   - "The Agentic Commerce Protocol, built with OpenAI, replaces UI scraping with structured JSON for catalogs, line items, tax, and fulfillment. Agents and sellers exchange checkout state directly, and sellers keep their customer relationship and risk systems."
 tags: ["access-and-identity", "payments", "scoped-credentials", "stripe"]
+domain: "access-and-identity"
+sourceName: "youtube.com"
+sourceUrl: "https://www.youtube.com/watch?v=KLSuFPj2ld0"
 draft: false
 ---
 **Why this matters to you.** The moment your agent can spend money, it holds a payment credential — and an LLM planner is non-deterministic, so on a bad day it buys from the wrong place, buys the wrong thing, spends the wrong amount, or uses the wrong credential. If that credential is a raw stored card pasted into a tool call, nothing downstream enforces what it may be used for; the prompt is your only guardrail. On 2026-06-06, Stripe principal engineer Steve Kaliski gave a talk on [building safe payment infrastructure for the autonomous economy](https://www.youtube.com/watch?v=KLSuFPj2ld0) — his framing: agents are already economic actors (they spend tokens at LLM providers today), so the spend path needs real enforcement.

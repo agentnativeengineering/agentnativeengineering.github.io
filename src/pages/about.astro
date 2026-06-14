@@ -1,38 +1,39 @@
 ---
 import Base from '../layouts/Base.astro';
+import Footer from '../components/Footer.astro';
 ---
 
-<Base title="About — Agent Native Engineering" description="What this site is and who writes it.">
-  <article class="note">
-    <div class="wrap">
-      <a class="backlink" href="/">← home</a>
-      <h1>About</h1>
-      <div class="prose">
+<Base title="About — Agent Native Engineering" description="What this site is, who writes it, and the rule that every claim ships with a source.">
+  <div class="wrap" data-r="pad">
+    <article class="article">
+      <a class="backlink" href="/">← Home</a>
+      <header style="margin:22px 0 0">
+        <div class="eyebrow">// ABOUT</div>
+        <h1 class="page-h1" data-r="page-h1" style="margin-top:14px">About</h1>
+      </header>
+      <div class="prose" style="margin-top:30px">
         <p>
-          <strong>Agent Native Engineering</strong> is open engineering knowledge for building and
-          operating AI agents in production — agents that work under real load, not bolt-ons and
-          not demos.
+          <strong>Agent Native Engineering</strong> is open knowledge for building, operating, and
+          engineering with AI agents in production — agents that work under real load, not bolt-ons
+          and not demos.
         </p>
         <p>
-          Build-time guidance for agents is well covered; <em>operating</em> them is not. So the
-          centre of this project is the <a href="/guide/">field guide</a> — eleven engineering
-          domains, from scope and durable execution through security and observability to engineering
-          with agents, each grounded in real-world practice rather than theory. Around it sit
-          <a href="/field-notes/">notes</a> from the work,
-          <a href="/architectures/">reference architectures</a> built from open-source systems, and
-          a podcast.
+          The centre of the project is <a href="/guide/">The Guide</a> — twelve engineering domains,
+          from scope and model selection through durable execution and security to evaluation and
+          harness engineering, each grounded in real-world examples and studies rather than opinion.
+          Around it sit <a href="/field-notes/">Daily Notes</a> from the work, a
+          <a href="/architectures/">Reference Architecture</a> composed from open-source systems, and
+          the <a href="/daily-brief/">Daily Brief</a> — a spoken digest of the notes.
         </p>
         <p>
           One rule holds the whole thing together: <strong>every claim ships with a source.</strong>
-          The incidents are real, cited, and linked — the $47K runaway loop, the Replit production
-          wipe, EchoLeak, the multi-agent cascade studies. If we can't source it, we don't say it.
+          The examples are real, cited, and linked. If we can't source it, we don't say it.
         </p>
         <h2>How this site is made</h2>
         <p>
-          It's dogfooding the premise. A scheduled agent drafts each day's note from the previous
-          day's actual engineering work and opens a pull request. A human edits and merges. The
-          site you're reading is, quite literally, built by agents and edited by a person — which
-          is the whole point.
+          It dogfoods the premise. A scheduled agent drafts each day's note from real engineering
+          work and opens a pull request; a human edits and merges. The site you're reading is, quite
+          literally, built by agents and edited by a person — which is the whole point.
         </p>
         <p>
           Find the source and follow along at
@@ -40,6 +41,8 @@ import Base from '../layouts/Base.astro';
           or subscribe via <a href="/rss.xml">RSS</a>.
         </p>
       </div>
-    </div>
-  </article>
+    </article>
+  </div>
+
+  <Footer slot="footer" variant="slim" left={'About · <span class="strong">Agent Native Engineering</span> · CC BY 4.0'} />
 </Base>

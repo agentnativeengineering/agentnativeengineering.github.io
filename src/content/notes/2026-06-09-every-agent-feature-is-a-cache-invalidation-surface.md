@@ -7,6 +7,9 @@ takeaways:
   - "Multi-agent handoffs are cache misses. Their role-based orchestration scored well on SWE-bench but ran slower at roughly 6x the cost, so they collapsed to a single agent with one invoke_skill meta-tool and a fixed set of 16 tools."
   - "Compress history at idle, while the cache is warm. Insert-then-compress plus double rolling cache markers let history grow and tool calls retry without cold-starting the cache, reaching about a 90.6% hit rate in their own non-rigorous comparison."
 tags: ["harness-engineering", "prompt-caching", "context-management", "agent-cost"]
+domain: "harness-engineering"
+sourceName: "openclacky.com"
+sourceUrl: "https://www.openclacky.com/engineering/cache-invalidation-surface"
 draft: false
 ---
 **Why this matters to you.** Prompt caching is the discount every LLM provider offers when the start of your request is byte-identical to the previous one: the provider reuses the computation for that prefix and charges a fraction of the full price. The catch is that the discount dies the moment any earlier byte changes — and almost every feature you add to an agent (a new skill, a timestamp in the system prompt, a reordered tool list, a sub-agent handoff) changes earlier bytes. You won't see it as a bug; you'll see it as a cost and latency line that creeps up with every release. On 2026-06-06, the founder of OpenClacky, an AI coding agent, [published an engineering account](https://www.openclacky.com/engineering/cache-invalidation-surface) of building the product three times and concluding that every agent feature is a cache-invalidation surface.

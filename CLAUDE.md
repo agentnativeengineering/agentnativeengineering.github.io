@@ -1,187 +1,119 @@
 # CLAUDE.md — Agent Native Engineering design system
 
 Instructions for any agent or person working on this site. **Follow this exactly.** The single
-source of truth for tokens is `src/styles/global.css`; this file explains the intent so changes
-stay coherent. Change a token in `global.css` → update this file.
+source of truth for visual tokens is `src/styles/global.css`; this file explains the intent so
+changes stay coherent. Change a token in `global.css` → update this file.
 
 ---
 
 ## 0. What this site is
 
-An **open, versioned, sourced field guide for building, operating, and engineering _with_ AI agents
-in production**, plus field notes and reference architectures — presented as a **typeset
-specification / document**, modelled on `latex.css`, Tufte CSS, IETF RFCs, Oxide RFDs, and
-`12factor.net`. It is **not** a SaaS product page, and it is **not** a "daily log." It builds on
-open protocols and the broader open-source ecosystem rather than reinventing them, and frames the
-work as a loop: build → operate → engineer-with → build the next ones faster. The centre is the
-**field guide** (`/guide/`): **eleven** engineering domains (scope & simplicity, durable execution,
-memory & context, multi-agent orchestration, reliability, autonomy/cost/control, security, access &
-identity, observability, evaluation, harness engineering), each grounded in real-world practice.
-Around it: **field notes** (the writing, labelled "Notes"), **reference architectures** (open-source
-stacks), and a podcast. Audience: senior engineers, AI-infra practitioners, platform/SRE teams.
+An open **field guide and daily brief on building, operating, and engineering with AI agents in
+production**, presented as an **editorial / daily-newspaper** publication. The centre is **The
+Guide** (`/guide/`): **twelve** engineering domains, each grounded in real-world examples and
+studies. Around it: **Daily Notes** (the dated writing), the **Reference Architecture** (the
+two-layer open-source stack), and the **Daily Brief** (spoken audio editions). Audience: a serious
+general reader bridged to deep technology — clear over clever.
 
-**Non-negotiable content rule: every claim ships with a linked source.** Each domain page ends in
-a Sources section. If it can't be sourced, it doesn't go in. Derive from real incidents, not
-theory; do **not** re-create a "12 factors" numbered manifesto — this is a field guide by domain.
+**Mental model — the Build → Operate → Engineer loop.** It's the organizing spine, and color
+encodes the phase. Build = rust, Operate = blue, Engineer = green.
 
-**HARD RULE — Write Notes to be learned.** A Note must simplify its source so a reader understands it
-in ONE pass and can act tomorrow, with no second tool — never a denser summary layered on the original.
-Lead with why the reader cares; define every term at first use, inline; no floating abstractions;
-explain plainly (no slogans); end with one concrete "what to do"; simplify, don't re-compress; never put
-words in the source's mouth (flag your own extensions, keep the source's hedges). Each Note opens with a
-`takeaways:` block (≤3 plain bullets, first sentence bold) so the point lands in 10 seconds. (Full rule
-+ examples: the `write-field-note` skill, §4a.)
-
-**HARD RULE — Notes recency: every Note's headline example/citation MUST be from within the last
-1–2 weeks of its publish date.** Notes are a current, alive stream — a Note about agents in
-production must anchor on something that *just* happened (a this-week incident, talk, release, or
-CVE), not a year-old landmark case. Older canonical cases (EchoLeak, the $47K loop) may appear as a
-named *anchor/reference* only, never as the lead. If no genuinely recent (≤2-week) example exists
-for a topic, don't publish the Note yet — find the fresh hook first. (The Field Guide domains are
-evergreen and exempt; this rule is for Notes.)
-
-Homepage leads with the **field guide** and the **writing** — not fictional code or product copy.
-
-**Prime directive: it must read as an authoritative published document, never as a generated
-SaaS/startup page.** Credibility is judged on visual design before a word is read. When in doubt,
-make it more like a typeset paper and less like a website.
+**Non-negotiable content rule:** every claim ships with a linked source — grounded in real-world
+examples and studies, not opinion. If it can't be sourced, it doesn't go in. Never use the word
+"toy" (use "demo"). Don't re-create a numbered "12-factor" manifesto — this is a field guide by
+**domain**.
 
 ---
 
 ## 1. The look in one line
 
-Warm paper · Source Serif 4 body & headings · IBM Plex Mono for structure (section numbers,
-labels, metadata, code) · oxblood/LaTeX-red links · numbered §sections · a centered document
-masthead · dated entry lists. No hero, no cards, no buttons, no shadows, no blue.
+Warm paper · **Newsreader** display serif · **IBM Plex Mono** for structure (eyebrows, labels,
+badges, nav, ticker) · **IBM Plex Sans** for body · bordered "sticker" cards with a **hard offset
+shadow** · one or two phase-colored accents per view. No gradients, no soft shadows, no third
+typeface, no emoji (only `✌ ★ ▸ → /` are used).
 
----
-
-## 2. BANNED (these are the "AI-generated SaaS" tells — never reintroduce)
-
-- ❌ **Inter / Geist / system-sans as the primary face.** We are serif-first (Source Serif 4).
-- ❌ **Blue accent / blue links.** The #1 generated-site tell. Links are oxblood `--accent`.
-- ❌ **Pill/rounded buttons, "Get started" CTAs, gradient or hero sections, feature-card grids.**
-- ❌ **Drop shadows, glassmorphism, neon, dark "terminal" themes, blinking anything.**
-- ❌ **Pure white `#fff`** backgrounds — we use warm paper `#fbfaf7`.
-- ❌ Emoji as UI, AI-generic hero art, relative-only dates, anonymous/undated posts.
-- ❌ More than the two typefaces; a third font or a decorative display face.
-
----
-
-## 3. Color tokens (`:root` in `global.css`)
+## 2. Color tokens (`:root` in `global.css`)
 
 | Token | Hex | Use |
 |---|---|---|
-| `--paper` | `#fbfaf7` | page background — warm paper, never pure white |
-| `--paper-2` | `#f3f0e8` | code blocks, table headers, alt fills |
-| `--paper-3` | `#efeada` | deepest paper tint |
-| `--ink` | `#1a1a18` | body text, headings |
-| `--ink-2` | `#38352e` | secondary body, gloss text |
-| `--muted` | `#6b6258` | metadata, captions |
-| `--faint` | `#938a7b` | mono micro-labels only (non-essential) |
-| `--rule` | `#ddd7c9` | hairline rules / dividers |
-| `--rule-strong` | `#c3bbab` | double rules (masthead/footer), stronger borders |
-| `--accent` | `#9a2d1f` | **oxblood** — links, §marks, section numbers, the one accent |
-| `--accent-ink` | `#792217` | accent hover |
-| `--accent-soft` | `#f1e6e1` | rare oxblood tint backgrounds |
+| `--paper` | `#f6f4ee` | page background |
+| `--card` | `#fffdf8` | card / parchment surface |
+| `--panel-build` / `--panel-engineer` | `#f5efe6` / `#eef4ef` | tinted layer panels |
+| `--ink` | `#1c1917` | text, 1.5px borders |
+| `--dark` / `--dark-2` | `#15120f` / `#1c1917` | "For agents" band, dark cards |
+| `--muted` / `--muted-2` / `--faint` | `#57534e` / `#78716c` / `#a8a29e` | text scale |
+| `--build` | `#b8430f` | rust — phase Build + primary accent |
+| `--operate` | `#2d62a3` | blue — phase Operate |
+| `--engineer` | `#2f7d56` | green — phase Engineer |
+| `--signal` | `#e8702f` | "For agents ▸" label on dark |
 
-One accent only. Oxblood carries links, `§` marks, and the masthead `doc-id`/numbers — nothing
-else. Never tint large blocks. Never add a second hue without updating this file.
+`--accent` is the per-element phase color: a card sets `style="--accent:<phase hex>"` and its
+border-shadow, badge, and markers follow. Never introduce a color outside this set.
 
----
+## 3. Components (reuse, don't reinvent)
 
-## 4. Typography
+Shared chrome lives in `src/components/`:
 
-- **Serif — Source Serif 4** (`--serif`): body, headings, masthead title, principle titles. The
-  voice of the document. Weights 400/600/700 + italic 400. Old-style numerals on (`onum`).
-- **Mono — IBM Plex Mono** (`--mono`): the *structural* layer — wordmark, nav, section numbers
-  (`§1`, `§2`), `doc-id`, metadata, bylines, tags, code, the colophon. Mono = "this is a spec."
-- Loaded via Google Fonts `@import` at the top of `global.css` (`display=swap`) + preconnect in
-  `Base.astro`.
+- **`Nav.astro`** — sticky translucent bar; `AN/` monogram + wordmark + Plex Mono links + dark
+  GitHub button. `active` prop highlights the current section in rust.
+- **`Footer.astro`** — `variant="full"` (columned, home only) or `variant="slim"` (`left`/`right`
+  lines, inner pages).
+- **`ForAgents.astro`** — the dark "For agents ▸" band that closes every page; buttons via slot.
+- **`Player.astro`** — custom audio player (play/seek/persist) wrapping a real `<audio>`.
+- **`DomainCard.astro`** — the offset sticker card for a guide domain (badge + name + essence +
+  principles), phase-colored. Used on home + `/guide/`.
+- **`CopyGuideButton.astro`** — generates the guide as markdown and copies it client-side.
 
-**Scale & rhythm**
-- Root `18px` (`17px` ≤600px). Body line-height `1.72`.
-- Masthead `h1`: `clamp(2.1rem, 6vw, 3.3rem)`, weight 700, centered.
-- Subtitle: italic serif, `clamp(1.05rem, 2.6vw, 1.35rem)`, muted.
-- Section heading: serif 700 with a mono oxblood `§n` prefix.
-- Principle title: serif 600, ~1.22rem.
-- Mono labels: `0.74–0.8rem`, `letter-spacing 0.1–0.16em`, often uppercase, `--faint`/`--accent`.
-- Prose body caps at `--measure` (68ch).
+CSS component classes (in `global.css`): `.card`(`.hover`,`.card-dark`) · `.badge` · `.chip`/`.chip-alt`
+· `.eyebrow` · `.masthead`/`.dateline`/`.nameplate`/`.ticker` · `.entries`/`.entry-row` ·
+`.layer-panel`/`.layer-connect` · `.for-agents` · `.coming-soon` · `.footer`(+`.footer-slim`) ·
+`.player` · `.prose` · `.article`/`.callout`. Page-specific layout lives in each page's scoped
+`<style>`. Reuse these; don't invent parallel styles.
 
----
+## 4. The twelve domains & the loop
 
-## 5. Signature devices (what makes it bespoke — keep these)
+`src/content/guide/*.md` — one file per domain, frontmatter `order` (1–12) + `phase`
+(`build`/`operate`/`engineer`) + `question` + `principles[]` + `tools[]`. Phases: **1–5 build,
+6–10 operate, 11–12 engineer**. `src/data/phase.ts` maps phase → accent hex (the only place that
+mapping lives). Renumbering or adding a domain → update every file's `order` and add a redirect in
+`astro.config.mjs` if a slug changes.
 
-1. **Document masthead** — centered title block: `doc-id` (e.g. `ANE-000 · An Open Standard`),
-   serif title, italic subtitle, mono byline (`Version · Revised · Status`), a short centered rule.
-   Like an RFC/LaTeX cover. Use on the homepage and section landing pages.
-2. **Numbered §sections + Contents** — `§1`, `§2` in oxblood mono; a two-column **Contents** TOC
-   linking to anchors. Principles are a numbered list with a hover `§` anchor for deep links.
-3. **Dated entry lists, not cards** — field notes render as `date │ title │ summary` rows with
-   hairline dividers (RFD/danluu style). No cards, no thumbnails.
-4. **Body rules in `.prose`** — flush-left paragraphs separated by a `1.15rem` gap (no first-line
-   indent — bold inline lead-ins must align). Code blocks get a left oxblood border. (Optional:
-   Tufte `.sidenote` floats into the right margin ≥1080px for definitions/normative asides.)
-5. **Double rules + colophon** — header and footer use a `3px double` rule; the footer is a
-   colophon ("Set in Source Serif 4 & IBM Plex Mono. Built by agents, edited by humans. CC BY 4.0").
-6. **Wordmark** — `agentnative` (ink, 600) + `engineering` (faint) + `/` (oxblood) in IBM Plex
-   Mono. The oxblood slash is the only logo flourish. Favicon mirrors it (`AN` + oxblood `/`).
-
----
-
-## 6. Layout
-
-- Single document column: `--doc: 760px`; prose `--measure: 68ch`; padding `--pad`.
-- Left-aligned text (not justified — avoids bad web rivers). Generous vertical rhythm.
-- Sections separated by hairline `--rule`; major boundaries (header/footer) by `3px double`.
-- Sticky header is fine but keep it a thin document bar, not a SaaS navbar.
-
----
-
-## 7. Components (classes in `global.css`)
-
-`.site-head` (masthead bar) · `.masthead` (+ `.doc-id`, `.subtitle`, `.byline`, `.rule`) ·
-`.abstract` · `.toc` (Contents, 2-col `ol`) · `.section` + `.section-head` (`.sec-no` + `h2`) ·
-`.principles` / `.principle` (`.pn` number, `.anchor` §) · `.entries` / `.entry-row`
-(`.date`, `.ttl`, `.ex`) · `.codeblock` (open-source quickstart: `.cb-bar` label + mono `pre`,
-`.pr` prompt, `.cm` comment, `.kw` keyword — left oxblood border, never a neon terminal) ·
-`.repos` / `.repo-row` (`.name` mono, `.lang`, `.desc`, `.meta` — the implementation/repository
-list, rows not cards) · `.asterism` (✳✳✳ divider) · `article.note` + `.art-head` + `.art-meta`
-· `.prose` (LaTeX rules) · `.sidenote` · `.site-foot` (`.foot-links`, `.colophon`) · `.ph`
-(placeholder pages). Reuse these; don't invent parallel styles.
-
----
-
-## 8. Information architecture
+## 5. Information architecture
 
 ```
-/                Home — masthead · abstract · §1 Field Guide · §2 Field Notes · §3 Architectures
-/guide/          The Field Guide — versioned index of the 8 domains (masthead + version/revised)
-/guide/<slug>    A domain page — question · principles (P1..) · prose anatomy · sources · prev/next
-/architectures/  Reference architectures — the composed open-source stack, mapped to domains
-/glossary/       The discipline's vocabulary                             [Placeholder]
-/field-notes/    Dated index of notes (by year)
-/field-notes/<slug>   A field note (typeset document)
-/contribute/  /adopters/  /cite/   Community + reference pages           [Placeholder]
-/about/          What this is, and the every-claim-is-sourced rule
-/spec/           Redirect → /guide/ (the spec became the guide)
-/rss.xml         Feed
+/                 Home — masthead · ticker · the loop + featured Daily Brief · Recent Notes ·
+                  The Guide (12) · Reference Architecture preview · For-agents band
+/guide/           The Guide — the 12 domain cards
+/guide/<slug>     A domain — eyebrow · principles (P1..) · prose anatomy · building blocks · prev/next
+/field-notes/     Daily Notes — dated index by year
+/field-notes/<slug>   A Daily Note — takeaway callout · prose · prev/next
+/daily-brief/     Daily Brief — the audio editions
+/daily-brief/<slug>   An edition — player · The One Idea · The Brief (its covered notes)
+/architectures/   Reference Architecture — the two-layer nested diagram (domain layer over the
+                  12-domain open-source software layer); data in `src/data/architecture.ts`
+/glossary/ /cite/ /contribute/ /adopters/   forthcoming (Placeholder.astro)
+/about/  /spec/ (→ /guide/)  /rss.xml
 ```
-Guide domains live in `src/content/guide/*.md` (collection `guide`); version + revised date come
-from `src/data/site.ts`. `Placeholder.astro` styles not-yet-written pages as "forthcoming"
-documents. Each domain's body follows a fixed anatomy: **the pain → what production demands →
-patterns → open-source building blocks → Demo → production → verify it → Sources.** Never use the
-word "toy" (use "demo"). Sources may link YouTube talks (the transcripts in `../../youtube/` carry
-the video IDs).
 
----
+The site is **data-driven**: pages render from the `notes`, `guide`, and `episodes` collections
+(`src/content.config.ts`). Daily Brief editions come from `episodes`; "The Brief" stories are the
+notes each episode `covers`. mp3s live in `public/audio/`.
 
-## 9. Working rules
+## 6. Notes — authoring rules (kept)
+
+- **2-minute read** (~200–480 words; hard-fail past 550 — enforced by `scripts/validate-content.mjs`).
+- **Recency:** a Note's headline example MUST be within the last **1–2 weeks**; older landmark
+  cases are named anchors only. Guide domains are evergreen and exempt.
+- Each Note opens with a `takeaways:` block (≤3 bullets, first sentence bold) — it becomes the
+  "THE TAKEAWAY" callout. Voice: plain, engineer-to-engineer, no hype, no "X, not Y" kicker.
+- See `AGENTS.md` for the full authoring contract.
+
+## 7. Working rules
 
 - **Never break the build.** Run `npm run validate` (content lint → `astro check` → build) before
-  committing. Pre-commit hook + `Validate` CI both enforce it.
-- **Tokens, not literals.** Use the CSS variables; add new ones here with a rationale.
-- **One-accent / serif-first / no-SaaS discipline** is the brand. Any change toward the banned
-  list in §2 is wrong by default.
-- **Verify contrast** (WCAG AA: 4.5:1 body, 3:1 large/UI) when touching text/background pairs.
-- See `AGENTS.md` (authoring contract) and `docs/daily-pipeline.md` (daily flow).
+  committing; the pre-commit hook + CI enforce it.
+- **Tokens, not literals.** Use the CSS variables and `phase.ts`; add a token here with a rationale.
+- **One accent per view, phase-driven.** Anything toward gradients / soft shadows / a third
+  typeface / blue-as-decoration is wrong by default.
+- The design prototypes that this implements live in `../design-system/*.dc.html` — the visual
+  source of truth. Match them.

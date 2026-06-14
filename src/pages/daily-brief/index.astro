@@ -1,0 +1,56 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Footer from '../../components/Footer.astro';
+
+const episodes = (await getCollection('episodes', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
+const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+const total = episodes.length;
+---
+
+<Base
+  active="daily-brief"
+  title="Daily Brief — Agent Native Engineering"
+  description="The Agentic Daily Brief — your daily audio update on agent engineering: spoken digests of the field notes, grounded in real production stories, in about ten minutes."
+>
+  <div class="wrap" data-r="pad">
+    <header class="page-header">
+      <div class="eyebrow">// DAILY BRIEF</div>
+      <h1 class="page-h1" data-r="page-h1" style="margin-top:16px">Daily Brief</h1>
+      <p class="page-dek">Your daily audio update on agent engineering — the field notes, distilled and spoken. Grounded in real-world examples and studies, not opinion.</p>
+    </header>
+
+    <section class="section" style="padding-top:30px">
+      {episodes.length === 0 && <p style="font-family:var(--mono);color:var(--faint)">No editions yet.</p>}
+      <div class="editions">
+        {episodes.map((ep, i) => (
+          <a class="card hover edition" href={`/daily-brief/${ep.id}/`} style="--accent:#b8430f">
+            <div class="edition-head">
+              <span class="edition-no">EDITION No. {total - i}</span>
+              <span class="edition-meta">{fmt(ep.data.date)} · {mmss(ep.data.seconds)}</span>
+            </div>
+            <h2 class="edition-title">{ep.data.title}</h2>
+            {ep.data.summary && <p class="edition-dek">{ep.data.summary}</p>}
+            <span class="edition-open">Open full edition →</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <Footer slot="footer" variant="slim" left={'Daily Brief · <span class="strong">Agent Native Engineering</span> · CC BY 4.0'} />
+</Base>
+
+<style>
+  .editions { display: flex; flex-direction: column; gap: 22px; }
+  .edition { padding: 26px 30px; display: flex; flex-direction: column; gap: 12px; text-decoration: none; }
+  .edition-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .edition-no { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; color: var(--build); }
+  .edition-meta { font-family: var(--mono); font-size: 11px; color: var(--faint); }
+  .edition-title { font-family: var(--serif); font-weight: 500; font-size: 27px; line-height: 1.2; letter-spacing: -0.01em; margin: 0; color: var(--ink); text-wrap: balance; }
+  .edition-dek { font-family: var(--sans); font-size: 14px; line-height: 1.6; color: var(--muted); margin: 0; max-width: 70ch; }
+  .edition-open { font-family: var(--mono); font-size: 12px; color: var(--build); }
+</style>

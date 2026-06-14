@@ -3,6 +3,9 @@ title: "Never expose a raw MCP server"
 date: 2026-05-30
 summary: "MCP shipped without mandatory auth, so put a gateway in front of every server that enforces OAuth 2.1, audience validation, and no token passthrough — and route it through a registry that acts as your control plane."
 tags: ["mcp", "security"]
+domain: "security"
+sourceName: "theregister.com"
+sourceUrl: "https://www.theregister.com/security/2026/05/13/bug-hunter-tracks-down-three-serious-mcp-database-flaws-one-left-unpatched/"
 draft: false
 ---
 

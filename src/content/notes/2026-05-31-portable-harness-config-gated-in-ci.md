@@ -3,6 +3,9 @@ title: "Keep harness config in version control and gate it in CI"
 date: 2026-05-31
 summary: "Skills, hooks, and rules belong in version control, written to a portable shape, with a CI gate that validates them before they ship."
 tags: ["harness-engineering", "agents-md", "ci"]
+domain: "harness-engineering"
+sourceName: "github.com"
+sourceUrl: "https://github.com/affaan-m/ECC/releases/tag/v2.0.0-rc.1"
 draft: false
 ---
 

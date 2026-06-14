@@ -1,6 +1,7 @@
 ---
 title: "Access & Identity"
-order: 8
+order: 9
+phase: "operate"
 question: "Who is the agent, and what is it actually allowed to touch?"
 summary: "An agent is not its user. Give every agent its own verifiable, cryptographically-rooted identity; grant least-privilege scoped, short-lived, delegated access; treat a static API key as already stolen; and put a human on every irreversible action."
 principles:

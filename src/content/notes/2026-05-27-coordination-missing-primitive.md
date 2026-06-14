@@ -3,6 +3,9 @@ title: "Coordination is the missing primitive for agent swarms"
 date: 2026-05-27
 summary: "Runtime, orchestration, and triggers for multi-agent work are largely solved; coordinating who does what and where a human steps in is not, and reusing GitHub or a ticket tracker for it just hides the intervention points."
 tags: ["multi-agent", "orchestration"]
+domain: "architecture-and-orchestration"
+sourceName: "suprmind.ai"
+sourceUrl: "https://suprmind.ai/hub/insights/multi-agent-ai-news-week-of-may-19-25-2026-enterprise-orchestration-platforms/"
 draft: false
 ---
 
@@ -18,4 +21,4 @@ Coordination is also where systems fail. The UC Berkeley [MAST taxonomy](https:/
 
 When you scale a swarm, design the coordination layer deliberately. Borrowing GitHub or a tracker hides the signal you need.
 
-[Multi-Agent Orchestration](/guide/multi-agent-orchestration/).
+[Architecture & Orchestration](/guide/architecture-and-orchestration/).

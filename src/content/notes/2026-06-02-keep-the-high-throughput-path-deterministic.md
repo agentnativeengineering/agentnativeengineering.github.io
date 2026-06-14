@@ -7,6 +7,9 @@ takeaways:
   - "A deterministic rule engine makes the call; the AI only helps a human write the rules. An analyst describes a rule in plain English, the model drafts it, a human reviews it, and the engine runs it."
   - "The reusable shape is a rule engine for the fast, auditable decisions plus an AI helper for the slow work of authoring rules. Keep the part that can be wrong off the live path."
 tags: ["scope-simplicity", "fraud"]
+domain: "scope-and-simplicity"
+sourceName: "youtube.com"
+sourceUrl: "https://www.youtube.com/watch?v=w11pQcGT-u4"
 draft: false
 ---
 

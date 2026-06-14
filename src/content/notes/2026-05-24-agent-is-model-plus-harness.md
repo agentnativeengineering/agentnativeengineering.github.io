@@ -3,6 +3,9 @@ title: "Agent = model + harness: treat every failure as a harness defect"
 date: 2026-05-24
 summary: "An agent is a model plus the harness around it, so most wrong behaviour is a missing line you can encode now rather than a flaw to wait out in the next model."
 tags: ["harness-engineering", "agent-native"]
+domain: "harness-engineering"
+sourceName: "youtube.com"
+sourceUrl: "https://www.youtube.com/watch?v=ulNsa0sD8N0"
 draft: false
 ---
 
