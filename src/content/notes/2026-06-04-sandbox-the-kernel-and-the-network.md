@@ -1,0 +1,25 @@
+---
+title: "To run agent-written code, isolate the kernel and the network"
+date: 2026-06-04
+draft: true
+summary: "An agent that writes and runs its own code is untrusted code, and a plain Linux container is not a strong enough wall around it. At Interrupt 2026, LangChain's Mikhail Bik argued the boundary needs two parts: kernel-level isolation so a container escape can't reach the host, and a network proxy that holds your secrets so a prompt-injected agent has nothing to steal. Both halves trace to real 2026 incidents."
+takeaways:
+  - "A coding agent runs code it wrote at runtime, so treat its environment as hostile. A shared-kernel container is not a security boundary: CVE-2026-31431 let a ~732-byte script escape a container to the host in May 2026."
+  - "Isolate at the kernel, not just the namespace. LangChain's sandbox runs each agent in a hardware-virtualized microVM so a break inside one sandbox cannot reach the host or another tenant."
+  - "Keep secrets out of the runtime entirely. Route the agent's network through a proxy that holds the credentials and enforces an allowlist, so a prompt-injected agent has nothing local to exfiltrate."
+tags: ["security", "sandbox", "prompt-injection"]
+---
+
+**Why this matters to you.** A coding agent does not run a fixed program. It writes code at runtime and runs it, and some of what it does is decided by text it just read — a web page, a README, a tool's output. If that text is hostile, the agent can be steered into running code you never wrote (prompt injection: hidden instructions in data that the model obeys as if you typed them). So once you let an agent run code, assume it will try to read or send whatever it can reach.
+
+**The talk.** At Interrupt 2026, in "Run Untrusted Agent Code with LangSmith Sandboxes," LangChain infrastructure lead Mikhail Bik argued an ordinary container is not a strong enough wall ([uploaded 1 June 2026, YouTube](https://www.youtube.com/watch?v=IIchUA5T3gs)). He cited two 2026 failure modes: container escapes ("containers alone are not enough") and prompt injection that gets an agent to "export the environment to a random website." The fix has two halves, both worth copying.
+
+**Half one: isolate the kernel.** A normal container shares the host's Linux kernel; namespaces divide what each container sees, but a kernel bug breaks that wall for the whole host. Bik cited a "700-byte script" that reached "the full host kernel" — CVE-2026-31431 ("Copy Fail"), a ~732-byte script that corrupts a privileged binary in the shared page cache to get root; because that cache is shared across containers and host, it enables container escape ([Microsoft Security Blog, 1 May 2026](https://www.microsoft.com/en-us/security/blog/2026/05/01/cve-2026-31431-copy-fail-vulnerability-enables-linux-root-privilege-escalation/)). LangChain runs "each sandbox in a hardware-virtualized microVM" with "kernel-level isolation between sandboxes" — a microVM is a small virtual machine with its own kernel, so a break inside one sandbox stays inside it ([LangChain blog, 17 Mar 2026](https://www.langchain.com/blog/introducing-langsmith-sandboxes-secure-code-execution-for-agents)).
+
+**Half two: take the secrets out of the runtime.** Kernel isolation stops escape, but a prompt-injected agent can still abuse credentials sitting beside it. So do not put them there. Route the agent's network through a proxy that holds the credentials and enforces an allowlist: "Sandboxes access external services through an Authentication Proxy, so secrets never touch the runtime" ([LangChain blog, 17 Mar 2026](https://www.langchain.com/blog/introducing-langsmith-sandboxes-secure-code-execution-for-agents)). A misled agent then has nothing local to read and cannot reach an endpoint the proxy did not allow. That is the lesson behind the npm worm Bik referenced: Mini Shai-Hulud's payload runs on `npm install` and harvests credentials from the build environment, then exfiltrates them ([Microsoft Security Blog, 20 May 2026](https://www.microsoft.com/en-us/security/blog/2026/05/20/mini-shai-hulud-compromised-antv-npm-packages-enable-ci-cd-credential-theft/)). If the credentials are not in that environment, there is nothing to harvest.
+
+**One caveat.** A sandbox is only as good as the escape it has not had yet: in the same period n8n's in-process JavaScript sandbox fell to CVE-2026-1470, a crafted `with` statement that bypassed the sanitizer to run arbitrary code ([JFrog Security Research, 2026](https://research.jfrog.com/post/achieving-remote-code-execution-on-n8n-via-sandbox-escape/)). That is why the boundary should be a real VM — a bypass leaks into a throwaway microVM, not your host.
+
+**What to do tomorrow.** Pick one agent that runs code or shell, and check what its process can reach: run `env | grep -iE 'key|token|secret|aws|vault'` in its environment, and curl a host you did not mean to allow. If either works, that is your exfiltration path. The fix: move execution into a microVM-isolated sandbox and put credentials behind a network proxy with an allowlist, so the runtime holds no secrets.
+
+[Security](/guide/security/)
