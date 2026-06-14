@@ -1,0 +1,45 @@
+---
+title: "Output testing missed that an agent fabricated data on empty tool results"
+date: 2026-06-14
+summary: "AWS's Agent-EvalKit caught a travel agent scoring 84% on response quality but only 32% on faithfulness, because checking the final answer never saw the empty tool results it hallucinated over."
+takeaways:
+  - "Score agents at the trace level — faithfulness against what tools actually returned — not just whether the final answer reads well."
+  - "A polished response can hide fabrication when a search tool returns empty and the agent fills the gap."
+  - "Run the minimum set of evals you need, scoped at span, trajectory, and session, since each judge call costs inference."
+tags: ["evaluation", "agent-eval", "faithfulness", "tracing"]
+sourceName: "AWS Machine Learning Blog"
+sourceUrl: "https://aws.amazon.com/blogs/machine-learning/evaluate-ai-agents-systematically-with-agent-evalkit/"
+sources:
+  - title: "Agent-EvalKit: systematic agent evaluation (AWS)"
+    url: "https://aws.amazon.com/blogs/machine-learning/evaluate-ai-agents-systematically-with-agent-evalkit/"
+  - title: "Dat Ngo (Arize) on LLM observability, evaluation, experimentation"
+    url: "https://www.youtube.com/watch?v=JsCCrBF7F1g"
+  - title: "AgentOps with Amazon Bedrock AgentCore (AWS)"
+    url: "https://aws.amazon.com/blogs/machine-learning/agentops-operationalize-agentic-ai-at-scale-with-amazon-bedrock-agentcore/"
+  - title: "Nova Sonic voice agent test harness (AWS)"
+    url: "https://aws.amazon.com/blogs/machine-learning/evaluate-your-amazon-nova-sonic-voice-agent-at-scale-no-microphone-required/"
+draft: false
+---
+## What happened
+
+You test an agent the way you test any software: does the output match what you expected? The problem is that an agent which autonomously picks tools can return a clean, confident answer that is simply made up. In a [post dated 2026-06-11](https://aws.amazon.com/blogs/machine-learning/evaluate-ai-agents-systematically-with-agent-evalkit/), AWS described running its open-source toolkit Agent-EvalKit against a travel research agent. The agent scored 83.9% on response quality and 64.5% on tool-parameter accuracy — but only 32.3% on faithfulness (whether the answer is grounded in what the tools actually returned). The cause: when its web-search tools came back empty, the agent [fabricated exchange rates and temperatures](https://aws.amazon.com/blogs/machine-learning/evaluate-ai-agents-systematically-with-agent-evalkit/) rather than admit it had nothing.
+
+## Why it matters
+
+Output-level testing sits above the surface of the final response, so it never sees the empty tool result the agent papered over. The failure is invisible until a user trusts a fabricated number. Catching it means tracing the full execution path — which tools ran, what they returned, and whether the response reflects that data. Arize's Dat Ngo, in a [talk published 2026-06-07](https://www.youtube.com/watch?v=JsCCrBF7F1g), framed this as the core of production evaluation: OpenTelemetry traces (the audit record of what an agent did) feed evals scoped at the span, trajectory, or session level. AWS's [AgentOps guidance](https://aws.amazon.com/blogs/machine-learning/agentops-operationalize-agentic-ai-at-scale-with-amazon-bedrock-agentcore/) names the same four eval levels — tool/span, conversation turn, session outcome, and system.
+
+## How it works
+
+1. **Trace first.** Instrument the agent with OpenTelemetry so every tool call and intermediate result is captured, not just the final text.
+2. **Generate ground truth.** Read the agent's source to build test cases with known-correct outcomes.
+3. **Score per dimension.** Check faithfulness, tool usage, and surface quality separately — one cannot be inferred from another.
+4. **Mix judge styles.** Code-based checks are fast but penalize valid variation; LLM-as-judge is nuanced but costs inference, so use the minimum set needed.
+5. **Gate and re-run.** Wire evals into CI/CD as quality gates and re-evaluate after each change.
+
+> A response can read well while quietly hallucinating over empty tool results, so each quality dimension has to be checked on its own.
+
+## What broke
+
+The travel agent's high quality score masked a broken behavior, and no better prompt would have surfaced it — the fix was harness-level: trace the tool returns and judge the answer against them. The same hallucination-over-empty-input pattern shows up in voice: AWS's [Nova Sonic test harness](https://aws.amazon.com/blogs/machine-learning/evaluate-your-amazon-nova-sonic-voice-agent-at-scale-no-microphone-required/) detects "audio hallucinations" by transcribing spoken output and comparing it to the text the model claims it said.
+
+[Evaluation](/guide/evaluation/)

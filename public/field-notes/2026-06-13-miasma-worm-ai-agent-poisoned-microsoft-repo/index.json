@@ -1,0 +1,36 @@
+{
+  "type": "note",
+  "slug": "miasma-worm-ai-agent-poisoned-microsoft-repo",
+  "title": "Miasma worm steals creds the moment an AI agent opens a poisoned Microsoft repo",
+  "date": "2026-06-13",
+  "summary": "A self-replicating stealer hid in 73 verified Microsoft packages and fired through auto-executing editor config files the instant a developer opened the code in Claude Code or Gemini CLI.",
+  "domain": "security",
+  "tags": [
+    "security",
+    "supply-chain",
+    "credential-theft",
+    "coding-agents"
+  ],
+  "takeaways": [
+    "Treat any repo opened by an AI coding agent as code that can run on open, not inert text — disable auto-executing editor and package-manager config files for untrusted folders.",
+    "Cryptographic verification did not help: the attacker published with stolen legitimate Microsoft credentials, so SLSA provenance signed the malware too.",
+    "If you used an AI agent on an affected Microsoft package, assume your AWS, Azure, GCP, and Kubernetes credentials are compromised and rotate them."
+  ],
+  "sourceName": "Ars Technica",
+  "sourceUrl": "https://arstechnica.com/security/2026/06/for-the-2nd-time-in-weeks-microsoft-packages-laced-with-credential-stealer/",
+  "sources": [
+    {
+      "title": "Ars Technica: Microsoft packages laced with credential stealer (Miasma)",
+      "url": "https://arstechnica.com/security/2026/06/for-the-2nd-time-in-weeks-microsoft-packages-laced-with-credential-stealer/"
+    },
+    {
+      "title": "404 Media: Microsoft hacked to deliver malware to Claude and Gemini users",
+      "url": "https://www.404media.co/microsoft-hacked-to-deliver-malware-to-claude-and-gemini-users/"
+    },
+    {
+      "title": "SafeDep: Miasma worm targets AI coding agents via config files",
+      "url": "https://safedep.io/miasma-worm-ai-coding-agent-config-injection/"
+    }
+  ],
+  "body": "If your team uses an AI coding agent, opening a repository is no longer a passive act. Editor and package-manager config files can run shell commands the instant a folder is opened or dependencies install — and a worm called Miasma turned that into a credential heist that fired before anyone read a line of code.\n\n## What happened\n\nOn 2026-06-08, [Ars Technica reported](https://arstechnica.com/security/2026/06/for-the-2nd-time-in-weeks-microsoft-packages-laced-with-credential-stealer/) that 73 cryptographically verified open-source packages from Microsoft on GitHub were laced with a credential stealer that triggered \"when developers opened them in AI coding agents.\" GitHub disabled the packages citing only a terms-of-service violation; Microsoft did not acknowledge \"potential malicious content\" until the following Monday. [404 Media confirmed](https://www.404media.co/microsoft-hacked-to-deliver-malware-to-claude-and-gemini-users/) Microsoft took the unusual step of shutting down 70-plus of its own Azure and AI-agent repositories, with malware aimed specifically at users of Claude Code and Gemini CLI. It was the second breach of an official Microsoft account in two months.\n\n## Why it matters\n\nThe payload is a 28 KB stealer that grabs credentials from AWS, Azure, GCP, Kubernetes, password managers, and over 90 developer tool configs, then spreads laterally across cloud infrastructure. Because the attacker published with stolen legitimate Microsoft credentials, the packages carried valid SLSA (Supply-chain Levels for Software Artifacts) provenance attestation — the signature that is supposed to guarantee integrity vouched for the malware. Verification was no defense.\n\n## How it works\n\n1. **Steal the publishing token.** The actor (tracked as TeamPCP) harvested a legitimate Microsoft OIDC (OpenID Connect) token, bypassing the build pipeline entirely.\n2. **Plant the dropper in config.** [SafeDep researchers found](https://safedep.io/miasma-worm-ai-coding-agent-config-injection/) the worm wired one dropper into seven editor and package-manager config files that auto-execute on open or install.\n3. **Wait for the agent.** Opening the repo in Claude Code or Gemini CLI runs the config, executing the stealer.\n4. **Exfiltrate and spread.** It harvests cloud creds and replicates outward to other developer machines.\n\n> Cryptographic verification signed the malware too, because the attacker held a real Microsoft token.\n\n## What broke\n\nThe blindspot is treating config files as inert metadata. The fix is harness-level, not a smarter prompt: block auto-executing config in untrusted folders, scope agent file access, and — per Ars Technica — if you ran an agent against these packages, assume compromise and rotate every credential.\n\n[Security](/guide/security/)"
+}

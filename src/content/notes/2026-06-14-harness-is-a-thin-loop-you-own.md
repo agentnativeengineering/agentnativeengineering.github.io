@@ -1,0 +1,45 @@
+---
+title: "The harness is a thin loop you own, not a framework"
+date: 2026-06-14
+summary: "Teams running coding agents in production converge on the same shape: a small loop you control, every mistake written back into CLAUDE.md or a skill, and verification that the agent can actually run what it builds."
+takeaways:
+  - "When the agent makes a mistake, don't re-correct it in chat — write the fix into CLAUDE.md or a skill so it never recurs."
+  - "Verification means the agent can actually run the thing it built (open the app, drive the simulator), not just lint and type-check."
+  - "The loop itself is small enough to own: query the model, parse an action, run it, append the result, repeat."
+tags: ["harness-engineering", "claude-code", "skills", "agent-loop"]
+sourceName: "Anthropic (Claude Code)"
+sourceUrl: "https://www.youtube.com/watch?v=Hth_tLaC2j8"
+sources:
+  - title: "Reflecting on a year of Claude Code (Anthropic team)"
+    url: "https://www.youtube.com/watch?v=Hth_tLaC2j8"
+  - title: "Building a minimal AI agent from scratch (mini-swe-agent)"
+    url: "https://minimal-agent.com/"
+  - title: "Boris Cherny on building Claude Code (WorkOS recap)"
+    url: "https://workos.com/blog/boris-cherny-claude-code-acquired-interview-takeaways"
+  - title: "Conductor CEO Charlie Holtz on his AI coding setup"
+    url: "https://www.youtube.com/watch?v=fQmlML9Lay4"
+draft: false
+---
+## What happened
+
+In a video [published 2026-06-08](https://www.youtube.com/watch?v=Hth_tLaC2j8), two members of the Claude Code team at Anthropic reflected on a year of running the tool. Their single most important practice: every time the agent makes a mistake, "I don't tell [it] to do it differently. I tell it to write it to the [CLAUDE.md] or to like make a skill" — so the same error never returns and the agent "can just like run forever." (A CLAUDE.md is the project's standing instruction file; a skill is a reusable, named procedure the agent loads on demand.) Their second lesson: verification is not lint or unit tests — those were always automatable. It means "can the agent run the thing." They wire Claude to open a local desktop app, drive the iOS and Android simulators, and click through new UX to check edge cases itself.
+
+## Why it matters
+
+Most teams reach for a heavyweight agent framework and then fight it. The cluster argues the opposite: the harness — the loop and the files around the model — is small enough to own outright, and owning it is where reliability comes from. The mini-swe-agent team shows [an agent is "just a big loop" of roughly 50 lines](https://minimal-agent.com/) — query the model, parse an action, run it as bash, append the output — and that this exact blueprint scores up to 74% on SWE-bench Verified, "only a few percent below highly optimized agents." If a 50-line loop gets within a few points of the frontier, the leverage is in your CLAUDE.md, your skills, and your verification, not the framework.
+
+## How it works
+
+1. **Run a thin loop.** Query the model, extract the proposed action, execute it, append the result to the message list, repeat — [no framework required](https://minimal-agent.com/).
+2. **Feed errors back as messages.** When a command times out or returns a format error, hand the exception back to the model so it [self-corrects on the next turn](https://minimal-agent.com/).
+3. **Encode every mistake.** Write each correction into [CLAUDE.md or a skill](https://www.youtube.com/watch?v=Hth_tLaC2j8) instead of re-explaining it.
+4. **Make verification real.** Give the agent a way to [run and click through the actual app](https://www.youtube.com/watch?v=Hth_tLaC2j8), not just type-check it.
+5. **Then orchestrate.** Once the loop is trustworthy, [spawn parallel agents](https://www.youtube.com/watch?v=fQmlML9Lay4) per task and review their diffs.
+
+> The framework is small enough to own; the leverage is in the files and the verification around it.
+
+## What broke
+
+The gap is harness engineering, not prompts. The mini-swe-agent team found that interactive CLI elements break the loop, so they set `PAGER=cat` and disable progress bars to keep [output parseable](https://minimal-agent.com/). The Conductor team learned the agent itself needs guardrails: they keep "slop-free zones" — human-only parts of the codebase — because [AI that reads bad code writes more bad code](https://www.youtube.com/watch?v=fQmlML9Lay4). And in [WorkOS's recap of Boris Cherny's interview](https://workos.com/blog/boris-cherny-claude-code-acquired-interview-takeaways), the creator of Claude Code reports uninstalling his IDE to orchestrate automated loops instead, with merges per engineer up 200% — payoff that only lands once the loop underneath is reliable.
+
+[Harness Engineering](/guide/harness-engineering/)

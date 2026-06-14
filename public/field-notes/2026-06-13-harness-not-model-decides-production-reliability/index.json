@@ -1,0 +1,32 @@
+{
+  "type": "note",
+  "slug": "harness-not-model-decides-production-reliability",
+  "title": "The harness, not the model, decides production agent reliability",
+  "date": "2026-06-13",
+  "summary": "Two teams running agents in production converge on the same lesson: the harness around the model — durable state, guardrails, evals — decides reliability, because the model is the interchangeable part.",
+  "domain": "harness-engineering",
+  "tags": [
+    "harness-engineering",
+    "durable-execution",
+    "guardrails",
+    "production-reliability"
+  ],
+  "takeaways": [
+    "Spend your engineering on the harness — durable state, guardrails, evals — because the model is the interchangeable part and the plumbing is what keeps you in production.",
+    "Roughly 80% of production agent code is reliability, observability, and durable-state plumbing, not business logic — move it to the platform layer.",
+    "Encode recurring PR corrections as deterministic checks (Semgrep rules, architectural tests) the agent runs itself, so review stops burning out senior engineers."
+  ],
+  "sourceName": "Temporal",
+  "sourceUrl": "https://youtube.com/watch?v=-0Ly0cjPdjM",
+  "sources": [
+    {
+      "title": "Grid Dynamics x Temporal — agentic platform in production",
+      "url": "https://youtube.com/watch?v=-0Ly0cjPdjM"
+    },
+    {
+      "title": "Xavier's Florian Bautz — guardrails for the code-review bottleneck",
+      "url": "https://youtube.com/watch?v=W1uG25of2t0"
+    }
+  ],
+  "body": "## What happened\n\nIf your coding agent works in a demo but falls over in production, the gap is almost never the model. On 2026-06-11, Grid Dynamics CTO Eugene Steinberg and Temporal CTO Maxim Fateev published [a conversation on building an enterprise agentic platform](https://youtube.com/watch?v=-0Ly0cjPdjM) with a blunt number: roughly **80 percent of production agent code** is reliability, observability, retries, queues, and durable state — not the business logic anyone set out to write. Grid Dynamics, an engineering partner for Fortune 1000 companies, adopted Temporal's durable execution after hitting production outages while scaling a FinTech agentic platform. Their framing splits the agent (the loop of conversation history, LLM calls, tool calls) from the **harness** — the surrounding rules, tools, context management, sandboxing, and guardrails. Steinberg's argument: harness quality often matters more than model choice, since models are interchangeable while harnesses are not.\n\n## Why it matters\n\nThe wall you hit is the last mile. Your agent provably works; then you have to make it survive crashes, flaky APIs, mainframes, and multi-day waits without losing state — and that work dwarfs the agent itself. A second practitioner reports the same from a different angle. Florian Bautz, an AI engineer at Xavier, argues in [a discussion on the code-review bottleneck](https://youtube.com/watch?v=W1uG25of2t0) that the same identical model \"succeeds or fails across harnesses,\" and that as teams generate far more code, human review burns out senior engineers. Two teams, two problems, one conclusion: spend on the harness.\n\n## How it works\n\n1. **Split agent from harness.** Treat the loop as small; put reliability, retries, and durable state in the [platform layer, not the app](https://youtube.com/watch?v=-0Ly0cjPdjM).\n2. **Make state durable.** Port the prototype to durable execution so a crash or deploy resumes instead of restarting.\n3. **Encode review as checks.** Turn recurring PR (proposed-change) corrections into [Semgrep rules and architectural unit tests](https://youtube.com/watch?v=W1uG25of2t0) the agent runs itself.\n4. **Wire feedback close to the laptop.** Run those checks in stop hooks so [agents self-correct without a human](https://youtube.com/watch?v=W1uG25of2t0).\n5. **Build evals.** Keep a [test suite for every model and prompt change](https://youtube.com/watch?v=-0Ly0cjPdjM).\n\n> Models are interchangeable; the harness around them is the part you actually have to engineer.\n\n## What broke\n\nGrid Dynamics treated production as something to reach, then learned that [staying in production is harder than getting there](https://youtube.com/watch?v=-0Ly0cjPdjM). The fix was not a better prompt — it was moving the undifferentiated reliability plumbing off the application and onto a durable-execution platform. Xavier's parallel fix: stop relying on human reviewers as the feedback loop, and encode their preferences as deterministic guardrails the agent can't skip.\n\n[Harness Engineering](/guide/harness-engineering/)"
+}

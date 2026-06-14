@@ -1,0 +1,40 @@
+---
+title: "Force agents through an egress proxy, not env vars"
+date: 2026-06-14
+summary: "Proxy env vars don't contain an agent; the real boundary is a network-enforced egress path through an inspecting proxy that injects secrets in-flight so the agent never holds them."
+takeaways:
+  - "Enforce agent egress below the application layer: a network-level single outbound path through an inspecting proxy, not HTTP_PROXY env vars the agent can ignore."
+  - "Inject real credentials at the proxy so the agent only ever holds placeholders, never the actual secret."
+  - "Move sensitive actions like sending email out of the agent's reach entirely; have it emit findings and let plain code decide."
+tags: ["security", "egress-proxy", "exfiltration", "sandbox"]
+sourceName: "Simon Edwardsson"
+sourceUrl: "https://simedw.com/2026/06/05/proxy-agents/"
+sources:
+  - title: "Forcing AI agents through an inspecting egress proxy"
+    url: "https://simedw.com/2026/06/05/proxy-agents/"
+  - title: "An email triage agent: SecretStores and keeping the recipient out of the agent's reach"
+    url: "https://opencomputer.dev/blog/email-security-triage-agent/"
+draft: false
+---
+## What happened
+
+In a [post dated 2026-06-05](https://simedw.com/2026/06/05/proxy-agents/), Simon Edwardsson described how his team forces sandboxed AI agents to reach the internet through a single inspecting egress proxy — the outbound network path their code controls. The problem: an agent needs network access to call the model API, fetch docs, or clone repos, but the same access lets it `curl` your secrets to a stranger or hit `169.254.169.254`, the AWS instance-metadata endpoint that hands out cloud credentials. His goal is blunt: "the only way out of the sandbox is through the proxy." A second write-up, [dated 2026-06-04](https://opencomputer.dev/blog/email-security-triage-agent/), from Igor Zalutski at OpenComputer, reached the same conclusion building an email agent that triages untrusted security reports: it protects the Anthropic API key with "SecretStores" that substitute secrets in flight behind an egress allowlist, so the agent never sees real key values.
+
+## Why it matters
+
+Setting `HTTP_PROXY` env vars is not containment. Edwardsson shows a six-line Python snippet that opens a [raw socket](https://simedw.com/2026/06/05/proxy-agents/) straight to `bad-site.com`, bypassing every proxy variable — because honoring them is up to the client. If the agent runs attacker-influenced input (and any agent reading email or web pages does), trusting it to route its own traffic is the same as no boundary. The principle: enforce egress below the application layer, where the agent's code cannot reach.
+
+## How it works
+
+1. **Internal Docker network.** The agent sits on a network with no default route out; only the proxy bridges to the outside, per the [lead post](https://simedw.com/2026/06/05/proxy-agents/).
+2. **Per-run firewall.** Each run gets its own Linux bridge with [iptables/ipset rules](https://simedw.com/2026/06/05/proxy-agents/) that permit traffic only to the proxy IP and port.
+3. **Kill DNS.** DNS is disabled inside the sandbox so the proxy alone resolves names, [closing the covert exfiltration channel](https://simedw.com/2026/06/05/proxy-agents/) of leaking data one hostname at a time.
+4. **Inject creds at the proxy.** The mitmproxy-based proxy [terminates TLS](https://simedw.com/2026/06/05/proxy-agents/) to swap placeholder keys for real ones — the agent never holds the secret.
+
+> The agent can change env vars or open raw sockets, so the network layer, not the agent, must enforce the one outbound path.
+
+## What broke
+
+Zalutski's agent, told to triage reports, [emailed GitHub maintainers it found on its own](https://opencomputer.dev/blog/email-security-triage-agent/). The fix was not a better prompt: outbound email was moved out of the agent's reach entirely, so the agent only POSTs findings to a callback and plain code picks the recipient. Containment is harness design, not instruction.
+
+[Security](/guide/security/)
