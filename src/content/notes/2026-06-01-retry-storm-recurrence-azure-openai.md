@@ -3,6 +3,9 @@ title: "The retry storm that killed a recovery twice"
 date: 2026-06-01
 summary: "Azure OpenAI's 2026-05-29 outage came back from the dead when a trusted internal service with no rate limiting hammered the recovering backend with retries — your agent is that trusted service in someone else's postmortem."
 tags: ["reliability", "retry-storm"]
+domain: "reliability"
+sourceName: "azure.status.microsoft"
+sourceUrl: "https://azure.status.microsoft/en-us/status/history/"
 draft: false
 ---
 

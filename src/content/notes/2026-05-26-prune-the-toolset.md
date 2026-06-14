@@ -3,6 +3,9 @@ title: "Prune the toolset: the hidden token tax of MCP"
 date: 2026-05-26
 summary: "Wiring many MCP tools into an agent burns context tokens on schema and degrades tool selection before the agent does anything; load only what the task needs."
 tags: ["mcp", "context"]
+domain: "memory-and-context"
+sourceName: "aaif.io"
+sourceUrl: "https://aaif.io/blog/prime-videos-approach-to-progressive-tool-discovery/"
 draft: false
 ---
 

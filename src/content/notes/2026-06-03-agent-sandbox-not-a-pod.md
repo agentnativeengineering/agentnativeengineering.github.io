@@ -7,6 +7,9 @@ takeaways:
   - "Put the credentials behind a separate process. In Microsoft's open-source KARS repo the router holds the cloud identity and the agent runs under a different operating-system user, so the agent's process has no permission to read the credential even if it is fully taken over."
   - "This is becoming a shared, vendor-neutral pattern. The Kubernetes SIG Apps agent-sandbox project ships a portable Sandbox resource with gVisor or Kata isolation; per-sandbox network egress is a goal its maintainers still list as desired and have yet to ship."
 tags: ["security", "kubernetes", "sandbox"]
+domain: "security"
+sourceName: "youtube.com"
+sourceUrl: "https://www.youtube.com/watch?v=_SzOdHMVPnY"
 draft: false
 ---
 

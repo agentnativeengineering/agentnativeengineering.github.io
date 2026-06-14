@@ -7,6 +7,9 @@ takeaways:
   - "The bottleneck moves from writing code to scoping and review. Both Amazon's frontier teams and OpenClaw's maintainers feed parallel agents a backlog of well-scoped tasks and spend their own time on specs and reviewing diffs."
   - "Coding speed does not automatically become business output. One practitioner estimates agents make engineers 5-8x faster at writing code, with much of that capacity absorbed by backlog cleanup, refactoring, testing, and hardening rather than new features."
 tags: ["harness-engineering", "parallel-agents", "workflow-redesign", "agent-context"]
+domain: "harness-engineering"
+sourceName: "aws.amazon.com"
+sourceUrl: "https://aws.amazon.com/blogs/machine-learning/how-frontier-teams-are-reinventing-ai-native-development/"
 draft: false
 ---
 **Why this matters to you.** Coding agents — LLM-driven tools that plan, edit, and test code with limited supervision — are easy to adopt and hard to get multiples from. The wall most teams hit: hand engineers an agent, keep the workflow the same, and watch the promised 10x flatten into a modest bump plus a learning-curve slowdown nobody budgeted for. On 2026-06-11, AWS published [an account by Swami Sivasubramanian](https://aws.amazon.com/blogs/machine-learning/how-frontier-teams-are-reinventing-ai-native-development/) of Amazon's internal "frontier teams" that names the difference: a six-engineer pathfinder team rebuilt the Bedrock inference engine in 76 days against an original scope of 30 developers for 12–18 months, and a Prime Video sprint compressed a 90-week estimate to 24 weeks. The reported 4.5x to over 10x gains came from redesigning workflows around agents, not from the tools alone.

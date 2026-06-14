@@ -235,7 +235,9 @@ a { color: inherit; }
 .prose ul, .prose ol { padding-left: 1.4rem; margin: 0.6rem 0; }
 .prose li + li { margin-top: 0.4rem; }
 .prose li::marker { color: var(--build); }
-.prose blockquote { border-left: 2px solid var(--hair-3); margin: 0; padding-left: 1.2rem; color: var(--muted); font-style: italic; }
+/* Pull quote — dark sticker card with the phase-accent offset (never a left-border callout). */
+.prose blockquote { background: var(--dark-2); color: var(--paper); border: 1.5px solid var(--ink); border-radius: 4px; box-shadow: 6px 6px 0 var(--accent); margin: 1.8rem 0; padding: 24px 28px; font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 22px; line-height: 1.36; letter-spacing: -0.01em; }
+.prose blockquote p { margin: 0; text-indent: 0; }
 .prose code { font-family: var(--mono); font-size: 0.85em; background: var(--panel-build); border: 1px solid var(--hair); padding: 0.06em 0.34em; border-radius: 3px; }
 .prose pre { background: var(--dark-2); color: #e8e2d6; border-radius: 4px; padding: 1rem 1.15rem; overflow-x: auto; font-size: 0.82rem; line-height: 1.6; }
 .prose pre code { background: none; border: none; padding: 0; color: inherit; }

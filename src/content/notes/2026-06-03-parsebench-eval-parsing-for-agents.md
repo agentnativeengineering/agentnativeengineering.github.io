@@ -7,6 +7,9 @@ takeaways:
   - "LlamaIndex's open ParseBench re-scores parsing on five things agents depend on: tables, charts, content faithfulness, semantic formatting, and visual grounding. Across 14 parsers no single one was strong on all five except LlamaParse Agentic, LlamaIndex's own parser, at 84.9% overall."
   - "Charts are where parsers fall apart. Most specialized parsers score below 6% because they read the text off a chart but never turn it into a structured table an agent can compute over."
 tags: ["evaluation", "document-parsing", "benchmarks"]
+domain: "evaluation"
+sourceName: "youtube.com"
+sourceUrl: "https://www.youtube.com/watch?v=Qgz21p87x3c"
 draft: false
 ---
 

@@ -7,6 +7,9 @@ takeaways:
   - "That kills the sticky-session tax. A remote server that previously needed sticky routing, a shared session store, and gateway packet inspection can now run behind a plain round-robin load balancer and auto-scale like any stateless HTTP service."
   - "State does not disappear, it moves into the open. Instead of hidden session metadata a tool now mints an explicit handle like basket_id that the model passes back on later calls, which the maintainers note still needs real security and lifecycle design."
 tags: ["harness-engineering", "mcp", "stateless", "scaling"]
+domain: "harness-engineering"
+sourceName: "aaif.io"
+sourceUrl: "https://aaif.io/blog/mcp-is-growing-up/"
 draft: false
 ---
 **Why this matters to you.** If you have run a remote MCP server in production, you have probably paid the sticky-session tax. MCP — the Model Context Protocol, the standard way an agent connects to tools, data, and external services — used to hand each client an `Mcp-Session-Id` and expect every later request to return to the same server instance. Behind a load balancer that forces sticky routing, a shared session store, and a gateway that inspects packets to find the session — exactly the infrastructure that blocks clean horizontal scaling. On 2026-05-27, [Angie Jones of the Agentic AI Foundation argued that MCP is "growing up"](https://aaif.io/blog/mcp-is-growing-up/), and the change underneath that claim is the [2026-07-28 release candidate](https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/), locked on 2026-05-21.

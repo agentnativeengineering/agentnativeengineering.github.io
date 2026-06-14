@@ -3,6 +3,9 @@ title: "Context engineering as a routing problem"
 date: 2026-06-01
 summary: "Rippling reports a semantic-route-first, domain-scoped skill injection pipeline cuts context size 100–500x in a system serving over a million users, by treating context engineering as a routing problem instead of reaching for a bigger window."
 tags: ["memory-context", "context-engineering"]
+domain: "memory-and-context"
+sourceName: "langchain.com"
+sourceUrl: "https://www.langchain.com/blog/how-rippling-went-ai-native-across-every-product-in-6-months-with-deep-agents-and-langsmith"
 draft: false
 ---
 
