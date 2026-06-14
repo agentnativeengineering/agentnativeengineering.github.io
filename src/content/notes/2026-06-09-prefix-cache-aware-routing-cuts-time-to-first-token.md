@@ -7,6 +7,9 @@ takeaways:
   - "Agent traffic is unusually prefix-heavy, so cache hits are common in practice. Snap reports 75-80% prefix cache hit rates in production using llm-d's prefix-cache-aware routing integrated into its Envoy-based service mesh."
   - "The fix is routing requests to the replica that already holds the prompt's KV cache. Cache-aware routing treats model servers as stateful, using real-time server metrics instead of round-robin to pick the accelerator with a warm prefix."
 tags: ["memory-and-context", "prefix-caching", "kv-cache", "inference-routing"]
+domain: "memory-and-context"
+sourceName: "cloud.google.com"
+sourceUrl: "https://cloud.google.com/blog/products/containers-kubernetes/gke-inference-gateway-prefix-caching-accelerates-ai-inference/"
 draft: false
 ---
 **Why this matters to you.** Agent traffic is repetitive in a way ordinary web traffic is not: every turn resends the same system prompt, tool definitions, and retrieved documents before the part that actually changed. If your model servers sit behind a standard HTTP load balancer, each request lands on a random GPU that reprocesses that whole shared prefix from scratch — and you pay in time to first token (TTFT, how long the user waits before the first output token appears) and in GPU compute burned on tokens you already processed. On 2026-06-09, Google [published benchmark results for GKE Inference Gateway](https://cloud.google.com/blog/products/containers-kubernetes/gke-inference-gateway-prefix-caching-accelerates-ai-inference/) claiming up to 92.8% shorter TTFT from routing each request to the accelerator that already holds the relevant cache — and, more usefully, a production data point: Snap reports 75–80% prefix cache hit rates in production.

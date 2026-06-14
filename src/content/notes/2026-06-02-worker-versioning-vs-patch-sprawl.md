@@ -3,6 +3,9 @@ title: "Worker versioning instead of patch sprawl"
 date: 2026-06-02
 summary: "Alaska Airlines hit 50+ accumulated Temporal patches in three years; pinning each in-flight execution to the build it started on let them ship breaking changes with no patch and no non-determinism error."
 tags: ["durable-execution", "deploys"]
+domain: "durable-execution"
+sourceName: "youtube.com"
+sourceUrl: "https://www.youtube.com/watch?v=fdy7sKuxw9M"
 draft: false
 ---
 

@@ -3,6 +3,9 @@ title: "When the license is the only cap"
 date: 2026-05-31
 summary: "A flat per-seat AI license caps requests-per-model, never aggregate tokens — so it silently becomes the only control on a fleet of uncapped seats, invisible until the invoice."
 tags: ["autonomy-cost-control", "cost"]
+domain: "autonomy-and-cost"
+sourceName: "elvex.com"
+sourceUrl: "https://www.elvex.com/blog/ai-token-cost-enterprise-budget-control"
 draft: false
 ---
 

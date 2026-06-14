@@ -7,6 +7,9 @@ takeaways:
   - "Auto-generated few-shot examples mostly fail expert review. When Spotify mined real query history for question-SQL pairs, curators accepted only 12.5% — the rest were ad-hoc exploration, wrong tables, or misleading patterns."
   - "Context needs an owner and a health score. Each cluster is monitored for pair validity after schema changes, coverage of actual questions, and SQL reproducibility, and the scores direct where experts spend curation time."
 tags: ["memory-and-context", "context-engineering", "text-to-sql", "retrieval"]
+domain: "memory-and-context"
+sourceName: "engineering.atspotify.com"
+sourceUrl: "https://engineering.atspotify.com/2026/6/encoding-your-domain-expert-the-context-layer-behind-spotifys-data-assistant/"
 draft: false
 ---
 **Why this matters to you.** A context layer is the bundle of schemas, examples, and docs an agent retrieves before it acts — and for a text-to-SQL agent (one that turns a plain-English question into a database query), it decides whether the answer is right or merely plausible. The wall you hit at any real warehouse: dumping every table schema into the model's context window doesn't scale, and the agent starts joining the wrong tables and returning numbers nobody should trust. On 2026-06-10, [Spotify published how it handles this for Vedder](https://engineering.atspotify.com/2026/6/encoding-your-domain-expert-the-context-layer-behind-spotifys-data-assistant/), its internal data assistant, which has answered natural-language questions against a warehouse of 70,000+ datasets since August 2025 and is now used by 2,100+ employees.

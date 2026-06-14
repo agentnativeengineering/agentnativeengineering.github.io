@@ -7,6 +7,9 @@ takeaways:
   - "Each stage owns one decision and emits a narrow output. The spec lists refs, a credential profile, a retry policy, validation checks, and artifacts, and execution returns logs, JUnit, metrics, and row counts that decide finish, retry, repair, or alert."
   - "Failures become boundary breaks rather than mysteries. A break at a contract edge tells you where to look and what you are allowed to change, instead of debugging a single opaque agent run."
 tags: ["security", "etl", "sandbox", "data-plane", "airbyte"]
+domain: "security"
+sourceName: "zozo123.github.io"
+sourceUrl: "https://zozo123.github.io/agentic-airbyte/"
 draft: false
 ---
 **Why this matters to you.** If you wire an AI coding agent into a data pipeline, the tempting shortcut is to let it read the source rows, hold the warehouse credentials, and move the data itself. That hands one nondeterministic process both untrusted input and live secrets — the exact shape of the lethal trifecta, where an injected row can steer an agent that also has the means to exfiltrate.

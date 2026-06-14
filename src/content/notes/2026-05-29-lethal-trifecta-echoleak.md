@@ -3,6 +3,9 @@ title: "The lethal trifecta keeps recurring"
 date: 2026-05-29
 summary: "A Claude.ai exfiltration disclosed this week shows the lethal trifecta is still unsolved a year after EchoLeak — the only reliable defense is to remove one of its three legs."
 tags: ["security", "prompt-injection"]
+domain: "security"
+sourceName: "oasis.security"
+sourceUrl: "https://www.oasis.security/blog/claude-ai-prompt-injection-data-exfiltration-vulnerability"
 draft: false
 ---
 

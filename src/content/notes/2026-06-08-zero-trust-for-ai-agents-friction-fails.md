@@ -7,6 +7,9 @@ takeaways:
   - "Least agency extends least privilege to what a tool can do, not just what it can reach. The guide restricts how often and where each agent tool acts: a database tool gets read-only queries, an email summarizer gets no send or delete rights, an API gets minimal operations."
   - "Size the blast radius before the breach. Assume each agent will be compromised at some point and match its permissions to the damage it could do, so one captured agent cannot pivot into the rest of the estate."
 tags: ["security", "zero-trust", "least-agency", "access-control"]
+domain: "access-and-identity"
+sourceName: "cdn.prod.website-files.com"
+sourceUrl: "https://cdn.prod.website-files.com/6889473510b50328dbb70ae6/6a1611a04085d7cd3dadc924_Claude-eBook-Zero-Trust-for-AI-Agents-05182026.pdf"
 draft: false
 ---
 **Why this matters to you.** If you are putting autonomous agents into production, the security model you inherited was built for a different threat. An agent interprets goals, picks tools, and runs multi-step operations without a human approving each step — so your existing access controls won't stop it from misusing permissions it legitimately holds. On 2026-05-18 Anthropic published [Zero Trust for AI Agents](https://cdn.prod.website-files.com/6889473510b50328dbb70ae6/6a1611a04085d7cd3dadc924_Claude-eBook-Zero-Trust-for-AI-Agents-05182026.pdf), a framework for deploying agents in the enterprise, and its opening claim is blunt: perimeter defenses can't keep up because frontier models are [compressing the time from vulnerability to exploit from months to hours](https://cdn.prod.website-files.com/6889473510b50328dbb70ae6/6a1611a04085d7cd3dadc924_Claude-eBook-Zero-Trust-for-AI-Agents-05182026.pdf) at a cost measured in dollars.

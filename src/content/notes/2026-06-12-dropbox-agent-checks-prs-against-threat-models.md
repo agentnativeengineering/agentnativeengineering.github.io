@@ -7,6 +7,9 @@ takeaways:
   - "Retrieval is the hard half, not the LLM judgment. Dash's semantic search recovered links between 80% of design reviews and their implementing PRs, and 69% of those connections had no shared identifier to grep for — they were recoverable only semantically."
   - "Keep agent security findings advisory and traceable. Dropbox validates each finding against the actual code, ties it to a source requirement, and keeps most findings non-blocking so a false positive costs a reviewer seconds instead of gating a merge."
 tags: ["security", "threat-modeling", "mcp", "code-review"]
+domain: "security"
+sourceName: "dropbox.tech"
+sourceUrl: "https://dropbox.tech/security/dropbox-mcp-dash-design-code-security"
 draft: false
 ---
 **Why this matters to you.** A threat model — the list of attacks a design must defend against, written during security design review — usually goes quiet the moment the review ends. The implementing code lands weeks later in a pull request (PR — one proposed change submitted for review) that nobody compares against it, so controls everyone agreed on can silently never ship. On 2026-06-12, [Dropbox published the measured size of that gap](https://dropbox.tech/security/dropbox-mcp-dash-design-code-security): across 150 design reviews from the prior 18 months, only 12% of implementing PRs linked back to their threat model, the median delay between review and implementation was about five weeks (54% took over a month), and 15% of reviews were filed retroactively, after the code already existed.

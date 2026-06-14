@@ -3,6 +3,9 @@ title: "Your MCP server works — your agent doesn't"
 date: 2026-05-28
 summary: "When an agent fails, the tool and the model are usually fine; the bug is in context, handoff, or the eval — and a trace plus an eval is how you localize it instead of guessing."
 tags: ["observability", "evaluation"]
+domain: "observability"
+sourceName: "github.com"
+sourceUrl: "https://github.com/Arize-ai/phoenix/releases"
 draft: false
 ---
 

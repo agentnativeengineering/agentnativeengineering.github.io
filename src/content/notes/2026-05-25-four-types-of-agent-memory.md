@@ -3,6 +3,9 @@ title: "The four types of agent memory — and why most agents don't need all fo
 date: 2026-05-25
 summary: "Google's Memory Bank is the latest in a wave of memory primitives, but the CoALA framework's four kinds show most agents need only a couple — and the tooling for the hard kind isn't ready yet."
 tags: ["memory", "context"]
+domain: "memory-and-context"
+sourceName: "docs.cloud.google.com"
+sourceUrl: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/memory-bank"
 draft: false
 ---
 

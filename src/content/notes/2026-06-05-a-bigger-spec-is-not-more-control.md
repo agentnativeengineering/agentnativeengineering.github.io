@@ -7,6 +7,9 @@ takeaways:
   - "A bigger spec does not guarantee the agent follows it. In one engineer's tests the agent ignored notes that some classes already existed and duplicated them, and a workflow turned a one-line bug into sixteen acceptance criteria."
   - "Right-size the spec to the task and review the output against it. Generation is now the fast, cheap part; deciding what to build, integrating it, and checking the agent actually followed the spec are not."
 tags: ["coding-agents", "spec-driven-development", "scope"]
+domain: "scope-and-simplicity"
+sourceName: "github.com"
+sourceUrl: "https://github.com/github/spec-kit"
 draft: false
 ---
 

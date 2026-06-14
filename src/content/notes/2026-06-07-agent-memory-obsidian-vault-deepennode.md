@@ -7,6 +7,9 @@ takeaways:
   - "The library leans on Obsidian's Local REST API plugin over HTTPS on port 27124. It handles the self-signed certificate, markdown content type, and URL encoding so the agent just calls one function."
   - "Treating memory as a wikilinked graph keeps structure the agent can later traverse. The deepenNode() call also ensures named [[wikilinks]] exist so the graph view stays connected as the vault grows."
 tags: ["memory-and-context", "obsidian", "agent-memory", "knowledge-graph"]
+domain: "memory-and-context"
+sourceName: "github.com"
+sourceUrl: "https://github.com/samuraisguilt-jpg/obsidian-agent-bridge"
 draft: false
 ---
 **Why this matters to you.** If you have wired an agent to long-term memory, you have probably watched the store turn into a junk drawer. Most "memory" is a vector database or a log: every run appends another row, retrieval pulls back near-duplicates, and nobody folds yesterday's note into today's understanding. The cost shows up later as retrieval noise and context windows full of restated facts.

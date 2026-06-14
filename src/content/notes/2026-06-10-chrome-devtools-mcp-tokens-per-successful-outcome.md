@@ -7,6 +7,9 @@ takeaways:
   - "Most agent-experience failures are silent. Microsoft's walkthrough of the seven steps between a prompt and generated code shows that an oversized tool description simply gets dropped from the context window, and the agent falls back to stale training data with no error anywhere."
   - "Error messages are now agent input, so make them prescriptive. Self-healing errors that state the next step stop literal-minded retry loops, and Datadog's Pup CLI cuts preload cost by letting agents fetch its command schema on demand instead of loading 200+ tool definitions up front."
 tags: ["harness-engineering", "mcp", "agent-experience", "tool-design"]
+domain: "harness-engineering"
+sourceName: "youtube.com"
+sourceUrl: "https://www.youtube.com/watch?v=_B4Pv9ttFgY"
 draft: false
 ---
 **Why this matters to you.** If you ship an SDK, CLI, or MCP server (Model Context Protocol — the standard interface coding agents use to call external tools), agents are already your users, and they fail differently than humans: they read everything you return into a token-limited context window, take error messages literally, and silently skip your tool when its description costs too much space. The price is invisible — the agent writes code from stale training data instead, and nobody files a bug. On 2026-06-05, Michael Hablich of Google published [a talk on the engineering lessons from Chrome DevTools MCP](https://www.youtube.com/watch?v=_B4Pv9ttFgY), the purpose-built server that lets agents like Claude Code, Gemini CLI, and Codex debug and profile live web pages.

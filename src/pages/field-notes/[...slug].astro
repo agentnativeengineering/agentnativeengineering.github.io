@@ -1,29 +1,69 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
+import { marked } from 'marked';
 import Base from '../../layouts/Base.astro';
 import Footer from '../../components/Footer.astro';
 import ForAgents from '../../components/ForAgents.astro';
+import { accentOf, type Phase } from '../../data/phase';
 
 export async function getStaticPaths() {
   const notes = (await getCollection('notes', ({ data }) => !data.draft)).sort(
     (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
   );
+  const guide = await getCollection('guide');
+  const domainBySlug = new Map(
+    guide.map((g) => [g.id, { title: g.data.title, phase: g.data.phase as Phase, order: g.data.order, principle: g.data.principles[0] ?? g.data.question }]),
+  );
+  const episodes = (await getCollection('episodes', ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  );
+  const epByNote = new Map<string, { id: string; title: string }>();
+  for (const ep of episodes) for (const c of ep.data.covers) if (!epByNote.has(c)) epByNote.set(c, { id: ep.id, title: ep.data.title });
+
   return notes.map((note, i) => ({
     params: { slug: note.id },
-    props: { note, newer: notes[i - 1] ?? null, older: notes[i + 1] ?? null },
+    props: {
+      note,
+      domain: note.data.domain ? domainBySlug.get(note.data.domain) ?? null : null,
+      episode: epByNote.get(note.id) ?? null,
+      newer: notes[i - 1] ?? null,
+      older: notes[i + 1] ?? null,
+    },
   }));
 }
 
-const { note, newer, older } = Astro.props;
-const { Content } = await render(note);
+const { note, domain, episode, newer, older } = Astro.props;
 const { title, date, summary, tags, takeaways } = note.data;
 
+const accent = domain ? accentOf(domain.phase) : '#b8430f';
+const filedLabel = domain ? domain.title : tags[0];
 const fmt = (d: Date) => d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }).toUpperCase();
 const words = note.body ? note.body.trim().split(/\s+/).length : 0;
 const readMin = Math.max(1, Math.round(words / 200));
-const topTag = tags[0];
-
 const lead = takeaways?.[0]?.replace(/\*\*/g, '') ?? summary ?? '';
+
+// Split the note body into infographic section cards. A section starts at a `##` heading or a
+// `**Bold lead-in.**` opening a paragraph; its label becomes the card's `// EYEBROW`.
+function parseSections(md: string) {
+  const blocks = md.trim().split(/\n{2,}/);
+  type S = { label: string | null; blocks: string[] };
+  const out: S[] = [];
+  let cur: S | null = null;
+  const flush = () => { if (cur && cur.blocks.join('').trim()) out.push(cur); };
+  for (const raw of blocks) {
+    const t = raw.trim();
+    if (!t) continue;
+    if (/^\[[^\]]+\]\(\/guide\/[^)]+\)\.?$/.test(t)) continue; // drop trailing "[Domain](/guide/..)" link
+    const h = t.match(/^#{2,3}\s+(.+)$/);
+    const b = t.match(/^\*\*(.+?)\*\*\s*([\s\S]*)$/);
+    if (h) { flush(); cur = { label: h[1].replace(/[:.]\s*$/, ''), blocks: [] }; }
+    else if (b && b[1].length <= 64) { flush(); cur = { label: b[1].replace(/[:.]\s*$/, ''), blocks: b[2].trim() ? [b[2].trim()] : [] }; }
+    else { if (!cur) cur = { label: null, blocks: [] }; cur.blocks.push(t); }
+  }
+  flush();
+  return out.map((s) => ({ label: s.label, html: marked.parse(s.blocks.join('\n\n')) as string }));
+}
+const sections = note.body ? parseSections(note.body) : [];
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const iso = date.toISOString().slice(0, 10);
@@ -47,19 +87,24 @@ const jsonLd = [
 
 <Base active="notes" title={`${title} — Agent Native Engineering`} description={summary} ogType="article" jsonLd={jsonLd}>
   <div class="wrap" data-r="pad">
-    <article class="article" style="--accent:#b8430f">
+    <article class="article" style={`--accent:${accent}`}>
       <a class="backlink" href="/field-notes/">← Daily Notes</a>
 
       <header style="margin:22px 0 0">
         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-          {topTag && <span class="badge">{topTag.toUpperCase()}</span>}
+          {filedLabel && <span class="badge">{filedLabel.toUpperCase()}</span>}
           <span style="font-family:var(--mono);font-size:11px;letter-spacing:0.1em;color:var(--muted-2)">{fmt(date)}</span>
         </div>
         <h1 class="page-h1" data-r="page-h1" style="font-size:46px;margin:18px 0 0">{title}</h1>
         {summary && <p class="page-dek" style="margin-top:18px">{summary}</p>}
         <div class="article-meta" style="margin-top:22px;padding:14px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)">
           <span>{readMin} min read</span>
-          {topTag && <span><span class="k">Filed under</span> {topTag}</span>}
+          {filedLabel && (
+            <span><span class="k">Filed under</span> {domain ? <a href={`/guide/${note.data.domain}/`} style={`color:${accent};text-decoration:none`}>{filedLabel}</a> : filedLabel}</span>
+          )}
+          {note.data.sourceUrl && (
+            <span><span class="k">Source</span> <a href={note.data.sourceUrl} target="_blank" rel="noopener" style="color:var(--ink);border-bottom:1px solid var(--faint-2);text-decoration:none">{note.data.sourceName ?? 'original'} ↗</a></span>
+          )}
           <button class="copy-link" type="button" data-copy-link data-url={canonical} style="margin-left:auto">Copy link</button>
         </div>
       </header>
@@ -76,21 +121,72 @@ const jsonLd = [
         </section>
       )}
 
-      <div class="prose" style="margin-top:38px"><Content /></div>
+      <div class="note-sections">
+        {sections.map((s) => (
+          <section class="note-section">
+            {s.label && <span class="eyebrow">// {s.label.toUpperCase()}</span>}
+            <div class="prose" set:html={s.html} />
+          </section>
+        ))}
+      </div>
+
+      {note.data.sourceUrl && (
+        <section class="sources-card">
+          <div class="sources-label">SOURCES</div>
+          <a class="source-row" href={note.data.sourceUrl} target="_blank" rel="noopener">
+            <span class="source-name">{note.data.sourceName ?? 'Primary source'}</span>
+            <span class="source-host">{note.data.sourceName ?? 'source'} ↗</span>
+          </a>
+        </section>
+      )}
+
+      {(domain || episode) && (
+        <section class="related">
+          <div class="related-label">RELATED</div>
+          <div class="related-grid">
+            {domain && (
+              <a class="card hover rel-card" href={`/guide/${note.data.domain}/`} style={`--accent:${accent}`}>
+                <span class="badge" style="align-self:flex-start">FROM THE GUIDE</span>
+                <h3 class="rel-title">{String(domain.order).padStart(2, '0')} · {domain.title}</h3>
+                <p class="rel-body">{domain.principle}</p>
+                <span class="rel-more">Read the domain →</span>
+              </a>
+            )}
+            {episode && (
+              <a class="card hover rel-card" href={`/daily-brief/${episode.id}/`} style="--accent:#2f7d56">
+                <span class="badge" style="align-self:flex-start">DAILY BRIEF</span>
+                <h3 class="rel-title">In this edition</h3>
+                <p class="rel-body">{episode.title}</p>
+                <span class="rel-more" style="color:#2f7d56">Open the brief →</span>
+              </a>
+            )}
+          </div>
+        </section>
+      )}
 
       <nav class="prevnext">
-        <span>{older && <a href={`/field-notes/${older.id}/`}>← {older.data.title}</a>}</span>
-        <span>{newer && <a href={`/field-notes/${newer.id}/`}>{newer.data.title} →</a>}</span>
+        {older ? (
+          <a class="pn-card" href={`/field-notes/${older.id}/`}>
+            <span class="pn-label">← PREVIOUS</span>
+            <span class="pn-title">{older.data.title}</span>
+          </a>
+        ) : <span></span>}
+        {newer ? (
+          <a class="pn-card pn-next" href={`/field-notes/${newer.id}/`}>
+            <span class="pn-label">NEXT →</span>
+            <span class="pn-title">{newer.data.title}</span>
+          </a>
+        ) : <span></span>}
       </nav>
     </article>
 
-    <ForAgents description="— this note, structured and sourced. Feed it to your own agent.">
+    <ForAgents label="Machine-readable ▸" description="— this note, structured and sourced. Feed it to your own agent.">
       <button class="fa-btn solid" type="button" data-copy-link data-url={canonical}>Copy link</button>
       <a class="fa-btn faint" href="/rss.xml">RSS</a>
     </ForAgents>
   </div>
 
-  <Footer slot="footer" variant="slim" left={`Daily Note · <span class="strong">Agent Native Engineering</span>${topTag ? ` · filed under ${topTag}` : ''}`} />
+  <Footer slot="footer" variant="slim" left={`Daily Note · <span class="strong">Agent Native Engineering</span>${filedLabel ? ` · filed under ${filedLabel}` : ''}`} />
 </Base>
 
 <script>
@@ -111,8 +207,43 @@ const jsonLd = [
   .extra-takeaways { margin: 14px 0 0; padding-left: 1.1rem; }
   .extra-takeaways li { font-family: var(--sans); font-size: 14px; line-height: 1.55; color: var(--muted); }
   .extra-takeaways li::marker { color: var(--accent); }
-  .prevnext { margin-top: 38px; padding-top: 18px; border-top: 1px solid var(--hair); display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-family: var(--serif); font-size: 16px; }
-  .prevnext a { color: var(--ink); text-decoration: none; }
-  .prevnext a:hover { color: var(--accent); }
-  .prevnext span:last-child { text-align: right; }
+
+  /* Infographic section cards (the note body) */
+  .note-sections { margin-top: 22px; display: flex; flex-direction: column; gap: 18px; }
+  .note-section { background: var(--card); border: 1.5px solid var(--ink); border-radius: 6px; padding: 24px 26px; box-shadow: 4px 4px 0 var(--accent); }
+  .note-section .eyebrow { display: block; margin-bottom: 13px; color: var(--accent); letter-spacing: 0.16em; }
+  .note-section .prose { max-width: none; font-size: 15.5px; }
+  .note-section .prose > :first-child { margin-top: 0; }
+  /* ordered list -> numbered step badges */
+  .note-section .prose ol { list-style: none; margin: 0; padding: 0; counter-reset: step; display: flex; flex-direction: column; gap: 14px; }
+  .note-section .prose ol > li { counter-increment: step; display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start; }
+  .note-section .prose ol > li::before { content: counter(step, decimal-leading-zero); font-family: var(--mono); font-weight: 600; font-size: 12px; color: var(--accent); border: 1.5px solid var(--accent); border-radius: 3px; padding: 4px 9px; }
+  .note-section .prose ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .note-section .prose ul > li { display: grid; grid-template-columns: auto 1fr; gap: 11px; align-items: start; }
+  .note-section .prose ul > li::before { content: "/"; font-family: var(--mono); font-weight: 600; color: var(--accent); }
+
+  /* Sources card */
+  .sources-card { margin-top: 28px; background: var(--card); border: 1.5px solid var(--ink); border-radius: 4px; padding: 24px 26px; }
+  .sources-label { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; color: var(--faint); margin-bottom: 14px; }
+  .source-row { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding: 0; text-decoration: none; }
+  .source-name { font-family: var(--serif); font-size: 17px; color: var(--ink); }
+  .source-host { font-family: var(--mono); font-size: 11px; color: var(--accent); white-space: nowrap; }
+
+  /* Related cards */
+  .related { margin-top: 28px; }
+  .related-label { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; color: var(--faint); margin-bottom: 16px; }
+  .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 24px 22px; }
+  .rel-card { padding: 22px 22px 16px; display: flex; flex-direction: column; gap: 11px; text-decoration: none; }
+  .rel-title { font-family: var(--serif); font-weight: 600; font-size: 20px; line-height: 1.12; margin: 0; color: var(--ink); }
+  .rel-body { font-family: var(--sans); font-size: 13.5px; line-height: 1.5; color: var(--muted); margin: 0; text-wrap: pretty; }
+  .rel-more { font-family: var(--mono); font-size: 11px; color: var(--accent); margin-top: 4px; }
+
+  /* Prev / next cards */
+  .prevnext { margin-top: 38px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .pn-card { border: 1px solid var(--hair-2); border-radius: 4px; padding: 18px 20px; text-decoration: none; display: flex; flex-direction: column; gap: 7px; }
+  .pn-card:hover { border-color: var(--accent); }
+  .pn-next { text-align: right; }
+  .pn-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--faint); }
+  .pn-title { font-family: var(--serif); font-size: 16px; line-height: 1.25; color: var(--ink); }
+  @media (max-width: 560px) { .prevnext { grid-template-columns: 1fr; } .pn-next { text-align: left; } }
 </style>
