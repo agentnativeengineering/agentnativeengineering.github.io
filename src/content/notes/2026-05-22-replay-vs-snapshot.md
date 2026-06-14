@@ -3,6 +3,9 @@ title: "Replay vs. snapshot: two ways to make an agent crash-proof"
 date: 2026-05-22
 summary: "Long-running agents need durable execution, and the two roads — replaying an event history or snapshotting the machine — solve different halves of the problem."
 tags: ["durable-execution", "reliability"]
+domain: "durable-execution"
+sourceName: "dbos.dev"
+sourceUrl: "https://www.dbos.dev/blog/new-in-dbos-may-2026"
 draft: false
 ---
 

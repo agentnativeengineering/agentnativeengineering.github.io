@@ -7,6 +7,19 @@ seconds: 468
 covers:
   - 2026-06-12-dropbox-agent-checks-prs-against-threat-models
   - 2026-06-12-stripe-scopes-agent-payment-tokens-to-seller-amount-and-time-window
+brief:
+  - kind: story
+    domain: "access-and-identity"
+    source: "youtube.com"
+    url: "https://www.youtube.com/watch?v=KLSuFPj2ld0"
+    title: "Stripe scopes agent payment tokens to seller, amount, and time window"
+    body: "Stripe's Steve Kaliski explains how shared payment tokens, an HTTP 402 machine payments protocol, and the Agentic Commerce Protocol keep a non-deterministic agent planner from spending outside a Stripe-enforced mandate."
+  - kind: story
+    domain: "security"
+    source: "dropbox.tech"
+    url: "https://dropbox.tech/security/dropbox-mcp-dash-design-code-security"
+    title: "Dropbox built an agent that checks PRs against their threat models"
+    body: "Dropbox found only 12% of implementing PRs link back to their threat model, so it built an MCP+Dash agent that retrieves the relevant security requirements at code-review time and compares them against the diff."
 draft: false
 ---
 

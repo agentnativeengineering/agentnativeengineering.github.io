@@ -3,6 +3,9 @@ title: "The $47,000 loop: alerts aren't enforcement"
 date: 2026-05-23
 summary: "An agent that goes wrong doesn't crash, it spends — and only a hard cap that terminates before the next API call can stop it; a dashboard or alert arrives too late."
 tags: ["cost", "autonomy"]
+domain: "autonomy-and-cost"
+sourceName: "fortune.com"
+sourceUrl: "https://fortune.com/2026/05/22/microsoft-ai-cost-problem-tokens-agents/"
 draft: false
 ---
 

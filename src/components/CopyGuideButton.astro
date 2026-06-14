@@ -1,0 +1,30 @@
+---
+// "Copy the guide .md" button for the "For agents" band. Generates the guide as markdown at
+// build time and copies it client-side. Self-contained so any page can drop it in.
+import { getCollection } from 'astro:content';
+
+const domains = (await getCollection('guide', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const guideMd =
+  '# Agent-Native Engineering — The Guide\n\n' +
+  'Twelve engineering domains for building and operating AI agents in production.\n\n' +
+  domains
+    .map((d) => `## ${String(d.data.order).padStart(2, '0')} · ${d.data.title}\n${d.data.question}\n` + d.data.principles.map((p) => `- ${p}`).join('\n'))
+    .join('\n\n') + '\n';
+---
+
+<button class="fa-btn solid" type="button" data-copy-guide data-md={guideMd}>Copy the guide .md</button>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-guide]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.md || '');
+        const original = btn.textContent;
+        btn.textContent = 'Copied to clipboard ✓';
+        setTimeout(() => { btn.textContent = original; }, 1900);
+      } catch {}
+    });
+  });
+</script>

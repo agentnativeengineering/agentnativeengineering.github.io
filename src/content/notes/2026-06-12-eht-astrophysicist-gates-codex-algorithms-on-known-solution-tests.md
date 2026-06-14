@@ -7,6 +7,9 @@ takeaways:
   - "The pattern works because the domain has a cheap, trustworthy verifier. When a known-correct answer exists, you can let an agent generate aggressively and let the test, not a reviewer's judgment, decide what survives."
   - "Write the known-answer check before you hand a task to an agent. A failing oracle turns plausible-looking wrong code from a review burden into an automatic rejection."
 tags: ["evaluation", "codex", "verification", "scientific-computing"]
+domain: "evaluation"
+sourceName: "openai.com"
+sourceUrl: "https://openai.com/index/using-codex-to-simulate-black-holes"
 draft: false
 ---
 **Why this matters to you.** A coding agent will hand you code that looks right and is subtly wrong, and the cost lands on you: reviewing a plausible numerical kernel line by line is often slower than writing it yourself. The way out is not a smarter model — it is a verifier the agent's output must pass before anyone trusts it. On 2026-06-11, [OpenAI published an account](https://openai.com/index/using-codex-to-simulate-black-holes) of Chi-kwan Chan, an astrophysicist at the University of Arizona and a member of the Event Horizon Telescope (EHT) collaboration — the team behind the first image of a black hole in 2019 — who works exactly this way with Codex (OpenAI's coding agent) in his research, as the team moves toward the first video of the supermassive black hole at the center of the M87 galaxy.

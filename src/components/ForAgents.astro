@@ -1,0 +1,20 @@
+---
+// The dark "For agents ▸" band that closes every page. The label + description are props;
+// each page supplies its own buttons via the default slot (they differ per page —
+// copy-the-guide, download .json, .md, llms.txt, RSS, etc.).
+interface Props {
+  label?: string;
+  description: string;
+}
+const { label = 'For agents ▸', description } = Astro.props;
+---
+
+<section class="for-agents" id="machine">
+  <div class="lead">
+    <span class="label">{label}</span>
+    <span class="desc">{description}</span>
+  </div>
+  <div class="btns">
+    <slot />
+  </div>
+</section>

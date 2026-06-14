@@ -7,6 +7,9 @@ takeaways:
   - "The gap is a skipped check. Keycloak verified the outer message's signature but not the encrypted login inside it when the outer message itself was unsigned."
   - "Fix it in two moves. Upgrade to a patched line, then require signed SAML responses on every external login provider (the advisory prescribes only the upgrade; the signing step is this note's hardening)."
 tags: ["access-identity", "security"]
+domain: "access-and-identity"
+sourceName: "github.com"
+sourceUrl: "https://github.com/keycloak/keycloak/security/advisories/GHSA-794g-x443-36f7"
 draft: false
 ---
 

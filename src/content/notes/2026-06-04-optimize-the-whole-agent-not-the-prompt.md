@@ -1,0 +1,23 @@
+---
+title: "Tune the whole agent against a rubric, then pick the candidate yourself"
+date: 2026-06-04
+summary: "When an agent answers badly in production you can burn days guessing which of four parts to fix: its instructions, a tool's description, the model, or a missing skill. Microsoft's Foundry Agent Optimizer reads the saved logs of real runs (traces), proposes edits to all four, ranks them by a quality score you set, and leaves you to choose which version ships."
+takeaways:
+  - "When an agent answers badly, four things could be the cause: its instructions, a tool description, the model, or a skill. Guessing one at a time burns days, so test edits to all four against one shared quality score."
+  - "Microsoft's Foundry Agent Optimizer reads your real production traces and proposes candidate edits across those four levers, ranked by a rubric you weight. In Microsoft's own demo and sample the best candidate scored measurably higher, but those are vendor figures on their own scenarios."
+  - "The optimizer proposes and ranks; you promote. It shows each candidate side by side with what improved, what regressed, and the token cost, then a person picks which version goes live."
+tags: ["harness-engineering", "evaluation", "agent-optimization"]
+draft: true
+---
+
+**Why this matters to you.** When your agent answers badly in production, you can burn days guessing which of four parts to fix: the model, the system prompt (its standing instructions), the description of each tool it can call, or a reusable skill (a saved procedure it can follow). You usually cannot tell which by reading the trace — the saved record of one run: the user input, every tool the agent called, and its final answer. In a 2 June 2026 Microsoft Build talk (BRK241), Jeff Hollan, Partner Director on Microsoft Foundry, put it this way: "If I'm having an issue with my agent, which one of those variables should I tune and tweak?" ([talk](https://www.youtube.com/watch?v=_8UKz197JuM), Microsoft Build 2026). In his demo, Hollan's field-operations voice agent answered by reading out a bullet-point list — accurate, but "a little bit robotic" to listen to.
+
+**What the optimizer does.** Foundry's Agent Optimizer reads your traces plus an evaluator's scores, then generates candidate edits — each one a concrete proposed change, like a reworded prompt or a swapped model — and ranks them. Microsoft's write-up covers all four levers: it rewrites instructions where responses "fall short," generates reusable skills, evaluates "across multiple model deployments in the same run," and refines tool descriptions so the agent "picks the right tool more reliably" ([Foundry blog, *Introducing Agent Optimizer*](https://devblogs.microsoft.com/foundry/agent-optimizer-build2026/), 2 June 2026). Only invited customers can use it now (private preview); public preview is ~30 days out.
+
+**The score is a rubric you weight.** Foundry's Rubric evaluator (public preview) auto-generates scoring dimensions from your agent's context — correct tool use, a safety check, "voice-optimized conciseness" — and you set the weights. In the demo Hollan bumped the voice-conciseness weight from 3 to 10 to steer the optimizer toward his complaint ([talk](https://www.youtube.com/watch?v=_8UKz197JuM)). That run found a candidate worth "11% better performance," and Microsoft's published example moves a composite score (the rubric's weighted dimensions rolled into one 0-to-1 number) "from 0.60 to 0.92" ([Foundry blog](https://devblogs.microsoft.com/foundry/agent-optimizer-build2026/)). Both are vendor figures on their own scenarios, so do not read them as a guarantee for your case.
+
+**You still promote.** To promote means to pick one candidate and make it the live version. The optimizer ranks candidates and shows each side by side — "what improved, what regressed, and why," plus per-task token cost — and "each promoted candidate becomes a new versioned hosted agent deployment — auditable, rollback-ready" ([Foundry blog](https://devblogs.microsoft.com/foundry/agent-optimizer-build2026/)). The tool searches and ranks, but a person decides which version goes live.
+
+**What to do tomorrow.** Before you touch the agent, write the scorecard first: pick the two or three things you care about (correct answer, safe answer, short enough to listen to) and give each a weight — the loop is only as good as that rubric. You can run the same loop on free tools — score your saved runs with an open evaluator like [DeepEval](https://github.com/confident-ai/deepeval), then compare each edited version against that scorecard before shipping.
+
+[Harness Engineering](/guide/harness-engineering/)

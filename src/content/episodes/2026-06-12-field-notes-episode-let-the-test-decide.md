@@ -6,6 +6,13 @@ audio: /audio/field-notes-episode-let-the-test-decide.mp3
 seconds: 366
 covers:
   - 2026-06-12-eht-astrophysicist-gates-codex-algorithms-on-known-solution-tests
+brief:
+  - kind: story
+    domain: "evaluation"
+    source: "openai.com"
+    url: "https://openai.com/index/using-codex-to-simulate-black-holes"
+    title: "An EHT astrophysicist gates Codex-generated algorithms on known-solution tests"
+    body: "Event Horizon Telescope researcher Chi-kwan Chan uses Codex to generate candidate black-hole plasma algorithms and accepts them only after they pass tests against known solutions — a verification-gated pattern any agent harness can copy."
 draft: false
 ---
 

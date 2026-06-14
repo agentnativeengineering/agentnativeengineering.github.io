@@ -3,6 +3,9 @@ title: "Why Agent Native Engineering exists"
 date: 2026-05-21
 summary: "An open community for building, operating, and engineering with AI agents in production — built on existing open protocols, and organised around one loop: build, operate, then let agents do the engineering."
 tags: ["meta", "agent-native"]
+domain: "scope-and-simplicity"
+sourceName: "oasis.security"
+sourceUrl: "https://www.oasis.security/blog/claude-ai-prompt-injection-data-exfiltration-vulnerability"
 draft: false
 ---
 

@@ -7,6 +7,9 @@ takeaways:
   - "The gap is where intermediate data lives during the run. The standard loop returns each 15-30 KB JSON tool result into model context, where it accumulates and triggers per-minute rate caps; in Code Mode the agent batches MCP calls in one TypeScript program and payloads stay in the sandbox."
   - "Models fail differently when tool results flow through them. Sonnet passed a phrase query unquoted and confidently reported inflated counts, Opus self-corrected with client-side validation, and GPT-5-4 twice reported a 50-item array cap as the real total."
 tags: ["memory-and-context", "code-mode", "mcp", "tool-calling"]
+domain: "memory-and-context"
+sourceName: "aaif.io"
+sourceUrl: "https://aaif.io/blog/how-port-of-context-eliminated-production-agent-failures/"
 draft: false
 ---
 **Why this matters to you.** When your agent calls tools through MCP (the Model Context Protocol — the standard interface for wiring external tools to a model), every result comes back into the model's context window. A GitHub search here, a Hacker News fetch there, each returning 15–30 KB of JSON, and the context balloons until you hit per-minute token rate limits and the run dies mid-task — a failure that looks random and costs you twice, because you pay for tokens the model only ever passed along. On 2026-06-10, [Port of Context published a controlled experiment](https://aaif.io/blog/how-port-of-context-eliminated-production-agent-failures/) from their production GTM-intelligence agent — built on the open-source goose framework with Arcade.dev and a custom MCP server, it searches GitHub and Hacker News and posts digests to Slack — where the standard tool loop completed only 56% of tasks and the alternative completed all of them.

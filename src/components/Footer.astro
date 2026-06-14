@@ -1,0 +1,70 @@
+---
+// Footer in two variants:
+//   full  — the columned home footer (brand + Explore / Listen / Community / For agents).
+//   slim  — a single provenance line, used on inner pages. `left`/`right` set its two lines.
+interface Props {
+  variant?: 'full' | 'slim';
+  left?: string;
+  right?: string;
+}
+const { variant = 'slim', left = 'Agent Native Engineering · CC BY 4.0', right = 'Build · Operate · Engineer ✌' } = Astro.props;
+
+const cols = [
+  { head: 'EXPLORE', items: [
+    { t: 'The Guide', u: '/guide/' },
+    { t: 'Reference Architecture', u: '/architectures/' },
+    { t: 'Daily Notes', u: '/field-notes/' },
+    { t: 'Daily Brief', u: '/daily-brief/' },
+  ] },
+  { head: 'LISTEN', items: [
+    { t: 'Apple', u: '/daily-brief/' },
+    { t: 'Spotify', u: '/daily-brief/' },
+    { t: 'YouTube', u: '/daily-brief/' },
+    { t: 'RSS', u: '/rss.xml' },
+  ] },
+  { head: 'COMMUNITY', items: [
+    { t: 'Contribute', u: '/contribute/' },
+    { t: 'Glossary', u: '/glossary/' },
+    { t: 'Cite', u: '/cite/' },
+    { t: 'GitHub', u: 'https://github.com/agentnativeengineering' },
+  ] },
+  { head: 'FOR AGENTS', items: [
+    { t: 'agent.json', u: '/#machine' },
+    { t: 'llms.txt', u: '/#machine' },
+    { t: 'The guide .md', u: '/#machine' },
+    { t: 'MCP server', u: '/#machine' },
+  ] },
+];
+---
+
+{variant === 'full' ? (
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-cols">
+        <div>
+          <div class="footer-brand">AGENT NATIVE<br />ENGINEERING</div>
+          <p class="footer-tag">The daily briefing on what actually matters in agent engineering. Every insight, field-tested.</p>
+        </div>
+        {cols.map((col) => (
+          <div>
+            <div class="footer-col-head">{col.head}</div>
+            <div class="footer-col-links">
+              {col.items.map((it) => <a href={it.u}>{it.t}</a>)}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 — Open knowledge under CC BY 4.0</span>
+        <span>Build · Operate · Engineer ✌</span>
+      </div>
+    </div>
+  </footer>
+) : (
+  <footer class="footer footer-slim">
+    <div class="footer-inner">
+      <span set:html={left} />
+      <span class="faint">{right}</span>
+    </div>
+  </footer>
+)}

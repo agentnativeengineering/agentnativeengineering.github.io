@@ -7,6 +7,9 @@ takeaways:
   - "The agent reads results in small paginated chunks and filters by source. That lets it pull, say, 20 Reddit hits at a time rather than paging through 42 mixed results inline."
   - "Five sources work with zero keys, including Hacker News via Algolia, Reddit, GitHub, the Jina reader, and a web fallback chaining DuckDuckGo, Wikipedia, and Bing. Paid backends like Tavily and Exa are opt-in through config."
 tags: ["memory-and-context", "context-window", "agent-tools", "search"]
+domain: "memory-and-context"
+sourceName: "news.ycombinator.com"
+sourceUrl: "https://news.ycombinator.com/item?id=48432000"
 draft: false
 ---
 **Why this matters to you.** If you have ever wired a web-search tool into an agent, you know the failure mode: a single query returns ten results with full snippets, the agent calls it three times, and suddenly half the context window is search debris the model has to read past on every turn. The cost is real — you pay for those tokens, latency climbs, and the model's attention thins out across noise it never needed.

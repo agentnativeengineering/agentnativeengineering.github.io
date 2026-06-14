@@ -3,6 +3,9 @@ title: "Do your agents need a durable-execution control plane, or a SQLite file?
 date: 2026-05-31
 summary: "A single SQLite execution log plus Litestream-to-S3 backup gives you the whole durable-execution model — append-only log, deterministic replay, retrying activities — with no broker; the catch is a bounded async-replication data-loss window you have to size yourself."
 tags: ["durable-execution", "sqlite"]
+domain: "durable-execution"
+sourceName: "obeli.sk"
+sourceUrl: "https://obeli.sk/blog/sqlite-is-all-you-need-for-durable-workflows/"
 draft: false
 ---
 
