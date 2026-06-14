@@ -1,0 +1,47 @@
+---
+title: "Run agent code in a zero-capability sandbox, not on your laptop"
+date: 2026-06-14
+summary: "Cloudflare, AWS, Nori, and Simon Willison converge the same week on the same fix for agent-run code: disposable isolates that start with no capabilities and grant permissions one at a time."
+takeaways:
+  - "Start the agent's execution environment with zero capabilities and grant each permission narrowly, instead of locking down a host that already has full access to your secrets and filesystem."
+  - "Keep real credentials out of the agent's environment; inject them at the boundary via a token vault or proxy."
+  - "Per-session disposable microVMs contain a compromise to a single run."
+tags: ["security", "sandboxing", "microvm", "code-execution"]
+sourceName: "AI Engineer"
+sourceUrl: "https://www.youtube.com/watch?v=SKDJo2CopRs"
+sources:
+  - title: "Cloudflare: dynamic workers and zero-capability eval++ (AI Engineer talk)"
+    url: "https://www.youtube.com/watch?v=SKDJo2CopRs"
+  - title: "AWS: hosting coding agents on Bedrock AgentCore microVMs"
+    url: "https://aws.amazon.com/blogs/machine-learning/its-safe-to-close-your-laptop-now-hosting-coding-agents-on-amazon-bedrock-agentcore/"
+  - title: "Local coding agents are inherently unsafe (HN-surfaced)"
+    url: "https://news.ycombinator.com/item?id=48426730"
+  - title: "Simon Willison: running Python in a MicroPython + WASM sandbox"
+    url: "https://simonwillison.net/2026/Jun/6/micropython-in-a-sandbox/"
+draft: false
+---
+## What happened
+
+In a talk published 2026-06-08, two Cloudflare engineers who [build AI agents at Cloudflare](https://www.youtube.com/watch?v=SKDJo2CopRs) described "dynamic workers" — a primitive that runs LLM- or user-generated code from a raw string inside an isolated worker sandbox. The key design choice: the sandbox starts with *zero capabilities*. No `fetch`, no environment variables, no filesystem. You explicitly grant each narrow permission the code is allowed to use. They frame it as a fast, cheap revival of `eval` ("eval++") made safe because the blast radius defaults to nothing.
+
+The same week, three other practitioners shipped the same idea from different angles. AWS argued for [moving coding agents off the laptop](https://aws.amazon.com/blogs/machine-learning/its-safe-to-close-your-laptop-now-hosting-coding-agents-on-amazon-bedrock-agentcore/) onto Bedrock AgentCore, giving each session its own isolated Firecracker microVM (a lightweight virtual machine) with tool credentials held in a Token Vault, never in the agent's environment. A practitioner running Nori [made the same case](https://news.ycombinator.com/item?id=48426730): disposable per-session Firecracker VMs, rebuilt each run, with real secrets injected into outbound traffic by a proxy so they never touch the box. And Simon Willison [released micropython-wasm](https://simonwillison.net/2026/Jun/6/micropython-in-a-sandbox/), running Python in a WebAssembly sandbox with hard memory and CPU-fuel limits.
+
+## Why it matters
+
+The wall is that the host you already have is the wrong container. Your laptop shares its SSH keys, ports, and filesystem with any agent you run; the Nori author admits to running Claude Code with `--dangerously-skip-permissions` and living in fear it will `rm -rf` his machine. OS-level permission prompts are a band-aid because filesystem access is inherent to the job. Containment has to be the default, not a rule you remember to add.
+
+## How it works
+
+1. **Start at zero.** The sandbox boots with no capabilities — Cloudflare's worker has no `fetch` or env vars until you grant them.
+2. **Grant narrowly.** You hand the code only the specific permissions it needs, so a stray command has nothing to reach.
+3. **Keep secrets out of the box.** AWS's Token Vault and Nori's proxy inject credentials at the boundary, never into the agent's environment.
+4. **Make it disposable.** Per-session Firecracker microVMs are rebuilt each run, so a compromise dies with the session.
+5. **Bound the resources.** Willison's WASM sandbox caps memory and uses wasmtime "fuel" to stop runaway CPU.
+
+> Make containment the default and grant capabilities one at a time, instead of locking down a host that starts with full access.
+
+## What broke
+
+The failure mode every author hit is the same: trusting a host that begins with full access and then trying to subtract risk. OS sandboxes and deny-rules leak because filesystem access is the job. The fix is harness engineering, not a safer prompt — start the execution environment with nothing and add capabilities deliberately. Willison notes even GPT-5.5 has so far failed to escape his fuel-limited WASM blob.
+
+[Security](/guide/security/)

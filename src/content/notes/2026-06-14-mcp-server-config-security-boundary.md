@@ -1,0 +1,45 @@
+---
+title: "Treat an MCP server config as your security boundary, not settings"
+date: 2026-06-14
+summary: "Docker's two MCP horror stories show that an unvetted server config and a fully-permitted agent both cause real damage, and the fix is a gateway, sandbox, and audited control plane."
+takeaways:
+  - "Route every MCP call through a gateway, sandbox the runtime at the OS level, and audit-log every tool invocation — permission alone is not safety."
+  - "An MCP server config launches processes and reads your filesystem, so review it like code that executes before you install it."
+  - "Verify an OAuth 2.1 token on every tool call and gate high-risk actions behind human approval, since most framework defaults ship with no auth."
+tags: ["security", "mcp", "audit", "oauth"]
+sourceName: "Agentic AI Foundation"
+sourceUrl: "https://aaif.io/blog/three-key-operational-patterns-you-need-to-prevent-mcp-horror-stories/"
+sources:
+  - title: "Docker's three operational patterns to prevent MCP horror stories"
+    url: "https://aaif.io/blog/three-key-operational-patterns-you-need-to-prevent-mcp-horror-stories/"
+  - title: "Read an MCP server config like it can execute code (HN)"
+    url: "https://news.ycombinator.com/item?id=48418092"
+  - title: "MCP authorization step by step (Solo.io)"
+    url: "https://www.solo.io/blog/understanding-mcp-authorization-step-by-step-part-one"
+  - title: "The five security risks specific to MCP servers (WorkOS/OWASP)"
+    url: "https://workos.com/blog/mcp-security-risks"
+draft: false
+---
+## What happened
+
+In a talk at MCP Dev Summit North America 2026, [published 2026-06-12](https://aaif.io/blog/three-key-operational-patterns-you-need-to-prevent-mcp-horror-stories/), Docker product manager Cecilia Liu told two MCP "horror stories." MCP — the Model Context Protocol, the standard way agents connect to external tools — turns a config file into running code. In the first, an engineer installed an MCP server found via Google straight into their local catalog with no review; three weeks later security found leaked code, API keys, and secrets, with no audit log to reconstruct what happened. In the second, a developer let an approved GitHub agent "clean up a repo" without confirmation — it merged open PRs, deleted branches, and wiped an unpushed work-in-progress branch. Nothing malicious occurred; everything the agent did was permitted. A separate [post grounded in OWASP's agentic-AI guidance](https://workos.com/blog/mcp-security-risks) names the same gaps: unauthenticated tool access, excessive permissions, and missing audit trails.
+
+## Why it matters
+
+An MCP server is not a settings file. As one [widely-discussed piece](https://news.ycombinator.com/item?id=48418092) puts it, the config launches a local process, passes environment variables, and points at your filesystem, so it belongs to your security boundary, not your preferences. Liu's second story is the sharper lesson: permission alone does not equal safety. An agent acting fully within its grants can still cause destructive, irreversible damage, which is squarely a Security problem before it is a prompt problem.
+
+## How it works
+
+1. **Gateway as the single path.** Route every agent-to-server call through one [MCP gateway](https://aaif.io/blog/three-key-operational-patterns-you-need-to-prevent-mcp-horror-stories/) that enforces a curated catalog, so an unapproved server is blocked at step zero.
+2. **Authenticate every call.** The spec requires OAuth 2.1, but [most framework defaults ship with no auth](https://workos.com/blog/mcp-security-risks); verify an access token on each tool invocation.
+3. **Sandbox the runtime.** Use OS-level filesystem and network isolation, not application-level checks, to bound what a permitted agent can actually reach.
+4. **Scope and shorten credentials.** Grant session-scoped tools and short-lived task credentials instead of agents holding long-lived multi-service tokens.
+5. **Log structured audit records.** Capture agent identity, user, tool, arguments, and timestamp so an incident is reconstructable.
+
+> Permission is not safety: an agent fully within its grants still merged PRs and deleted an unpushed branch.
+
+## What broke
+
+The damage in both stories came from the harness, not a bad prompt. The fix for spec-compliant auth is concrete: a [step-by-step Solo.io build](https://www.solo.io/blog/understanding-mcp-authorization-step-by-step-part-one) of the June 18 2025 Authorization spec starts with Origin-header validation middleware to block DNS-rebinding attacks, then layers OAuth 2.1 and a Keycloak identity provider. Because models treat tool results like system prompts, [WorkOS recommends](https://workos.com/blog/mcp-security-risks) sanitizing results and gating high-risk actions behind human approval — the confirmation step the second story skipped.
+
+[Security](/guide/security/)
