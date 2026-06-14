@@ -1,6 +1,7 @@
 ---
 title: "Evaluation"
-order: 10
+order: 11
+phase: "engineer"
 question: "How do you know it still works — before your users find out it doesn't?"
 summary: "For non-deterministic systems, the eval harness plays the role the test suite and SLO dashboard play for deterministic software. Grade the trajectory, gate releases in CI, and turn every failed production trace into a regression case."
 principles:

@@ -18,4 +18,4 @@ Coordination is also where systems fail. The UC Berkeley [MAST taxonomy](https:/
 
 When you scale a swarm, design the coordination layer deliberately. Borrowing GitHub or a tracker hides the signal you need.
 
-[Multi-Agent Orchestration](/guide/multi-agent-orchestration/).
+[Architecture & Orchestration](/guide/architecture-and-orchestration/).

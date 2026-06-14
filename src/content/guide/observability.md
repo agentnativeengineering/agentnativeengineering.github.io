@@ -1,6 +1,7 @@
 ---
 title: "Observability"
-order: 9
+order: 10
+phase: "operate"
 question: "Can you see exactly what your agent did, and why?"
 summary: "Classic latency-and-error metrics are necessary but insufficient for non-deterministic systems. You need the full trace of reasoning, tool calls, and tokens — to the OpenTelemetry GenAI standard — because the per-run trace, not the aggregate, tells you what happened. And when a compromise is what you're watching for, shrink time-to-detect: dwell time and coverage are the metrics that contain it."
 principles:
