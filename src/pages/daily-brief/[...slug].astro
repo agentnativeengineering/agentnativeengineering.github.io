@@ -1,0 +1,127 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Footer from '../../components/Footer.astro';
+import ForAgents from '../../components/ForAgents.astro';
+import Player from '../../components/Player.astro';
+
+export async function getStaticPaths() {
+  const episodes = (await getCollection('episodes', ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  );
+  const notes = await getCollection('notes', ({ data }) => !data.draft);
+  const noteById = new Map(notes.map((n) => [n.id, n]));
+
+  return episodes.map((ep, i) => {
+    const stories = ep.data.covers
+      .map((id) => noteById.get(id))
+      .filter(Boolean)
+      .map((n) => ({
+        id: n!.id,
+        title: n!.data.title,
+        summary: n!.data.summary ?? '',
+        tag: n!.data.tags[0] ?? '',
+        readMin: Math.max(1, Math.round((n!.body?.trim().split(/\s+/).length ?? 0) / 200)),
+      }));
+    return {
+      params: { slug: ep.id },
+      props: { ep, stories, editionNo: episodes.length - i },
+    };
+  });
+}
+
+const { ep, stories, editionNo } = Astro.props;
+const { Content } = await render(ep);
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
+---
+
+<Base
+  active="daily-brief"
+  title={`${ep.data.title} — Daily Brief — Agent Native Engineering`}
+  description={ep.data.summary}
+  ogType="article"
+>
+  <div class="wrap" data-r="pad">
+    <header style="padding:38px 0 0;max-width:880px">
+      <a class="backlink" href="/daily-brief/">← All editions</a>
+      <div class="dateline" style="justify-content:flex-start;margin-top:22px">
+        <span class="live"><span class="dot"></span>DAILY BRIEF</span>
+        <span class="sep">·</span>
+        <span class="strong">{fmt(ep.data.date)}</span>
+        <span class="sep">·</span>
+        <span>EDITION No. {editionNo}</span>
+      </div>
+      <h1 class="page-h1" data-r="page-h1" style="font-size:54px;margin:18px 0 0">{ep.data.title}</h1>
+      {ep.data.summary && <p class="page-dek">{ep.data.summary}</p>}
+    </header>
+
+    <section class="card card-dark" style="margin-top:30px;padding:24px 30px">
+      <Player src={ep.data.audio} seconds={ep.data.seconds} />
+      <div class="listen-row">
+        <span class="listen-label">LISTEN ▸</span>
+        <a class="brief-btn ghost" href="/daily-brief/">Spotify</a>
+        <a class="brief-btn ghost" href="/daily-brief/">Apple</a>
+        <a class="brief-btn ghost" href="/daily-brief/">YouTube</a>
+      </div>
+    </section>
+
+    {ep.data.summary && (
+      <section class="callout" style="--accent:#b8430f;margin-top:46px;max-width:880px">
+        <span class="eyebrow">// THE ONE IDEA</span>
+        <p>{ep.data.summary}</p>
+      </section>
+    )}
+
+    {stories.length > 0 && (
+      <section class="section">
+        <div class="section-head">
+          <span class="section-no">// 01</span>
+          <h2 class="section-title">The Brief</h2>
+          <span class="section-meta" style="margin-left:auto">{stories.length} {stories.length === 1 ? 'story' : 'stories'}</span>
+        </div>
+        <div class="brief-grid">
+          {stories.map((s) => (
+            <a class="card hover story" href={`/field-notes/${s.id}/`} style="--accent:#b8430f">
+              <div class="story-head">
+                {s.tag && <span class="badge">{s.tag.toUpperCase()}</span>}
+                <span class="story-read">{s.readMin} min</span>
+              </div>
+              <h3 class="story-title">{s.title}</h3>
+              {s.summary && <p class="story-body">{s.summary}</p>}
+              <span class="story-source">Read the note →</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {ep.body && ep.body.trim().length > 0 && (
+      <section class="section">
+        <div class="section-head"><span class="section-no">// 02</span><h2 class="section-title">Show notes</h2></div>
+        <div class="prose"><Content /></div>
+      </section>
+    )}
+
+    <ForAgents description="— every story structured, every claim sourced. Feed the edition to your own agent.">
+      <a class="fa-btn solid" href={ep.data.audio}>Download .mp3</a>
+      <a class="fa-btn faint" href="/rss.xml">RSS</a>
+    </ForAgents>
+  </div>
+
+  <Footer slot="footer" variant="slim" left={`Daily Brief · Edition No. ${editionNo} · <span class="strong">Agent Native Engineering</span>`} right="Until next time — Build · Operate · Engineer ✌" />
+</Base>
+
+<style>
+  .listen-row { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-top: 22px; padding-top: 20px; border-top: 1px solid #2c2823; }
+  .listen-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: #8a857a; margin-right: 4px; }
+  .brief-btn { font-family: var(--mono); font-size: 12px; text-decoration: none; padding: 7px 14px; border-radius: 3px; }
+  .brief-btn.ghost { color: #e8e2d6; background: transparent; border: 1px solid #45403a; }
+  .brief-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(372px, 1fr)); gap: 28px 22px; }
+  .story { padding: 22px 22px 16px; display: flex; flex-direction: column; gap: 14px; text-decoration: none; }
+  .story-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .story-read { font-family: var(--mono); font-size: 11px; color: var(--faint); white-space: nowrap; }
+  .story-title { font-family: var(--serif); font-weight: 600; font-size: 21px; line-height: 1.18; letter-spacing: -0.01em; margin: 0; color: var(--ink); text-wrap: pretty; }
+  .story-body { font-family: var(--sans); font-size: 13.5px; line-height: 1.58; color: var(--ink-3); margin: 0; text-wrap: pretty; }
+  .story-source { margin-top: auto; padding-top: 14px; border-top: 1px dashed var(--hair-dash); font-family: var(--mono); font-size: 11px; color: var(--accent); }
+  @media (max-width: 640px) { .brief-grid { grid-template-columns: 1fr; } }
+</style>

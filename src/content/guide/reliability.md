@@ -1,6 +1,7 @@
 ---
 title: "Reliability"
-order: 5
+order: 6
+phase: "operate"
 question: "When — not if — a tool fails, what does your agent do next?"
 summary: "For agents, errors are the common case, not the edge case, and the reliability gap is in the runtime around the model, not the model. Idempotent side effects, per-tool timeouts, verification between steps, and a tested path back to a known-good state are table stakes."
 principles:

@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
 
 interface Props {
   title?: string;
@@ -7,29 +9,28 @@ interface Props {
   ogType?: 'website' | 'article';
   image?: string;
   jsonLd?: Record<string, unknown>[];
+  active?: 'daily-brief' | 'notes' | 'guide' | 'architecture' | null;
 }
 
 const {
-  title = 'Agent Native Engineering — operating agents in production',
-  description = 'Open engineering knowledge for building and operating AI agents in production: durability, reliability, security, access control, observability, and evals — every claim sourced.',
+  title = 'Agent Native Engineering — building & operating AI agents in production',
+  description = 'A clear guide and daily brief on building AI agents in production — grounded in real-world examples and studies, not opinion.',
   ogType = 'website',
   image = '/logo.png',
   jsonLd = [],
+  active = null,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(image, Astro.site).href;
-const year = new Date().getFullYear();
 
-// Site-wide structured data — tells Google what this site is. Per-page schema
-// (Article/BreadcrumbList) is appended via the `jsonLd` prop.
 const siteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'Agent Native Engineering',
   url: new URL('/', Astro.site).href,
   description:
-    'An open, versioned, sourced field guide for building, operating, and engineering with AI agents in production.',
+    'A clear guide and daily brief on building, operating, and engineering with AI agents in production — grounded in real-world examples and studies.',
   publisher: {
     '@type': 'Organization',
     name: 'Agent Native Engineering',
@@ -52,6 +53,10 @@ const schemas = [siteSchema, ...jsonLd];
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
     <link rel="alternate" type="application/rss+xml" title="Agent Native Engineering" href="/rss.xml" />
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="Agent Native Engineering" />
@@ -64,46 +69,12 @@ const schemas = [siteSchema, ...jsonLd];
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     {schemas.map((s) => (
-      <script type="application/ld+json" set:html={JSON.stringify(s)} />
+      <script type="application/ld+json" is:inline set:html={JSON.stringify(s)} />
     ))}
   </head>
   <body>
-    <header class="site-head">
-      <div class="wrap">
-        <a class="brand" href="/">
-          agentnative<span class="dim">engineering</span><span class="bracket">/</span>
-        </a>
-        <nav class="nav">
-          <a href="/guide/">Field&nbsp;Guide</a>
-          <a href="/architectures/" class="hide">Architectures</a>
-          <a href="/field-notes/">Notes</a>
-          <a href="/audio/">Field&nbsp;Audio</a>
-          <a href="https://github.com/agentnativeengineering">GitHub</a>
-        </nav>
-      </div>
-    </header>
-
-    <main>
-      <slot />
-    </main>
-
-    <footer class="site-foot">
-      <div class="wrap">
-        <div class="foot-links">
-          <a href="/guide/">Field Guide</a>
-          <a href="/architectures/">Architectures</a>
-          <a href="/field-notes/">Notes</a>
-          <a href="/audio/">Field Audio</a>
-          <a href="/contribute/">Contribute</a>
-          <a href="/glossary/">Glossary</a>
-          <a href="/cite/">Cite</a>
-          <a href="/rss.xml">RSS</a>
-          <a href="https://github.com/agentnativeengineering">GitHub</a>
-        </div>
-        <p class="colophon">
-          Agent-Native Engineering — open knowledge under <a href="https://creativecommons.org/licenses/by/4.0/">CC&nbsp;BY&nbsp;4.0</a> · © {year}
-        </p>
-      </div>
-    </footer>
+    <Nav active={active} />
+    <main><slot /></main>
+    <slot name="footer"><Footer /></slot>
   </body>
 </html>

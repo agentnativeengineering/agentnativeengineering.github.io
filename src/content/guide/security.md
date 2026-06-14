@@ -1,6 +1,7 @@
 ---
 title: "Security"
-order: 7
+order: 8
+phase: "operate"
 question: "What happens when the input your agent reads is hostile?"
 summary: "Prompt injection is unsolved and the attacker is now AI-accelerated, so design for breach: an agent with private data, untrusted input, and a way to communicate out can be turned into an exfiltration tool. Break the trifecta, treat the model and tool supply chain as untrusted, and prefer controls that make an attack impossible over ones that only make it tedious."
 principles:

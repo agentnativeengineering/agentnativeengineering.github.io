@@ -1,6 +1,7 @@
 ---
 title: "Durable Execution"
-order: 2
+order: 3
+phase: "build"
 question: "When the process dies mid-run, can your agent resume at the right step without re-charging, re-emailing, or re-deploying what it already did?"
 summary: "Long-running agents have to survive crashes, deploys, and multi-day waits for a human, and resume without re-running completed side effects. The mature answer is checkpoint and replay, borrowed from durable-execution engines built long before the model labs."
 principles:

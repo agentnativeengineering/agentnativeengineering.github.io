@@ -1,6 +1,7 @@
 ---
 title: "Memory & Context"
-order: 3
+order: 4
+phase: "build"
 question: "What does your agent actually remember, and what is it carrying in the window right now?"
 summary: "An agent's working memory is a small, leaky window; its real knowledge has to live somewhere durable. Production agents decide what to keep, where to keep it, what to load back in — and how to isolate it per session, check its integrity, and expire unverified context before it can be poisoned."
 principles:

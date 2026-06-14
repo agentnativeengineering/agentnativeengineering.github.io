@@ -1,0 +1,62 @@
+---
+// Custom audio player matching the design: circular play/pause, seekable bar, elapsed/total,
+// position persisted across reloads. Wraps a native <audio> so it's real, not a mock.
+// The bundled script wires every [data-player] on the page, so the component can repeat.
+interface Props { src: string; seconds: number; }
+const { src, seconds } = Astro.props;
+const mmss = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+const key = src.replace(/[^a-z0-9]+/gi, '-');
+---
+
+<div class="player" data-player data-key={key} data-total={seconds}>
+  <audio preload="none" src={src}></audio>
+  <button class="player-btn" type="button" data-toggle aria-label="Play">
+    <span class="player-tri"></span>
+    <span class="player-pause"><i></i><i></i></span>
+  </button>
+  <div class="player-track">
+    <div class="player-bar" data-bar><div class="player-fill"></div></div>
+    <div class="player-time"><span data-elapsed>0:00</span><span>{mmss(seconds)}</span></div>
+  </div>
+</div>
+
+<style>
+  .player-pause { display: none; gap: 5px; align-items: center; }
+  .player .playing-tri { display: none; }
+  .player[data-playing] .player-tri { display: none; }
+  .player[data-playing] .player-pause { display: flex; }
+  .player-pause i { width: 4px; height: 16px; background: var(--dark); border-radius: 1.5px; }
+</style>
+
+<script>
+  const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+
+  document.querySelectorAll<HTMLElement>('[data-player]').forEach((el) => {
+    const audio = el.querySelector('audio') as HTMLAudioElement;
+    const toggle = el.querySelector('[data-toggle]') as HTMLButtonElement;
+    const bar = el.querySelector('[data-bar]') as HTMLElement;
+    const fill = el.querySelector('.player-fill') as HTMLElement;
+    const elapsed = el.querySelector('[data-elapsed]') as HTMLElement;
+    const storeKey = `ane-player:${el.dataset.key}`;
+    const total = Number(el.dataset.total) || 0;
+
+    const saved = Number(localStorage.getItem(storeKey) || '0');
+    if (saved > 0) { audio.currentTime = saved; elapsed.textContent = fmt(saved); if (total) fill.style.width = `${(saved / total) * 100}%`; }
+
+    toggle.addEventListener('click', () => { audio.paused ? audio.play() : audio.pause(); });
+    audio.addEventListener('play', () => { el.setAttribute('data-playing', ''); toggle.setAttribute('aria-label', 'Pause'); });
+    audio.addEventListener('pause', () => { el.removeAttribute('data-playing'); toggle.setAttribute('aria-label', 'Play'); });
+    audio.addEventListener('timeupdate', () => {
+      const dur = audio.duration || total;
+      if (dur) fill.style.width = `${(audio.currentTime / dur) * 100}%`;
+      elapsed.textContent = fmt(audio.currentTime);
+      localStorage.setItem(storeKey, String(audio.currentTime));
+    });
+    bar.addEventListener('click', (e) => {
+      const r = bar.getBoundingClientRect();
+      const frac = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+      const dur = audio.duration || total;
+      if (dur) audio.currentTime = frac * dur;
+    });
+  });
+</script>

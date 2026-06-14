@@ -1,0 +1,31 @@
+---
+// Sticky translucent nav, shared across every page. `active` highlights the current
+// section in rust. Order matches the page flow: Daily Brief -> Daily Notes -> The Guide
+// -> Reference Architecture -> GitHub.
+interface Props {
+  active?: 'daily-brief' | 'notes' | 'guide' | 'architecture' | null;
+}
+const { active = null } = Astro.props as Props;
+
+const links = [
+  { key: 'daily-brief', label: 'Daily Brief', href: '/daily-brief/' },
+  { key: 'notes', label: 'Daily Notes', href: '/field-notes/' },
+  { key: 'guide', label: 'The Guide', href: '/guide/' },
+  { key: 'architecture', label: 'Reference Architecture', href: '/architectures/' },
+] as const;
+---
+
+<div class="nav-bar">
+  <div class="nav-inner" data-r="nav">
+    <a class="brand" href="/">
+      <span class="an-mark">AN<span class="slash">/</span></span>
+      <span class="wordmark">agentnativeengineering<span class="slash">/</span></span>
+    </a>
+    <div class="nav-menu" data-r="navmenu">
+      {links.map((l) => (
+        <a class:list={['nav-link', { active: active === l.key }]} href={l.href}>{l.label}</a>
+      ))}
+      <a class="nav-gh" href="https://github.com/agentnativeengineering">GitHub</a>
+    </div>
+  </div>
+</div>
