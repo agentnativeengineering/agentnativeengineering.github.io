@@ -25,8 +25,11 @@ const guide = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/guide' }),
   schema: z.object({
     title: z.string(),
-    // Ordering within the guide (Domain 1..8).
+    // Ordering within the guide (Domain 1..12).
     order: z.number(),
+    // Loop phase this domain belongs to — drives the accent color (build=rust, operate=blue,
+    // engineer=green). Domains 1-5 build, 6-10 operate, 11-12 engineer.
+    phase: z.enum(['build', 'operate', 'engineer']),
     // The single question this domain answers, shown under the title.
     question: z.string(),
     // The imperative principle(s) this domain asserts — each grounded in the body.
@@ -40,9 +43,9 @@ const guide = defineCollection({
   }),
 });
 
-// Field audio — podcast digest episodes. One markdown file per episode; the mp3 itself lives in
-// public/audio/<slug>.mp3 (committed by the publish skill). `covers` lists the field-note slugs the
-// episode voices, so the page can link its show notes.
+// Daily Brief — podcast digest episodes (audio). One markdown file per episode; the mp3 itself
+// lives in public/audio/<slug>.mp3 (committed by the publish skill). `covers` lists the note ids the
+// episode voices — they become "The Brief" stories on the edition page.
 const episodes = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/episodes' }),
   schema: z.object({

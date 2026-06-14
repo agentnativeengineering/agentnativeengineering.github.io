@@ -1,6 +1,7 @@
 ---
 title: "Harness Engineering"
-order: 11
+order: 12
+phase: "engineer"
 question: "When the agent is doing the engineering, what is the system around the model that makes its work reliable?"
 summary: "An agent is a model plus a harness: the tools, context, memory, sub-agents, prompts, and hooks that connect the model to the real world. Harness engineering is the craft of building and evolving that wrapper so an agent can do production engineering work — kept in version control and under managed settings users can't override, because a modified config is as dangerous as modified code. It is one of the fastest-emerging skills in the field."
 principles:

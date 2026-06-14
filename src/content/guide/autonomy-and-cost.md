@@ -1,6 +1,7 @@
 ---
 title: "Autonomy, Cost & Control"
-order: 6
+order: 7
+phase: "operate"
 question: "What stops a looping agent before it burns the weekend's budget?"
 summary: "An agent doesn't crash when it goes wrong — it spends. Bound autonomy in steps, time, money, and agency with a hard cutoff enforced before the next call, and govern rollout, policy, spend, and acceptable-use from one control plane."
 principles:

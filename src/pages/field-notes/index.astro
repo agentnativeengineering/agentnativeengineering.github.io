@@ -1,12 +1,13 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import Footer from '../../components/Footer.astro';
 
 const notes = (await getCollection('notes', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
-
-const fmt = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: '2-digit' });
+const fmt = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: '2-digit' }).toUpperCase();
+const readMin = (body: string) => Math.max(1, Math.round((body.trim().split(/\s+/).length) / 200));
 
 const byYear = new Map<number, typeof notes>();
 for (const n of notes) {
@@ -17,31 +18,39 @@ for (const n of notes) {
 const years = [...byYear.keys()].sort((a, b) => b - a);
 ---
 
-<Base title="Notes — Agent Native Engineering" description="Dated notes from building and operating AI agents in production — what was tried, what broke, what was learned.">
-  <section class="wrap masthead" style="padding-bottom:1rem">
-    <p class="doc-id">Notes</p>
-    <h1 style="font-size:clamp(1.9rem,5vw,2.8rem)">Notes</h1>
-    <p class="subtitle">What was tried, what broke, what was learned — dated and attributable.</p>
-    <div class="rule"></div>
-  </section>
+<Base
+  active="notes"
+  title="Daily Notes — Agent Native Engineering"
+  description="Dated notes from building and operating AI agents in production — what was tried, what broke, what was learned. Grounded in real-world examples and studies."
+>
+  <div class="wrap" data-r="pad">
+    <header class="page-header">
+      <div class="eyebrow">// DAILY NOTES</div>
+      <h1 class="page-h1" data-r="page-h1" style="margin-top:16px">Daily Notes</h1>
+      <p class="page-dek">What was tried, what broke, what was learned — dated and attributable. Drawn from real-world examples and studies, not opinion.</p>
+    </header>
 
-  <section class="wrap section" style="padding-top:2rem">
-    {notes.length === 0 && <p style="color:var(--faint);font-family:var(--mono)">No notes yet.</p>}
-    {years.map((year) => (
-      <div style="margin-bottom:2.2rem">
-        <div class="section-head" style="border-top:none;padding-top:0">
-          <span class="sec-no" style="font-size:0.95rem">{year}</span>
+    <section class="section" style="padding-top:30px">
+      {notes.length === 0 && <p style="font-family:var(--mono);color:var(--faint)">No notes yet.</p>}
+      {years.map((year) => (
+        <div style="margin-bottom:14px">
+          <div class="section-head"><span class="section-no">{year}</span></div>
+          <div class="entries">
+            {byYear.get(year)!.map((n) => (
+              <a class="entry-row" href={`/field-notes/${n.id}/`}>
+                <span class="date">{fmt(n.data.date)}</span>
+                <span class="ttl">{n.data.title}</span>
+                <span class="meta">
+                  {n.data.tags[0] && <span class="domain" style="--accent:#b8430f">{n.data.tags[0]}</span>}
+                  <span class="pill">{readMin(n.body ?? '')} min</span>
+                </span>
+              </a>
+            ))}
+          </div>
         </div>
-        <div class="entries">
-          {byYear.get(year)!.map((note) => (
-            <a class="entry-row" href={`/field-notes/${note.id}/`}>
-              <span class="date">{fmt(note.data.date)}</span>
-              <span class="ttl">{note.data.title}</span>
-              {note.data.summary && <span class="ex">{note.data.summary}</span>}
-            </a>
-          ))}
-        </div>
-      </div>
-    ))}
-  </section>
+      ))}
+    </section>
+  </div>
+
+  <Footer slot="footer" variant="slim" left={'Daily Notes · <span class="strong">Agent Native Engineering</span> · CC BY 4.0'} />
 </Base>

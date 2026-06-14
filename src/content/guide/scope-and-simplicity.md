@@ -1,6 +1,7 @@
 ---
 title: "Scope & Simplicity"
 order: 1
+phase: "build"
 question: "Should this even be an agent — or is a workflow enough?"
 summary: "The first operational decision is whether to use an agent at all. Most production failures are design failures: an agent where a workflow would do, broad autonomy where narrow scope and least agency were safer."
 principles:
