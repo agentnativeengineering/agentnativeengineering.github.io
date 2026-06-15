@@ -32,7 +32,7 @@ export const softwareLayer: SoftwareDomain[] = [
   { num: '07', name: 'Autonomy, Cost & Control', phase: 'operate', slug: 'autonomy-and-cost', default: 'LiteLLM Budgets', alts: ['Envoy AI Gateway', 'OpenCost', 'Tokencost', 'Kong'] },
   { num: '08', name: 'Security', phase: 'operate', slug: 'security', default: 'LlamaFirewall', alts: ['OPA', 'NeMo Guardrails', 'gVisor', 'Presidio'] },
   { num: '09', name: 'Access & Identity', phase: 'operate', slug: 'access-and-identity', default: 'Keycloak', alts: ['SPIFFE/SPIRE', 'OPA', 'agentgateway', 'OpenFGA'] },
-  { num: '10', name: 'Observability', phase: 'operate', slug: 'observability', default: 'OpenTelemetry', alts: ['Langfuse', 'SigNoz', 'ClickHouse', 'Jaeger'] },
+  { num: '10', name: 'Observability', phase: 'operate', slug: 'observability', default: 'OpenTelemetry', alts: ['Langfuse', 'Phoenix', 'SigNoz', 'ClickHouse', 'Jaeger'] },
   { num: '11', name: 'Evaluation', phase: 'engineer', slug: 'evaluation', default: 'DeepEval', alts: ['Promptfoo', 'Ragas', 'Inspect', 'Giskard'] },
   { num: '12', name: 'Harness Engineering', phase: 'engineer', slug: 'harness-engineering', default: 'OpenHands', alts: ['Goose', 'Aider', 'SWE-agent'] },
 ];
@@ -98,6 +98,7 @@ export const toolUrl: Record<string, string> = {
   'OpenFGA': 'https://github.com/openfga/openfga',
   'OpenTelemetry': 'https://opentelemetry.io',
   'Langfuse': 'https://github.com/langfuse/langfuse',
+  'Phoenix': 'https://github.com/Arize-ai/phoenix',
   'SigNoz': 'https://github.com/SigNoz/signoz',
   'ClickHouse': 'https://github.com/ClickHouse/ClickHouse',
   'Jaeger': 'https://github.com/jaegertracing/jaeger',
