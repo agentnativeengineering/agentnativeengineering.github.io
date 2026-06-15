@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Footer from '../../components/Footer.astro';
 import ForAgents from '../../components/ForAgents.astro';
-import { softwareLayer, domainLayer } from '../../data/architecture';
+import { softwareLayer, domainLayer, toolUrl } from '../../data/architecture';
 import { accentOf } from '../../data/phase';
 ---
 
@@ -57,8 +57,8 @@ import { accentOf } from '../../data/phase';
                 <span class="stack-num">{l.num}</span>
               </div>
               <div class="chips">
-                <span class="chip"><span class="star">★</span>{l.default}</span>
-                {l.alts.map((a) => <span class="chip-alt">{a}</span>)}
+                <a class="chip" href={toolUrl[l.default] ?? '#'} target="_blank" rel="noopener"><span class="star">★</span>{l.default}</a>
+                {l.alts.map((a) => <a class="chip-alt" href={toolUrl[a] ?? '#'} target="_blank" rel="noopener">{a}</a>)}
               </div>
             </div>
           ))}

@@ -1,6 +1,6 @@
 import type { APIContext } from 'astro';
 import { getCollection } from 'astro:content';
-import { softwareLayer, domainLayer } from '../data/architecture';
+import { softwareLayer, domainLayer, toolUrl } from '../data/architecture';
 
 // /agent.json — the guide + reference architecture as a structured manifest for agents.
 export async function GET(context: APIContext) {
@@ -27,6 +27,7 @@ export async function GET(context: APIContext) {
     architecture: {
       software_layer: softwareLayer.map((l) => ({ num: l.num, domain: l.name, phase: l.phase, default: l.default, alternatives: l.alts, guide: `${site}/guide/${l.slug}/` })),
       domain_layer: domainLayer.map((d) => ({ name: d.name })),
+      tool_links: toolUrl,
     },
     notes: notes.map((n) => ({
       date: n.data.date.toISOString().slice(0, 10),
