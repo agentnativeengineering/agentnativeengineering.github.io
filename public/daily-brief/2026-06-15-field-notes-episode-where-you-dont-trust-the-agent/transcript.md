@@ -14,7 +14,7 @@ That's the headlines. Now... today's main episode. Let's go to the thing your ag
 
 So here's the uncomfortable part. Most of the work we do to secure an agent assumes one thing is safe — what it remembers. A chatbot starts every session clean. An agent with long-term memory carries its past into every future decision. And researchers showed in December that you can poison that past. WorkOS wrote this up, leaning on two attacks. One plants a malicious note in something boring — a README in a repo, a doc in a shared folder. The agent reads it, files it away as a "successful experience," and weeks later pulls it back out and copies the bad pattern, believing it's following its own proven playbook.
 
-[thoughtful] And here's the part I keep coming back to. The damage is time-shifted. The bad input lands in February. A totally different user triggers it in April. No single moment ever looks wrong. The second attack was worse — it corrupted memory through nothing but normal queries, no special access, with over ninety-five percent success against production setups. My read is this: the day you give an agent durable memory, you've given it a trust boundary you didn't know you had. The fix isn't a better prompt. It's tracking where every memory came from, so when something goes bad you can trace it. The full note, with every source linked, is on the site.
+[thoughtful] And here's the part I keep coming back to. The damage is time-shifted. The bad input lands in February. A totally different user triggers it in April. No single moment ever looks wrong. The second attack was worse — it corrupted memory through nothing but normal queries, no special access, with over ninety-five percent success against production setups. My read is this: the day you give an agent durable memory, you've given it a trust boundary you didn't know you had. The fix isn't a better prompt. It's tracking where every memory came from, so when something goes bad you can trace it.
 
 Okay. So. From the memory it can't trust... to the time it has to survive.
 
@@ -33,4 +33,5 @@ And that's the thread running through all three today. Memory you trust, time yo
 Remember the note that gets read in April but planted in February? That's the whole lesson — the dangerous boundary is the one you forgot you drew. Find it before someone else does.
 
 That's today's Agentic Daily Brief. [pause] Brought to you by Agent Native Engineering — open knowledge for building and running AI agents. The full write-ups, with their sources, are at agent native engineering dot com. [warm] See you next time.
+
 

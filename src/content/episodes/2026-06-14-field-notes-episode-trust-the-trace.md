@@ -3,7 +3,7 @@ title: "The Travel Agent That Aced Its Test and Made Up the Numbers"
 date: 2026-06-14
 summary: "Four converging lessons: check the trace not the answer, sandbox agent code by default, question stored memory, and own the thin loop."
 audio: "/audio/field-notes-episode-trust-the-trace.mp3"
-seconds: 431
+seconds: 417
 covers:
   - "2026-06-14-memory-tools-anchor-models-to-user-mistakes"
   - "2026-06-14-harness-is-a-thin-loop-you-own"
