@@ -26,7 +26,7 @@ export async function GET(context: APIContext) {
     })),
     architecture: {
       software_layer: softwareLayer.map((l) => ({ num: l.num, domain: l.name, phase: l.phase, default: l.default, alternatives: l.alts, guide: `${site}/guide/${l.slug}/` })),
-      domain_layer: domainLayer.map((d) => ({ name: d.name, pattern: d.tag })),
+      domain_layer: domainLayer.map((d) => ({ name: d.name })),
     },
     notes: notes.map((n) => ({
       date: n.data.date.toISOString().slice(0, 10),
