@@ -7,7 +7,7 @@ const domains = (await getCollection('guide', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order,
 );
 const guideMd =
-  '# Agent-Native Engineering — The Guide\n\n' +
+  '# Agent-Native Engineering — Field Guide\n\n' +
   'Twelve engineering domains for building and operating AI agents in production.\n\n' +
   domains
     .map((d) => `## ${String(d.data.order).padStart(2, '0')} · ${d.data.title}\n${d.data.question}\n` + d.data.principles.map((p) => `- ${p}`).join('\n'))
