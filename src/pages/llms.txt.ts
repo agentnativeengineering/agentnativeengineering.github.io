@@ -9,7 +9,7 @@ export async function GET(context: APIContext) {
 
   let t = `# Agent Native Engineering\n\n`;
   t += `> A clear guide and daily brief on building, operating, and engineering with AI agents in production — grounded in real-world examples and studies, not opinion.\n\n`;
-  t += `## The Guide (${domains.length} domains)\n`;
+  t += `## Field Guide (${domains.length} domains)\n`;
   for (const d of domains) t += `- [${d.data.title}](${site}/guide/${d.id}/): ${d.data.question}\n`;
   t += `\n## Daily Notes\n`;
   for (const n of notes) t += `- [${n.data.title}](${site}/field-notes/${n.id}/)${n.data.summary ? `: ${n.data.summary}` : ''}\n`;
