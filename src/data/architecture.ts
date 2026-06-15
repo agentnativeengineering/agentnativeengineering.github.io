@@ -20,7 +20,6 @@ export interface SoftwareDomain {
 
 export interface DomainSolution {
   name: string;
-  tag: string;        // orchestration pattern
 }
 
 export const softwareLayer: SoftwareDomain[] = [
@@ -39,19 +38,19 @@ export const softwareLayer: SoftwareDomain[] = [
 ];
 
 export const domainLayer: DomainSolution[] = [
-  { name: 'Customer Support', tag: 'HIERARCHICAL' },
-  { name: 'IT Service Desk', tag: 'HIERARCHICAL' },
-  { name: 'Sales & RevOps', tag: 'HIERARCHICAL' },
-  { name: 'Marketing & Content', tag: 'SEQUENTIAL' },
-  { name: 'HR & People Ops', tag: 'SEQUENTIAL' },
-  { name: 'Finance & Accounting', tag: 'GATED' },
-  { name: 'Procurement', tag: 'GATED' },
-  { name: 'Legal & Compliance', tag: 'GATED' },
-  { name: 'Supply Chain & Logistics', tag: 'HIERARCHICAL' },
-  { name: 'Data & Analytics', tag: 'SINGLE-AGENT' },
-  { name: 'Knowledge Management', tag: 'SINGLE-AGENT' },
-  { name: 'Product Engineering', tag: 'EVALUATOR' },
-  { name: 'SRE & Ops', tag: 'DURABLE' },
-  { name: 'Security Operations', tag: 'GUARDIAN' },
-  { name: 'AI FinOps', tag: 'MONITOR' },
+  { name: 'Customer Support' },
+  { name: 'IT Service Desk' },
+  { name: 'Sales & RevOps' },
+  { name: 'Marketing & Content' },
+  { name: 'HR & People Ops' },
+  { name: 'Finance & Accounting' },
+  { name: 'Procurement' },
+  { name: 'Legal & Compliance' },
+  { name: 'Supply Chain & Logistics' },
+  { name: 'Data & Analytics' },
+  { name: 'Knowledge Management' },
+  { name: 'Product Engineering' },
+  { name: 'SRE & Ops' },
+  { name: 'Security Operations' },
+  { name: 'AI FinOps' },
 ];
