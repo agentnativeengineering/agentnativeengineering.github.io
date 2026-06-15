@@ -27,12 +27,11 @@ import { accentOf } from '../../data/phase';
       <!-- Domain layer -->
       <div class="layer-panel engineer" style="--accent:#2f7d56">
         <div class="layer-head">
-          <span class="layer-label" style="color:#2f7d56"><span class="sq"></span>DOMAIN LAYER · WHAT YOU IMPLEMENT</span>
+          <span class="layer-label" style="color:#2f7d56"><span class="sq"></span>DOMAIN LAYER · REFERENCE SOLUTIONS</span>
         </div>
         <div class="sol-grid">
           {domainLayer.map((d) => (
             <div class="sol-card">
-              <span class="sol-tag">{d.tag}</span>
               <span class="sol-name">{d.name}</span>
             </div>
           ))}
@@ -80,9 +79,8 @@ import { accentOf } from '../../data/phase';
 
 <style>
   .sol-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(176px, 1fr)); gap: 12px; }
-  .sol-card { background: var(--card); border: 1.5px solid var(--ink); border-radius: 5px; padding: 13px 14px; display: flex; flex-direction: column; gap: 7px; }
-  .sol-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; color: var(--engineer); }
-  .sol-name { font-family: var(--serif); font-weight: 600; font-size: 16px; line-height: 1.12; color: var(--ink); }
+  .sol-card { background: var(--card); border: 1.5px solid var(--ink); border-radius: 5px; padding: 15px 16px; display: flex; align-items: center; min-height: 58px; }
+  .sol-name { font-family: var(--serif); font-weight: 600; font-size: 16px; line-height: 1.15; color: var(--ink); }
 
   .stack-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(252px, 1fr)); gap: 14px; }
   .stack-card { background: var(--card); border: 1.5px solid var(--ink); border-radius: 5px; padding: 14px 15px; display: flex; flex-direction: column; gap: 11px; }
