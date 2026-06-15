@@ -1,0 +1,36 @@
+{
+  "type": "note",
+  "slug": "index-context-instead-of-grep-large-codebases",
+  "title": "Stop letting coding agents grep huge codebases: index context instead",
+  "date": "2026-06-15",
+  "summary": "Teams running agents on million-file repos are replacing blind grep and context compression with indexed, semantic retrieval so the agent gets the right context without re-discovering it every session.",
+  "domain": "memory-and-context",
+  "tags": [
+    "memory-and-context",
+    "rag",
+    "code-intelligence",
+    "context-engineering"
+  ],
+  "takeaways": [
+    "Index your large codebase once and retrieve from it; don't make the agent re-grep and re-learn the repo every session.",
+    "Treat embeddings as cached compute: pay the upfront indexing cost and re-embed only changed files to avoid burning thousands of tokens per session.",
+    "Give the agent structured tools (LSP for exact types, hybrid search) so it stops reverse-engineering code from raw text."
+  ],
+  "sourceName": "YouTube",
+  "sourceUrl": "https://www.youtube.com/watch?v=6FMGck0wlak",
+  "sources": [
+    {
+      "title": "Augment Code interview: a context engine for enterprise codebases",
+      "url": "https://www.youtube.com/watch?v=6FMGck0wlak"
+    },
+    {
+      "title": "Kuba Rogut, Turbopuffer: 'RAG is dead, right??'",
+      "url": "https://www.youtube.com/watch?v=UM6sFg_jdlE"
+    },
+    {
+      "title": "GitHub: give Copilot CLI real code intelligence with language servers",
+      "url": "https://github.blog/ai-and-ml/github-copilot/give-github-copilot-cli-real-code-intelligence-with-language-servers/"
+    }
+  ],
+  "body": "## What happened\n\nPoint a coding agent at a million-file monorepo and it does the obvious thing: it greps around, hopes it lands on the right files, and re-learns the codebase from scratch every session. Three sources from this past week argue that for big repos this is the wrong default.\n\nIn an [interview published 2026-06-11](https://www.youtube.com/watch?v=6FMGck0wlak), Augment Code's Jack Tamasic described abandoning their own model training to build a \"context engine\" instead — RAG (retrieval-augmented generation: fetch relevant snippets and feed them to the model) plus a virtual file system that indexes up to a million files and \"generates the proper context for all your feature requests to whatever LLM model you're using.\" He names [Adobe](https://www.youtube.com/watch?v=6FMGck0wlak) as the landmark customer, whose codebase was too big and complex for other tools to understand when a change touched multiple areas.\n\n## Why it matters\n\nOn a large codebase the window cannot hold everything, so the agent either greps haphazardly or you compress the context window — and repeated compression loses fidelity. Both waste tokens re-discovering the same context. This is the core memory-and-context problem: deciding what is in the window on purpose, not by accident.\n\n## How it works\n\n1. **Index once, retrieve per request.** Augment ingests the repo into a context engine and pulls relevant context for each feature request rather than re-searching the whole tree.\n2. **Embeddings as cached compute.** Turbopuffer's [Kuba Rogut](https://www.youtube.com/watch?v=UM6sFg_jdlE) frames embeddings as paying an upfront indexing cost so agents stop re-finding the same context across sessions that \"burn thousands of tokens each.\"\n3. **Re-embed only what changed.** He cites [Cursor](https://www.youtube.com/watch?v=UM6sFg_jdlE) using Merkle trees to detect shared code across teammates and re-chunk only changed files, reportedly gaining roughly 12-24% answer accuracy.\n4. **Give the agent exact types.** [GitHub's LSP Setup skill](https://github.blog/ai-and-ml/github-copilot/give-github-copilot-cli-real-code-intelligence-with-language-servers/) wires Language Server Protocol into Copilot CLI so it gets resolved types and definitions instead of decompiling JARs and grepping bytecode.\n\n> The job is to retrieve the right million tokens, not to grep the whole repo into the window every time.\n\n## What broke\n\nThe failure mode is text reverse-engineering. GitHub notes that without a language server, grepping through extracted JARs, site-packages, or node_modules [misses generics, overloads, and transitive types](https://github.blog/ai-and-ml/github-copilot/give-github-copilot-cli-real-code-intelligence-with-language-servers/). The fix is harness engineering: structured retrieval and LSP tool calls return exact source locations, cutting tool calls and wrong answers. As Rogut closes, even with huge windows you need [staged retrieval](https://www.youtube.com/watch?v=UM6sFg_jdlE) to surface the right tokens rather than all of them.\n\n[Memory & Context](/guide/memory-and-context/)"
+}
