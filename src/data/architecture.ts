@@ -24,17 +24,17 @@ export interface DomainSolution {
 
 export const softwareLayer: SoftwareDomain[] = [
   { num: '01', name: 'Scope & Simplicity', phase: 'build', slug: 'scope-and-simplicity', default: 'LangGraph', alts: ['Pydantic AI', 'CrewAI', 'Google ADK', 'Mastra'] },
-  { num: '02', name: 'Model Selection', phase: 'build', slug: 'model-selection', default: 'LiteLLM', alts: ['vLLM', 'Ollama', 'SGLang', 'Envoy AI Gateway'] },
+  { num: '02', name: 'Model Selection', phase: 'build', slug: 'model-selection', default: 'LiteLLM', alts: ['vLLM', 'Envoy AI Gateway', 'Ollama', 'SGLang'] },
   { num: '03', name: 'Durable Execution', phase: 'build', slug: 'durable-execution', default: 'Temporal', alts: ['Restate', 'DBOS', 'Hatchet', 'Cadence'] },
   { num: '04', name: 'Memory & Context', phase: 'build', slug: 'memory-and-context', default: 'Mem0', alts: ['Graphiti', 'Letta', 'Qdrant', 'pgvector'] },
-  { num: '05', name: 'Architecture & Orchestration', phase: 'build', slug: 'architecture-and-orchestration', default: 'Dapr Agents', alts: ['LangGraph', 'CrewAI', 'Google ADK', 'kagent'] },
-  { num: '06', name: 'Reliability', phase: 'operate', slug: 'reliability', default: 'Temporal', alts: ['NATS', 'Restate', 'DBOS', 'Kubernetes'] },
-  { num: '07', name: 'Autonomy, Cost & Control', phase: 'operate', slug: 'autonomy-and-cost', default: 'LiteLLM Budgets', alts: ['OpenCost', 'Tokencost', 'Kong', 'Envoy AI Gateway'] },
+  { num: '05', name: 'Architecture & Orchestration', phase: 'build', slug: 'architecture-and-orchestration', default: 'Dapr Agents', alts: ['MCP', 'A2A', 'kagent', 'LangGraph'] },
+  { num: '06', name: 'Reliability', phase: 'operate', slug: 'reliability', default: 'Temporal', alts: ['NATS', 'Restate', 'Kubernetes', 'DBOS'] },
+  { num: '07', name: 'Autonomy, Cost & Control', phase: 'operate', slug: 'autonomy-and-cost', default: 'LiteLLM Budgets', alts: ['Envoy AI Gateway', 'OpenCost', 'Tokencost', 'Kong'] },
   { num: '08', name: 'Security', phase: 'operate', slug: 'security', default: 'LlamaFirewall', alts: ['OPA', 'NeMo Guardrails', 'gVisor', 'Presidio'] },
-  { num: '09', name: 'Access & Identity', phase: 'operate', slug: 'access-and-identity', default: 'Keycloak', alts: ['SPIFFE/SPIRE', 'Ory', 'OpenFGA', 'OPA'] },
-  { num: '10', name: 'Observability', phase: 'operate', slug: 'observability', default: 'OpenTelemetry', alts: ['Langfuse', 'SigNoz', 'Jaeger', 'Grafana'] },
+  { num: '09', name: 'Access & Identity', phase: 'operate', slug: 'access-and-identity', default: 'Keycloak', alts: ['SPIFFE/SPIRE', 'OPA', 'agentgateway', 'OpenFGA'] },
+  { num: '10', name: 'Observability', phase: 'operate', slug: 'observability', default: 'OpenTelemetry', alts: ['Langfuse', 'SigNoz', 'ClickHouse', 'Jaeger'] },
   { num: '11', name: 'Evaluation', phase: 'engineer', slug: 'evaluation', default: 'DeepEval', alts: ['Promptfoo', 'Ragas', 'Inspect', 'Giskard'] },
-  { num: '12', name: 'Harness Engineering', phase: 'engineer', slug: 'harness-engineering', default: 'OpenHands', alts: ['Aider', 'SWE-agent', 'Goose'] },
+  { num: '12', name: 'Harness Engineering', phase: 'engineer', slug: 'harness-engineering', default: 'OpenHands', alts: ['Goose', 'Aider', 'SWE-agent'] },
 ];
 
 export const domainLayer: DomainSolution[] = [
