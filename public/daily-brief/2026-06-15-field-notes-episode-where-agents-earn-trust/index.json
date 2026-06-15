@@ -1,0 +1,71 @@
+{
+  "type": "brief",
+  "slug": "field-notes-episode-where-agents-earn-trust",
+  "title": "The Agent That Lies to Itself, and Where Trust Actually Belongs",
+  "date": "2026-06-15",
+  "summary": "Memory poisoning, durable insurance agents, and Google's SecOps bots all teach the same rule: autonomy where mistakes are cheap, humans where they stick.",
+  "audio": "/audio/field-notes-episode-where-agents-earn-trust.mp3",
+  "seconds": 436,
+  "covers": [
+    "2026-06-15-google-secops-agents-triage-60-seconds",
+    "2026-06-15-coverwatch-temporal-insurance-agents",
+    "2026-06-15-memory-poisoning-agent-memory-attack-surface"
+  ],
+  "oneIdea": {
+    "title": "An agent trusts what it remembers more than what you tell it — so the durable risk isn't the prompt, it's what the agent quietly carries forward.",
+    "body": "Memory poisoning works because an agent treats its own stored 'experience' as ground truth, skipping the skepticism it applies to user input. The malicious entry lands weeks before the damage, so single-session monitoring sees nothing. Across all three of today's stories, the safe pattern is the same: give agents autonomy where mistakes are cheap and reversible, and gate everything that sticks — poisoned memory, an insurance bind, an irreversible containment action."
+  },
+  "stats": [
+    {
+      "n": "30 min → 60s",
+      "label": "Google SecOps agent triage time across 5M+ alerts"
+    },
+    {
+      "n": ">95%",
+      "label": "memory-injection success against production agent setups (MINJA)"
+    },
+    {
+      "n": "-7 days",
+      "label": "mean time to exploit — exploitation often precedes a patch (M-Trends 2026)"
+    }
+  ],
+  "brief": [
+    {
+      "kind": "story",
+      "title": "Memory poisoning: when an agent's own memory becomes the attack surface",
+      "take": true,
+      "domain": "memory-and-context",
+      "source": "WorkOS",
+      "url": "https://workos.com/blog/ai-agent-memory-poisoning",
+      "body": "WorkOS lays out a threat class that targets the one thing agent defenses assume is safe — the agent's long-term memory. A poisoned entry planted via benign content persists across sessions and is retrieved weeks later as trusted ground truth. Defend with provenance, trust-partitioned stores, and retrieval-drift monitoring."
+    },
+    {
+      "kind": "story",
+      "title": "Google's SecOps agents cut alert triage from 30 minutes to 60 seconds",
+      "take": false,
+      "domain": "security",
+      "source": "Google Cloud",
+      "url": "https://cloud.google.com/blog/products/identity-security/detecting-and-containing-powered-threats-with-google-security-operations-agents/",
+      "body": "Google Security Operations runs Gemini-native agents that do open-ended investigation across 5M+ alerts, cutting typical triage from ~30 minutes to ~60 seconds. Containment stays on deterministic playbooks and irreversible actions stay behind a human gate — autonomy where it's cheap, humans where mistakes stick."
+    },
+    {
+      "kind": "story",
+      "title": "Coverwatch runs multi-day insurance agents on durable workflows",
+      "take": false,
+      "domain": "durable-execution",
+      "source": "Temporal",
+      "url": "https://temporal.io/blog/how-coverwatch-uses-temporal-to-orchestrate-ai-powered-insurance-workflows",
+      "body": "Coverwatch models each carrier submission as a durable Temporal Workflow so agent state survives deploys, outages, and days-long human waits. The fix for flaky long-running agents wasn't a better prompt — it was moving state out of the process and into a durable harness."
+    },
+    {
+      "kind": "quote",
+      "title": "Agents are easy to demo, but they are very hard to operate.",
+      "take": false,
+      "domain": "durable-execution",
+      "source": "Temporal",
+      "url": "https://temporal.io/blog/how-coverwatch-uses-temporal-to-orchestrate-ai-powered-insurance-workflows",
+      "attribution": "— Darshit Vora, Temporal"
+    }
+  ],
+  "transcript": "[curious] Today on the Agentic Daily Brief: an attacker poisons your AI's memory in February and triggers the damage in April. How do you defend a system lying to itself for weeks? [pause] Hold that thought.\n\nOn today's episode: the agent that trusts its own memory too much, insurance bots that wait days without losing their place, and security triage cut from half an hour to a minute.\n\n[warm] This is the Agentic Daily Brief — your daily update on agent engineering.\n\nFirst — the headlines.\n\nResearchers behind a new benchmark called SWE-Explore — a team that includes Shanghai Jiao Tong University — published findings today on where AI coding agents actually break down. Here's the setup. When you ask a coding agent to fix a bug, it has to find the right code first. And the good news is, it does. Agents like Claude Code, Codex, and OpenHands reliably land on the correct file. [pause] But here's where it falls apart. Of the specific lines that actually need changing, they cover only about fourteen to nineteen percent. So they're in the right room, looking at the wrong wall. And swapping in a stronger model doesn't fix it. The repairs reliably fail when the agent can see fewer than half of the core code regions. The takeaway the researchers point to is almost counterintuitive — the answer isn't smarter filtering. It's reading MORE code, not less.\n\nThat's the headlines. Now... today's main episode.\n\n[thoughtful] Let me start with the thing that genuinely unsettled me. You've built an agent with a long-term memory — it remembers what worked, so it gets better over time. Now... what if someone could write a false memory into it? Not hack it. Not jailbreak it. Just leave a note where the agent will pick it up and decide, on its own, to keep it.\n\nThat's the attack the security team at WorkOS laid out this month. Picture a harmless-looking file — a README in a shared repo. The agent reads it, summarizes it as a \"successful experience,\" and files it away. Weeks pass. Then a totally different user gives the agent a similar task, it retrieves that poisoned memory, and it imitates the bad pattern — believing it's following its own proven playbook.\n\n[curious] And here's the part that got me. One research attack they cite corrupted an agent's memory through nothing but normal queries. No special access. And it landed more than ninety-five percent of the time against real production setups.\n\nSo why is this so much harder than ordinary prompt injection? Two reasons. The damage is time-delayed — the bad input lands weeks before anything goes wrong, so no single moment ever looks suspicious. And the agent trusts its own memory. When the user says something, the agent stays a little skeptical. When it remembers something, it treats that as ground truth. That's the whole problem. The thing the agent trusts most is the thing the attacker rewrites.\n\nAnd that hands us straight into the next question — what happens when an agent has to stay alive not for weeks of memory, but for days of real-world waiting?\n\nOkay. So. Away from the attacker, into a San Francisco insurance startup. A company called Coverwatch runs AI agents that handle commercial insurance submissions. And one submission doesn't finish in a tidy little request. It starts with a customer call, the agent prepares the paperwork, then a human broker fills the gaps, and then... it waits. Sometimes days, for an underwriter to respond.\n\nHere's the engineering problem nobody warns you about. Real agents wait on people. And while they wait, your servers redeploy, an API goes down, a process dies. So what holds the agent's place in line through all of that?\n\nCoverwatch's answer was to stop treating the agent's work as a disposable background job and instead make the whole submission durable — its state lives outside the process, so it survives crashes and deploys and resumes exactly where it stopped. A Temporal architect's line stuck with me. He said agents are easy to demo, but they're very hard to operate. [pause] That gap — easy to demo, hard to operate — is the real story of agents in production right now.\n\nAnd nobody is feeling that gap harder than the people defending against attacks. Which brings me to Google.\n\n[curious] Quick question before the number. How long does it take a human analyst to triage a single security alert — read it, pull the context, decide if it's real? About thirty minutes. Now Google put a Gemini-native agent on that job. [pause] It does it in roughly sixty seconds. Across more than five million alerts.\n\nBut the part that actually matters isn't the speed. It's where Google drew the line. The agent does the open-ended investigation — the reading, the hypothesis-forming, the stuff where being fast is cheap. But the moment you reach an action that's hard to undo — actually containing a threat, locking something down — a human approves it. The agent proposes; the person decides.\n\nAnd honestly, that's the same lesson hiding in all three of today's stories. We keep wanting agents to be trusted, autonomous, on their own. But the teams shipping this for real are doing the opposite. They put the agent where mistakes are cheap and reversible — investigating, drafting, retrieving — and they put a human or a hard rule wherever a mistake sticks. The poisoned memory, the insurance bind, the irreversible containment. Same shape, three times.\n\n[thoughtful] Before you go — one thing to try tomorrow. Pick one agent you run. Ask one question: if its memory or its state got quietly corrupted three weeks ago, would you even know? If the answer is no, that's your weak spot — start there.\n\nRemember that attacker who poisons the memory in February and triggers it in April? That's the whole lesson today. The agent trusts what it remembers more than what you tell it — so the thing to watch isn't the prompt. It's everything the agent quietly carries forward.\n\nThat's today's Agentic Daily Brief. [pause] Brought to you by Agent Native Engineering — open knowledge for building and running AI agents. The full write-ups, with their sources, are at agent native engineering dot com. [warm] See you next time.\n"
+}
