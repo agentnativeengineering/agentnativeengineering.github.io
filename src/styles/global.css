@@ -81,7 +81,7 @@ a { color: inherit; }
 .brand { display: flex; align-items: center; gap: 11px; text-decoration: none; }
 .an-mark {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 34px; height: 34px; border: 1.5px solid var(--ink); border-radius: 4px;
+  min-width: 34px; height: 34px; padding: 0 7px; border: 1.5px solid var(--ink); border-radius: 4px;
   font-family: var(--mono); font-weight: 600; font-size: 13px; letter-spacing: 0.02em;
 }
 .an-mark .slash { color: var(--build); margin-left: 1px; }
