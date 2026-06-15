@@ -1,7 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="3" fill="#fbfaf7" stroke="#d8d2c4"/>
-  <text x="6" y="22" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="15"
-        font-weight="600" fill="#1a1a18">AN</text>
-  <text x="24.5" y="22" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="15"
-        font-weight="600" fill="#9a2d1f">/</text>
+  <rect width="32" height="32" rx="3" fill="#f6f4ee" stroke="#1c1917" stroke-width="1.5"/>
+  <text x="4" y="21" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="11"
+        font-weight="600"><tspan fill="#1c1917">ANE</tspan><tspan fill="#b8430f">/</tspan></text>
 </svg>
