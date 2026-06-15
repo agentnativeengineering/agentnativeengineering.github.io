@@ -1,0 +1,33 @@
+{
+  "type": "note",
+  "slug": "bound-agent-llm-spend-at-the-gateway",
+  "title": "Bound agent LLM spend at the gateway with reserve-then-settle budgets",
+  "date": "2026-06-15",
+  "summary": "Provider dashboards are retrospective; agentgateway moves dollar budgets into the request path so a blown allocation rejects the next call before it reaches the model.",
+  "domain": "autonomy-and-cost",
+  "tags": [
+    "autonomy-and-cost",
+    "agentgateway",
+    "llm-cost",
+    "mcp",
+    "gateway"
+  ],
+  "takeaways": [
+    "Put a fail-closed budget check in the request path, not in a dashboard: reserve estimated cost before the call, settle actual token usage after, and reject when an allocation is exhausted.",
+    "One gateway for API and AI traffic avoids duplicating auth, policy, and observability across two parallel stacks.",
+    "Hierarchical org/team/user budgets let you cap blast radius without blocking everyone when one team overspends."
+  ],
+  "sourceName": "AAIF",
+  "sourceUrl": "https://aaif.io/blog/designing-agentgateway-a-unified-high-performance-gateway-for-ai-and-api-traffic/",
+  "sources": [
+    {
+      "title": "Lin Sun: Designing agentgateway as a unified AI + API gateway",
+      "url": "https://aaif.io/blog/designing-agentgateway-a-unified-high-performance-gateway-for-ai-and-api-traffic/"
+    },
+    {
+      "title": "Solo.io: Building real-time AI cost controls with agentgateway",
+      "url": "https://www.solo.io/blog/building-real-time-ai-cost-controls-with-agentgateway"
+    }
+  ],
+  "body": "## What happened\n\nAn LLM request does not map to a predictable unit of work: cost depends on the chosen model, prompt size, generated output, retries, and tool calls. Provider dashboards tell you what you spent — yesterday. By the time the number lands, the agent has already made the calls.\n\nIn a [design post dated 2026-06-04, Lin Sun of Solo.io](https://aaif.io/blog/designing-agentgateway-a-unified-high-performance-gateway-for-ai-and-api-traffic/) argued that capable agents \"stop looking like isolated chatbot experiences and start behaving more like distributed systems\" — they call tools, route across models, and coordinate workflows — so spend, auth, and routing controls belong at a shared gateway every request already passes through. A follow-on [Solo.io reference implementation, dated 2026-06-10](https://www.solo.io/blog/building-real-time-ai-cost-controls-with-agentgateway), shows the concrete mechanism: a dollar-denominated budget enforced synchronously in the request path of agentgateway, their Rust gateway for HTTP, gRPC, MCP (Model Context Protocol, how agents reach tools), and LLM traffic.\n\n## Why it matters\n\nThe wall you hit is that retrospective dashboards cannot stop runaway consumption — they only explain it afterward. If you want to bound an agent's spend, you need an enforcement point that can refuse the next provider request, not just a chart. Putting that point at the gateway, where identity and routing already live, means you do not stand up a second parallel stack of auth, observability, and policy just for AI traffic.\n\n## How it works\n\n1. **Trust identity at the edge.** The gateway validates the caller's JWT (signed identity token) and overwrites trusted org, team, user, and model headers so budgets attach to a real principal.\n2. **Reserve before the call.** Using [agentgateway's External Processing hook](https://www.solo.io/blog/building-real-time-ai-cost-controls-with-agentgateway), it estimates cost from a versioned per-model pricing table in PostgreSQL and reserves it in the RequestHeaders phase.\n3. **Reject when exhausted.** If the reservation exceeds the remaining budget, the request is blocked with a machine-readable rejection and a configurable status code.\n4. **Settle after the response.** Post-response, it records the provider's actual reported token usage and releases the reservation, correcting the estimate.\n5. **Scope budgets hierarchically.** Org, team, and user budgets use CEL match expressions, with isolated hard caps or fallback to the parent allocation.\n\n> Move the budget check into the request path so a blown allocation rejects the next call, instead of reading about it on tomorrow's invoice.\n\n## What broke\n\nThe naive version fails open: if the budget service is slow or down, requests sail through and spend is unbounded. The [guidance is to make the External Processing policy fail-closed](https://www.solo.io/blog/building-real-time-ai-cost-controls-with-agentgateway) — deny when the check cannot complete — and to never persist raw prompts in the cost path. Unknown models must be handled safely rather than priced at zero, and spend budgets are layered with rate limits and output-token caps. The same path governs developer tools like Claude Code via base-URL routing, so the cap follows the engineer, not just the service.\n\n[Autonomy, Cost & Control](/guide/autonomy-and-cost/)"
+}

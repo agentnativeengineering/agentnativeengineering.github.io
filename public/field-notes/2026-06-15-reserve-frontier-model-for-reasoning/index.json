@@ -1,0 +1,36 @@
+{
+  "type": "note",
+  "slug": "reserve-frontier-model-for-reasoning",
+  "title": "Reserve the frontier model for reasoning, run cheaper code for the predictable rest",
+  "date": "2026-06-15",
+  "summary": "Three production teams converge on the same pattern: call a frontier LLM only where it changes the answer, and serve the predictable inner loop with deterministic code or a smaller domain model.",
+  "domain": "model-selection",
+  "tags": [
+    "model-selection",
+    "frontier-models",
+    "cost",
+    "hybrid-architecture"
+  ],
+  "takeaways": [
+    "Call the frontier model only on the sub-tasks where it changes the answer; serve the predictable inner loop with deterministic code or a smaller domain-trained model.",
+    "An open-weights worker that self-invokes a frontier model as an advisor (~0.83 calls/task) beat the frontier model run end-to-end, at roughly a third of the cost.",
+    "Owning a smaller model for the inner loop hedges against rising token costs and silent provider-side model changes."
+  ],
+  "sourceName": "theCUBE",
+  "sourceUrl": "https://www.youtube.com/watch?v=DOO7QXZUbfs",
+  "sources": [
+    {
+      "title": "Blue Yonder: AI and the autonomous supply chain (talk)",
+      "url": "https://www.youtube.com/watch?v=DOO7QXZUbfs"
+    },
+    {
+      "title": "1,000 AI agents, 0 LLM calls? (ADK before-model callbacks)",
+      "url": "https://www.youtube.com/watch?v=EtxJJJ_7WQY"
+    },
+    {
+      "title": "Fireworks: matching frontier performance through training and harness engineering",
+      "url": "https://fireworks.ai/blog/open-source-agents-frontier-advisors"
+    }
+  ],
+  "body": "## What happened\n\nEvery LLM call in an agent's inner loop costs money and adds latency, and most of those calls do not need a frontier model. Three teams arrived at the same fix from different directions.\n\nIn a talk published 2026-06-11, Chris Burchett, SVP of AI at Blue Yonder, described the [hybrid architecture behind the company's supply-chain agents](https://www.youtube.com/watch?v=DOO7QXZUbfs) — software that already serves 27 billion machine-learning predictions a day. Large frontier models handle reasoning and human interaction; a smaller, domain-trained model (Nvidia's open-weight Nemotron 30B, built via a new model-training partnership) runs the inner agent loop, which Burchett says makes that loop \"faster, cheaper, and more reliable\" while hedging against rising token costs.\n\nTwo supports show the same pattern at smaller scale. Fireworks AI [tested it on Harvey's Legal Agent Benchmark](https://fireworks.ai/blog/open-source-agents-frontier-advisors) (LAB, a 100-task legal-reasoning suite). And a [1,000-agent marathon simulation](https://www.youtube.com/watch?v=EtxJJJ_7WQY) showed that once the race starts, almost none of the agents call an LLM at all.\n\n## Why it matters\n\nThe default agent design routes every step through one frontier model — the most capable and most expensive option — even for steps whose logic is fully predictable. That is the wrong capability-to-cost match, the core question of model selection. Fireworks puts numbers on it: an open-weights GLM 5.1 worker that calls Claude Opus 4.7 only as an advisor scored 18/100 all-pass at $368, beating Opus run end-to-end (14/100 at $954).\n\n## How it works\n\n1. **Split reasoning from routine.** Reserve the frontier model for genuine reasoning; use deterministic code or a smaller model where the logic is predictable.\n2. **Invoke the frontier model as an advisor.** Fireworks' GLM 5.1 worker self-triggers Opus only on hard sub-tasks — about 0.83 calls per task, not every step.\n3. **Own a domain model for the inner loop.** Blue Yonder runs Nemotron 30B inside the loop so cost and reliability are under its control.\n4. **Halt before the model call.** In Google's ADK, a before-model callback can stop an agent before it hits the LLM and run plain code instead.\n\n> Use the LLM for reasoning; use regular code when the logic is predictable.\n\n## What broke\n\nNaively swapping in a cheaper model drops quality. Fireworks closed the gap with harness engineering and post-training: supervised fine-tuning of Kimi K2.6 on passing LAB trajectories raised all-pass from 11/100 to 15/100 at roughly unchanged inference cost. The lesson is structural — the win comes from where you place each model, not from a better prompt.\n\n[Model Selection](/guide/model-selection/)"
+}
