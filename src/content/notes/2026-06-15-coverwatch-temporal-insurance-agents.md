@@ -33,9 +33,12 @@ Agents that touch the real world don't finish in one request — they wait on pe
 5. **History as a debugging asset.** The team's AI coding agents read centralized Temporal logs to diagnose failures.
 
 > Agents are easy to demo, but they are very hard to operate.
+>
+> — Darshit Vora, staff architect, Temporal
 
 ## What broke
 
 That operability gap is exactly what a [Temporal demo published the same day](https://www.youtube.com/watch?v=oKW1Hi7o9go) stress-tests. Staff architect Darshit Vora built an autonomous trading desk on Temporal plus the OpenAI Agents SDK, then injected chaos — bad news, a downed broker API, and a killed worker. Because state is durably persisted, trades "resume or retry exactly where they left off without hand-built state machines, Redis, or queues." The fix for flaky agents wasn't a better prompt; it was moving state out of the process and into a durable harness.
 
 [Durable Execution](/guide/durable-execution/)
+
