@@ -126,12 +126,15 @@ a { color: inherit; }
   display: inline-flex; align-items: center; gap: 5px;
   font-family: var(--mono); font-size: 10.5px; font-weight: 500;
   color: var(--card); background: var(--accent); border-radius: 99px; padding: 4px 10px;
+  text-decoration: none;
 }
 .chip .star { font-size: 8px; }
 .chip-alt {
   font-family: var(--mono); font-size: 10.5px; color: var(--muted);
   background: transparent; border: 1px solid var(--hair-3); border-radius: 99px; padding: 4px 10px;
+  text-decoration: none;
 }
+.chip-alt:hover { border-color: var(--accent); color: var(--ink); }
 
 /* ---------- Eyebrow→headline page header ---------- */
 .page-header { padding: 42px 0 0; max-width: 820px; }
