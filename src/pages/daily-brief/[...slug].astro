@@ -33,6 +33,11 @@ export async function getStaticPaths() {
 const { ep, stories, editionNo } = Astro.props;
 const { Content } = await render(ep);
 const fmt = (d: Date) => d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
+// Same news ticker as the home masthead — newest headlines scrolling across the edition.
+const tickerNotes = (await getCollection('notes', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const ticker = tickerNotes.slice(0, 6).map((n) => n.data.title);
 ---
 
 <Base
@@ -54,6 +59,14 @@ const fmt = (d: Date) => d.toLocaleDateString('en-US', { weekday: 'short', month
       <h1 class="page-h1" data-r="page-h1" style="font-size:54px;margin:18px 0 0">{ep.data.title}</h1>
       {ep.data.summary && <p class="page-dek">{ep.data.summary}</p>}
     </header>
+
+    <div class="ticker" style="margin-top:26px">
+      <div class="ticker-track">
+        {[...ticker, ...ticker].map((t) => (
+          <span class="ticker-item"><span class="slash">/</span>{t}</span>
+        ))}
+      </div>
+    </div>
 
     <section class="card card-dark" style="margin-top:30px;padding:24px 30px">
       <Player src={ep.data.audio} seconds={ep.data.seconds} />
