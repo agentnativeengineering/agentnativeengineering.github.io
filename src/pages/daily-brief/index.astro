@@ -4,7 +4,9 @@ import Base from '../../layouts/Base.astro';
 import Footer from '../../components/Footer.astro';
 
 const episodes = (await getCollection('episodes', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  // newest date first; on a same-date tie the later edition (by id) wins, so the freshest
+  // brief tops the list and takes the highest edition number.
+  (a, b) => (b.data.date.valueOf() - a.data.date.valueOf()) || b.id.localeCompare(a.id),
 );
 const fmt = (d: Date) => d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
 const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
