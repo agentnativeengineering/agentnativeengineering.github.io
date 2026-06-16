@@ -1,0 +1,28 @@
+{
+  "type": "note",
+  "slug": "yahoo-dual-graph-ad-buying-agents",
+  "title": "Yahoo grounds its ad-buying agents in two graphs: one for facts, one for audit",
+  "date": "2026-06-16",
+  "summary": "Yahoo's production media-buying platform pairs a Spanner knowledge graph for ground truth with a BigQuery graph that records every agent decision as a queryable trace.",
+  "domain": "architecture-and-orchestration",
+  "tags": [
+    "architecture-and-orchestration",
+    "multi-agent",
+    "knowledge-graph",
+    "auditability"
+  ],
+  "takeaways": [
+    "Give a multi-agent system two graphs: a knowledge graph for the facts it acts on, and a separate context graph that records every decision as a typed, queryable trace.",
+    "Ground agents in a deterministic source of truth before they touch real budgets; an LLM negotiating contracts on statistical guesses will hallucinate expensive deals.",
+    "Build auditability into the workflow as structured decision-traces, not by grepping raw logs after the fact."
+  ],
+  "sourceName": "Google Cloud Blog",
+  "sourceUrl": "https://cloud.google.com/blog/products/databases/graph-technologies-underpin-yahoo-system-of-action/",
+  "sources": [
+    {
+      "title": "Yahoo Seller Agent: a trusted agentic platform on graph technologies (Google Cloud)",
+      "url": "https://cloud.google.com/blog/products/databases/graph-technologies-underpin-yahoo-system-of-action/"
+    }
+  ],
+  "body": "## What happened\n\nIn a [post dated 2026-06-15](https://cloud.google.com/blog/products/databases/graph-technologies-underpin-yahoo-system-of-action/), Yahoo's Director of Engineering and a Google Cloud staff engineer described **Seller Agent**, a production multi-agent platform that collapses Yahoo's multi-week, manual digital ad-buying workflow into governed campaigns executable in seconds. A planning supervisor agent runs on GKE (Google Kubernetes Engine), uses the Agent Development Kit (ADK) to break a buyer request into specialized tasks — inventory discovery, audience matching, forecasting, pricing, governance review, execution — and coordinates sub-agents over the [Agent2Agent (A2A) protocol](https://cloud.google.com/blog/products/databases/graph-technologies-underpin-yahoo-system-of-action/). The design's center is two graphs, not one.\n\n## Why it matters\n\nThe authors are blunt about the failure they were avoiding: \"simply dropping LLMs into a high-stakes workflow does not solve the problem.\" [An agent negotiating ad placements](https://cloud.google.com/blog/products/databases/graph-technologies-underpin-yahoo-system-of-action/) without a deterministic view of real-time inventory and pricing rules \"is prone to hallucinate — potentially resulting in disastrous deals.\" And the moment an agent moves real budget, regulators want instant answers on *why* a decision was made. Both problems are about grounding and explanation, and both are too important to bolt on after the fact.\n\n## How it works\n\n1. **Knowledge graph for facts.** A [Spanner Graph](https://cloud.google.com/blog/products/databases/graph-technologies-underpin-yahoo-system-of-action/) models products, inventory, contracts, and governance policies as versioned, first-class relationships, so agents ground a decision in business reality within a single traversal.\n2. **Context graph for audit.** A separate [BigQuery Graph](https://cloud.google.com/blog/products/databases/graph-technologies-underpin-yahoo-system-of-action/) captures every action, score, and policy evaluation as a typed decision-trace that is queryable instantly.\n3. **Supervisor decomposition.** The planning agent splits a request into specialized sub-agent tasks rather than asking one model to do everything.\n4. **A2A coordination.** Sub-agents communicate over the open Agent2Agent protocol.\n5. **Closed loop.** Delivery and outcome signals are joined back to the decisions that produced them to improve future recommendations.\n\n> A trusted system of action needs two graphs: one that holds the facts the agent acts on, and one that records what it actually did.\n\n## What broke\n\nThe wrong control surface was the original instinct: \"digging through raw system logs after the fact.\" Grep-able logs cannot answer which policy applied to a given decision under regulatory scrutiny. The [fix was structural](https://cloud.google.com/blog/products/databases/graph-technologies-underpin-yahoo-system-of-action/) — make the decision-trace a typed, first-class graph written as the agent runs, so auditability is a query, not a forensic exercise. Yahoo and Google present the knowledge-graph-plus-context-graph pattern, built on open standards like IAB AdCOM, as a reusable blueprint for regulated domains such as finance and supply chain.\n\n[Architecture & Orchestration](/guide/architecture-and-orchestration/)"
+}
