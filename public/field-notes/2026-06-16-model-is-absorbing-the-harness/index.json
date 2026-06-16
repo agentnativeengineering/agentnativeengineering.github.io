@@ -1,0 +1,32 @@
+{
+  "type": "note",
+  "slug": "model-is-absorbing-the-harness",
+  "title": "The model is absorbing the harness — so don't build for lock-in",
+  "date": "2026-06-16",
+  "summary": "Two Google voices argue the harness around an agent matters less over time as the model absorbs scaffolding, and that betting on a proprietary harness for lock-in is the wrong bet.",
+  "domain": "harness-engineering",
+  "tags": [
+    "harness-engineering",
+    "gemini",
+    "tool-calling",
+    "agent-architecture"
+  ],
+  "takeaways": [
+    "Treat your harness as scaffolding the model will eventually absorb: build it to be swappable, not as a moat.",
+    "When you must triage where effort goes, domain expertise and a good harness can outweigh chasing the single best model.",
+    "Models that gain capability through post-training shrink the work your harness has to do."
+  ],
+  "sourceName": "Logan Kilpatrick (Interview)",
+  "sourceUrl": "https://www.youtube.com/watch?v=cMAs8z2dehs",
+  "sources": [
+    {
+      "title": "Logan Kilpatrick: Why the Model Eats the Harness",
+      "url": "https://www.youtube.com/watch?v=cMAs8z2dehs"
+    },
+    {
+      "title": "Cloud CISO Perspectives: 4 lessons that guided AI Threat Defense",
+      "url": "https://cloud.google.com/blog/products/identity-security/cloud-ciso-perspectives-the-4-lessons-that-guided-ai-threat-defense/"
+    }
+  ],
+  "body": "## What happened\n\nThe harness is everything wrapped around a model to make it useful in production: tool-calling (letting the model invoke functions), code execution, and the agent container that holds a running session. In an interview [published 2026-06-11](https://www.youtube.com/watch?v=cMAs8z2dehs), Logan Kilpatrick — who runs Google AI Studio and the Gemini API at Google DeepMind — argued that \"the model eats the harness\": scaffolding you build by hand keeps getting absorbed into the model itself. His conclusion for builders is blunt — building a proprietary harness *for lock-in* will matter less as models grow general enough to adapt to any harness. He points to a Gemini 3.5 Flash model that, he says, beats prior Pro models on coding purely through [post-training](https://www.youtube.com/watch?v=cMAs8z2dehs) (extra training after the base model, no new harness).\n\n## Why it matters\n\nIf you bet your architecture on a clever harness as a durable advantage, the next model release can quietly erase that advantage. The cost is sunk engineering: glue code, custom tool wrappers, and container logic that the model now does natively. The defensible work moves up the stack — to vertical expertise and the parts a model cannot internalize.\n\n## How it works\n\n1. **Scaffolding migrates inward.** Capabilities like tool-calling and code execution start as harness code, then ship inside the model.\n2. **Post-training closes gaps.** Kilpatrick cites a Flash model surpassing older Pro models on coding through [post-training alone](https://www.youtube.com/watch?v=cMAs8z2dehs).\n3. **Triage when forced.** Google Cloud CISO Chris Betz, in a [2026-06-15 post](https://cloud.google.com/blog/products/identity-security/cloud-ciso-perspectives-the-4-lessons-that-guided-ai-threat-defense/), describes vulnerability-finding as a product expert plus a harness plus a model — and says if forced to pick two, [pick expertise and harness over the best model](https://cloud.google.com/blog/products/identity-security/cloud-ciso-perspectives-the-4-lessons-that-guided-ai-threat-defense/).\n4. **Keep the harness swappable.** Treat it as replaceable plumbing so a better model drops in cheaply.\n\n> Build the harness to be discarded — the moat is your domain knowledge, not your glue code.\n\n## What broke\n\nThe failure mode is building a harness as a moat. Betz's [AI Threat Defense framework](https://cloud.google.com/blog/products/identity-security/cloud-ciso-perspectives-the-4-lessons-that-guided-ai-threat-defense/) shows the durable version: the edge comes from business context and expertise attackers lack, not from any single model — and the harness is one swappable input among three. The fix is to invest harness effort in the layer the model won't absorb: your vertical knowledge and the operational scaffolding (token and hardware budgets, human review, rollback) around it.\n\n[Harness Engineering](/guide/harness-engineering/)"
+}

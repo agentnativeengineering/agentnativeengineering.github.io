@@ -1,0 +1,39 @@
+---
+title: "Perplexity + HBS data: agents move the human from operator to supervisor"
+date: 2026-06-15
+summary: "A Perplexity and Harvard Business School study of an agent in real-world use finds 48x more machine execution per session and more frequent pauses for approval — the human's job becomes oversight, not execution."
+takeaways:
+  - "Design the agent to do long unattended work between human checkpoints, then budget the human's time for reviewing and approving — not for executing each step."
+  - "An agent that chains many tool and connector calls per session needs explicit approval pauses at the consequential points, or oversight collapses."
+  - "Measure autonomy as machine-execution time per session and dissatisfaction on the next turn, not as raw output volume."
+tags: ["autonomy-and-cost", "supervision", "mcp", "human-in-the-loop"]
+sourceName: "Perplexity Research"
+sourceUrl: "https://research.perplexity.ai/articles/how-ai-agents-reshape-knowledge-work"
+sources:
+  - title: "Perplexity + Harvard Business School: How AI Agents Reshape Knowledge Work"
+    url: "https://research.perplexity.ai/articles/how-ai-agents-reshape-knowledge-work"
+draft: false
+---
+## What happened
+
+In a [study published 2026-06-08](https://research.perplexity.ai/articles/how-ai-agents-reshape-knowledge-work), Perplexity, working with Harvard Business School researchers, measured its agent product ("Computer") against its non-agentic Search across real deployed sessions. The headline number is about autonomy: ["Computer performs 26 minutes of machine execution per session on average, versus 33 seconds for Search. That is a 48x increase in machine work on effectively the same tasks."](https://research.perplexity.ai/articles/how-ai-agents-reshape-knowledge-work) The agent chains far more external tool and connector calls — via MCP (Model Context Protocol, the open standard for connecting models to tools and data) and APIs — yet it also pauses more often for user approval. The authors' framing: ["The user moves from operator to supervisor."](https://research.perplexity.ai/articles/how-ai-agents-reshape-knowledge-work)
+
+## Why it matters
+
+If you are deciding how much rope to give an agent, this is grounded usage data, not a pitch deck. The wall you hit is that more autonomy means more unattended actions per session, and each action carries blast radius — a wrong connector call, a bad write, spend you did not approve. The study found the agent both did 48x more machine work and [paused more often for approval](https://research.perplexity.ai/articles/how-ai-agents-reshape-knowledge-work) while lowering next-turn dissatisfaction. That is the autonomy-and-cost trade in one line: you raise autonomy by adding checkpoints, not by removing the human. The human's scarce attention shifts from doing the work to bounding it.
+
+## How it works
+
+1. **Let the machine run long.** The agent does sustained execution between turns — 26 minutes per session here — instead of one quick lookup.
+2. **Fan out through MCP and APIs.** Autonomy comes from chaining many external tool and connector calls, not from a smarter single answer.
+3. **Pause at the consequential points.** The agent stops more often for user approval, so the human signs off where it matters.
+4. **Watch next-turn dissatisfaction.** The study tracked whether the following user turn signaled a problem — a cheap proxy for whether the agent stayed on the rails.
+5. **Reallocate the human to oversight.** Effort moves from executing each workflow to supervising many of them.
+
+> Raising autonomy meant adding approval pauses, not removing the human — the agent did 48x more machine work while stopping more often to ask.
+
+## What broke
+
+The honest limit is in the paper itself: the authors caution that the [early-adopter sample and human-time assumptions make the magnitudes approximate](https://research.perplexity.ai/articles/how-ai-agents-reshape-knowledge-work). Reported efficiency gains — task-time savings around 84–87% and cost savings around 93–94%, largest in high-wage domains like programming — are estimates resting on those assumptions, not audited outcomes. The actionable part is not the percentage; it is the structure. When you increase what an agent does unattended, the fix is harness design: explicit approval gates at the actions with real consequences, plus a cheap dissatisfaction signal you can watch, so supervision scales as machine work grows.
+
+[Autonomy, Cost & Control](/guide/autonomy-and-cost/)
