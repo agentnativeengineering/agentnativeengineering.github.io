@@ -7,7 +7,7 @@ import Player from '../../components/Player.astro';
 
 export async function getStaticPaths() {
   const episodes = (await getCollection('episodes', ({ data }) => !data.draft)).sort(
-    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+    (a, b) => (b.data.date.valueOf() - a.data.date.valueOf()) || b.id.localeCompare(a.id),
   );
   const notes = await getCollection('notes', ({ data }) => !data.draft);
   const noteById = new Map(notes.map((n) => [n.id, n]));
@@ -37,7 +37,7 @@ const fmt = (d: Date) => d.toLocaleDateString('en-US', { weekday: 'short', month
 const tickerNotes = (await getCollection('notes', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
-const ticker = tickerNotes.slice(0, 6).map((n) => n.data.title);
+const ticker = tickerNotes.slice(0, 4).map((n) => n.data.title);
 ---
 
 <Base

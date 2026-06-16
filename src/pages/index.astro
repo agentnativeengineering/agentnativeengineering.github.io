@@ -17,7 +17,9 @@ const notesAll = (await getCollection('notes', ({ data }) => !data.draft)).sort(
 const notes = notesAll.slice(0, 5);
 
 const episodes = (await getCollection('episodes', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  // newest date first; on a same-date tie the later edition (by id) wins, so the freshest
+  // brief is featured even when two editions share a day.
+  (a, b) => (b.data.date.valueOf() - a.data.date.valueOf()) || b.id.localeCompare(a.id),
 );
 const featured = episodes[0] ?? null;
 
@@ -27,7 +29,7 @@ const fmtShort = (d: Date) => d.toLocaleDateString('en-US', { weekday: 'short', 
 const fmtNote = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: '2-digit' }).toUpperCase();
 const readMin = (body: string) => Math.max(1, Math.round((body.trim().split(/\s+/).length) / 200));
 
-const ticker = notesAll.slice(0, 6).map((n) => n.data.title);
+const ticker = notesAll.slice(0, 4).map((n) => n.data.title);
 ---
 
 <Base>
