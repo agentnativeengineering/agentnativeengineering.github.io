@@ -1,0 +1,40 @@
+---
+title: "Token cost is becoming a governance discipline, not a line item"
+date: 2026-06-17
+summary: "Named companies are hitting unpredictable agent token bills and answering with caps, dashboards, and per-agent spend throttling."
+takeaways:
+  - "Meter agent spend per agent and per task before you scale adoption, not after the bill surprises you."
+  - "Build a cheaper-model justification gate: route by default to the lowest-priced model that passes, and require evidence before allowing an expensive one."
+  - "Treat undocumented employee-built agents as shadow IT: inventory, owner, and lifecycle, or they become zombie agents burning tokens."
+tags: ["autonomy-and-cost", "tokenomics", "cost-control", "governance"]
+sourceName: "WIRED"
+sourceUrl: "https://www.wired.com/story/claude-tokens-compute-cost-code-8x8/"
+sources:
+  - title: "WIRED: token usage is testing bosses' bet on AI"
+    url: "https://www.wired.com/story/claude-tokens-compute-cost-code-8x8/"
+  - title: "Analysis: AI agent sprawl at Fortune 500 companies"
+    url: "https://youtube.com/watch?v=bsOpmPmhxec"
+draft: false
+---
+## What happened
+
+In a [WIRED report dated 2026-06-16](https://www.wired.com/story/claude-tokens-compute-cost-code-8x8/), Paresh Dave documents a new C-suite obsession: "tokenomics" — managing the soaring, unpredictable cost of AI usage, where a token is one chunk of text a model reads or writes, and you pay per token. The numbers are concrete. Royal Bank of Canada's CEO said token usage surged 500 percent in six months. Some Amplitude engineers spend thousands of dollars a month each. Roughly 300 companies raised "token" concerns on April–May earnings calls, up from 93 a year earlier. Meta, Uber, and Salesforce have begun introducing usage caps. Software maker 8x8 standardized on Anthropic's Claude across 1,800 employees and stays net-positive — it canceled about $5 million in annual software subscriptions — but is already weighing caps as pricier models like Claude Opus 4.8 drive consumption up.
+
+## Why it matters
+
+Agent cost is not a fixed subscription you forecast once. It scales with every prompt, every retry, and every new model release that is more capable and more expensive than the last. That breaks the budgeting assumptions teams bring from SaaS. The bounding-spend principle is that an unbounded autonomous system bills you on its own schedule, so you have to put the meter and the throttle inside the system before adoption scales — not reconcile the invoice afterward.
+
+## How it works
+
+1. **Usage dashboards.** 8x8 and others monitor token spend so finance can see consumption per team and per workflow instead of one opaque bill.
+2. **Per-agent throttling.** A [related analysis](https://youtube.com/watch?v=bsOpmPmhxec) notes DaVita built an internal platform that caps inference spend per agent.
+3. **Cheaper-model gates.** 8x8 may require justifying that a cheaper model can't do a job before approving a costlier one; executives are buying systems to pick the lowest-priced model per prompt.
+4. **Lifecycle controls.** Lyft uses IT-approved skill sharing and centralized controls so agents are inventoried, not orphaned.
+
+> The bill scales with usage, so put the meter and the throttle inside the system before you scale adoption.
+
+## What broke
+
+The [same analysis](https://youtube.com/watch?v=bsOpmPmhxec) cites a Gartner prediction that the average Fortune 500 firm will run over 150,000 agents within two years, while only 13 percent believe they have adequate governance. Easy agent-creation tools let non-technical staff spin up duplicate, undocumented bots — the shadow-IT pattern, now inside the network. The failure mode is "zombie" agents that keep burning tokens after their owner leaves and conflicting outputs from agents nobody documented. The fix is not a better prompt; it is lifecycle engineering — an inventory, an owner, role-based access, and spend controls per agent. FICO built governance specifically to stop agents giving conflicting answers.
+
+[Autonomy, Cost & Control](/guide/autonomy-and-cost/)
