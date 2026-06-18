@@ -1,0 +1,41 @@
+---
+title: "Why a pod-per-agent model wastes compute, and what to run instead"
+date: 2026-06-18
+summary: "Solo.io and Google's Agent Substrate argue Kubernetes pod lifecycle is the wrong substrate for agent fleets, packing many idle agents per pre-provisioned pod with millisecond boots and snapshot suspend/resume."
+takeaways:
+  - "Stop tying each agent's lifecycle to its own Kubernetes pod; pack many agents into pre-provisioned worker pods and suspend the idle ones to storage."
+  - "Agents are long-lived, bursty, and idle most of the time, so the pod-per-agent model burns compute waiting on work that isn't there."
+  - "Sandboxing isolates an agent but does nothing for density; you need a runtime that decouples the agent actor from the worker pod."
+tags: ["architecture-and-orchestration", "kubernetes", "agent-runtime", "serverless"]
+sourceName: "Solo.io"
+sourceUrl: "https://www.solo.io/blog/agent-substrate-powers-kubernetes-agents-with-kagent"
+sources:
+  - title: "Solo.io: Agent Substrate powers Kubernetes agents with kagent"
+    url: "https://www.solo.io/blog/agent-substrate-powers-kubernetes-agents-with-kagent"
+  - title: "Solo.io: Why sandboxing your agent is not enough"
+    url: "https://www.solo.io/blog/why-sandboxing-your-agent-is-not-enough"
+draft: false
+---
+## What happened
+
+In a [post dated 2026-06-11](https://www.solo.io/blog/agent-substrate-powers-kubernetes-agents-with-kagent), Solo.io's Christian Posta described contributing to Agent Substrate, a Google-originated open-source runtime that the [kagent](https://www.solo.io/blog/agent-substrate-powers-kubernetes-agents-with-kagent) project now uses to run sandboxed AI agents on Kubernetes. The framing is blunt: "Agents are long-lived, bursty, and idle most of the time," and the default Kubernetes pattern of one pod per agent fits that shape badly. A [follow-up on 2026-06-17](https://www.solo.io/blog/why-sandboxing-your-agent-is-not-enough) by Lin Sun adds the second half of the lesson: sandboxing an agent gives you isolation, but isolation alone does nothing for the cost of running a fleet.
+
+## Why it matters
+
+A pod is a heavy unit. Pods can take seconds to start, the Kubernetes API server was never built to handle millions of resource writes, and attaching millions of volumes for per-agent state is not what the system was designed for. So if every agent is its own pod and most agents are idle most of the time, you are [paying for compute that sits waiting](https://www.solo.io/blog/agent-substrate-powers-kubernetes-agents-with-kagent). For an agent platform this is the wall: the architecture you reach for first does not scale on the axis agents actually stress, which is density of mostly-idle, bursty workloads.
+
+## How it works
+
+1. **Pre-provision worker pods.** Agent Substrate schedules agent "actors" into a pool of already-running [worker pods](https://www.solo.io/blog/agent-substrate-powers-kubernetes-agents-with-kagent), so deploying an agent never waits on a new pod to converge.
+2. **Pack many actors per pod.** [Six agents can map to six actor templates sharing one worker pod](https://www.solo.io/blog/why-sandboxing-your-agent-is-not-enough), and the pool scales out horizontally only when concurrency actually rises.
+3. **Keep the API off the hot path.** A separate control layer handles deploy/suspend/resume, leaving the [Kubernetes API for what it is good at](https://www.solo.io/blog/agent-substrate-powers-kubernetes-agents-with-kagent).
+4. **Snapshot idle agents.** An idle agent is suspended and snapshotted to object storage like GCS or S3, then [resumed on any available worker](https://www.solo.io/blog/why-sandboxing-your-agent-is-not-enough) in milliseconds.
+5. **Lock down egress.** Each actor runs in gVisor or Firecracker isolation with traffic routed through agentgateway, which can inject credentials on egress so [agents never hold API keys directly](https://www.solo.io/blog/agent-substrate-powers-kubernetes-agents-with-kagent).
+
+> Decouple the agent's lifecycle from the pod's, and treat agents as on-demand serverless bursts rather than always-on services.
+
+## What broke
+
+The fix here is runtime engineering, not a better manifest. Solo.io's earlier in-house version measured suspend/resume at [50ms with Bubblewrap and 200ms with Firecracker](https://www.solo.io/blog/agent-substrate-powers-kubernetes-agents-with-kagent) — numbers you only reach by moving the lifecycle off pods. Note the standing of the claim: it is a vendor that ships agentgateway and kagent, describing its own runtime, so treat the latency figures as Solo.io's own and the 1:1 pod-per-agent model is still supported for teams that want it. The generalizable takeaway survives the vendor framing: if your agents are mostly idle, packing density and snapshot suspend/resume matter more than another sandbox.
+
+[Architecture & Orchestration](/guide/architecture-and-orchestration/)
