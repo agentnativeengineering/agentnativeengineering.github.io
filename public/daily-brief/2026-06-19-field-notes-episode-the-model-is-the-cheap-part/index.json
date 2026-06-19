@@ -1,0 +1,75 @@
+{
+  "type": "brief",
+  "slug": "field-notes-episode-the-model-is-the-cheap-part",
+  "title": "The model is the cheap part: where agents actually break",
+  "date": "2026-06-19",
+  "summary": "Three teams found the same thing: agents break in the software around the model, not the model — and that layer is what's worth owning.",
+  "audio": "/audio/field-notes-episode-the-model-is-the-cheap-part.mp3",
+  "seconds": 454,
+  "covers": [
+    "2026-06-16-rocket-close-supercharger-single-call-retrieval",
+    "2026-06-17-mcp-tools-fail-on-interface-clarity",
+    "2026-06-18-ai-race-moved-up-to-the-software-layer"
+  ],
+  "oneIdea": {
+    "title": "Treat the model as the part you rent, and the software around it as the part you own.",
+    "body": "Across three stories, every win came from the layer around the model, not the model. Rocket Close tripled agent speed by cutting round trips. A Bengaluru team fixed failures by rewriting tool interfaces. And on one gateway, a cheap model grabbed seventeen percent of usage at one percent of spend — proof the model commoditizes while your software layer is what you actually own."
+  },
+  "stats": [
+    {
+      "n": "3x",
+      "label": "Rocket Close's agent latency drop — from cutting model round trips, not a faster model"
+    },
+    {
+      "n": "~30%",
+      "label": "fall in contact-center calls and emails after Rocket Close deployed its agent"
+    },
+    {
+      "n": "<1%→17%",
+      "label": "DeepSeek's jump in token share on Vercel's gateway, at about 1% of spend"
+    },
+    {
+      "n": "41% vs 39.5%",
+      "label": "Anthropic edging OpenAI in US business adoption — the leader now flips monthly"
+    }
+  ],
+  "brief": [
+    {
+      "kind": "story",
+      "title": "Rocket Close cut agent latency 3x by reducing model round trips, not the model",
+      "take": true,
+      "domain": "architecture-and-orchestration",
+      "source": "AWS",
+      "url": "https://aws.amazon.com/blogs/machine-learning/building-supercharger-how-rocket-close-optimized-title-operations-with-agentic-ai/",
+      "body": "Rocket Close's title-examiner agent was slow. Instead of a faster model, the team redesigned retrieval so a query resolves in a single pass — cutting round trips for a 3x latency gain and a ~30% drop in contact-center load."
+    },
+    {
+      "kind": "story",
+      "title": "MCP tools fail on interface clarity, not model intelligence",
+      "take": false,
+      "domain": "architecture-and-orchestration",
+      "source": "AAIF",
+      "url": "https://aaif.io/blog/til-at-mcpdev-summit-bengaluru-six-lessons-from-the-agentic-frontier/",
+      "body": "At the MCPDev Summit in Bengaluru, practitioners traced production agent failures to bad tool interfaces, not weak models. An agent sees only a tool's name, description, and schema — and a verbose description out-selects a sparse but better tool."
+    },
+    {
+      "kind": "story",
+      "title": "The AI race moved up to the software layer above the model",
+      "take": false,
+      "domain": "architecture-and-orchestration",
+      "source": "Vercel",
+      "url": "https://vercel.com/blog/ai-gateway-production-index-june-2026",
+      "body": "June moves — OpenAI buying an agent-runtime startup, DeepSeek jumping to 17% of gateway tokens at ~1% of spend — show the model commoditizing while the software around the agent becomes the layer worth owning."
+    },
+    {
+      "kind": "quote",
+      "title": "It's clearly not an intelligence problem. It's a problem about clarity. How clear the interface is.",
+      "take": false,
+      "domain": "architecture-and-orchestration",
+      "source": "Pure Storage",
+      "url": "https://aaif.io/blog/til-at-mcpdev-summit-bengaluru-six-lessons-from-the-agentic-frontier/",
+      "attribution": "— Yashasvi Misra, Pure Storage, on why her agent kept failing"
+    }
+  ],
+  "transcript": "[warm] An agent that kept failing to cancel orders. [pause] The team's first move? Blame the model — tweak the prompt, drop the temperature. But what if the model was never the problem... so where does an agent actually break?\n\n[warm] This is the Agentic Daily Brief.\n\n[pause] And that question — is it the model, or everything around it — is playing out at the very top of the industry right now.\n\n[curious] Here's the headline. At the G seven this week, world leaders pushed back on America's AI off-switch. After the US abruptly cut foreign access to Anthropic's most advanced models, leaders like France's Macron and India's Modi warned that any economy built on American AI now sits behind a kill switch Washington can flip overnight. So they started hashing out a \"trusted partners\" plan — durable access for select nations and firms. [slow] A fight over one company's exports just became a fight over who controls AI itself.\n\nAnd in a quieter note — OpenAI showed off a way to predict how a model will misbehave before it ships, by replaying old conversations and watching what it does. [pause] We'll get back to that idea — testing the model — because today is really about the opposite. The stuff around the model.\n\n[curious] So let's start in the place where this gets concrete. A title agency. Now, title examiners — the folks who check property records before you buy a house — used to spend hours digging through county rules and state guides, jumping between systems. So Rocket Close, inside Rocket Companies, built an agent to do that digging for them.\n\nAnd it worked. [pause] Calls and emails to their contact center dropped by about a third. But early on, the thing was slow. And here's the move I want you to notice. When an agent feels slow, the instinct is — get a faster model, right? [slow] They didn't.\n\n[surprised] They made it three times faster... by cutting how many times it talked to the model at all. See, every time an agent stops, picks a tool, calls it, and waits — that's a full round trip. And they stack up. So they redesigned it to answer a question in one pass instead of five. [warm] Same model. A third of the wait.\n\n[thoughtful] AWS, who wrote this up with them, put the lesson plainly — when an agent feels slow, count its round trips before you reach for a bigger model. [pause] That's the whole idea. The speed wasn't in the brain. It was in the plumbing.\n\n[curious] Which lands us right on the question that title agency was quietly answering — if the model isn't the bottleneck, what is? [pause] And there's a community of people building agents who've been screaming the answer.\n\nPicture an engineer in Bengaluru, at the first big summit on this stuff. [pause] She built a support agent. It kept failing to cancel orders. So she did what we all do — tweaked the prompt, adjusted the settings, blamed the AI. [slow] None of it worked.\n\n[surprised] The real problem? The agent couldn't understand the tool it was supposed to use. [pause] Because here's the thing a lot of people miss. When an agent reaches for a tool — a database, an API, whatever — it doesn't read your documentation. It can't. It sees three things, and only three. The tool's name, a short description, and the shape of the data it expects.\n\nSo if that's badly written, the agent isn't confused — it's blind. [pause] She put it this way — \"It's clearly not an intelligence problem. It's a problem about clarity.\" [warm] The interface IS the system.\n\nAnd the failure mode that got me? [pause] A longer, wordier tool description will beat a shorter, better one. [surprised] Not because it's better — because more words give the model more to match against. So your bloated tool out-competes your good one. The description quietly rigs the choice.\n\n[thoughtful] One engineer there — from a tools company called Arcade — said the most common mistake is people take a standard API spec, \"wrap it, and call it an MCP.\" That's the open standard for handing tools to an agent. And in his words, that \"gives it the utmost chances to fail.\" Because that spec was written for human programmers. The agent reads it raw.\n\n[curious] So zoom out with me for a second. Faster agents — fix the round trips. Smarter agents — fix the interface. [pause] In both cases, the win was in the software around the model, not the model. [warm] And it turns out the entire industry just made the same bet, with a lot more money.\n\n[curious] Because this June, the AI race split in three directions at once. [pause] And the part everyone assumed was the prize — the model itself — is starting to look like a commodity. Here's the number that stopped me. On one major gateway, a model called DeepSeek jumped from under one percent of usage... to seventeen percent. At about one percent of the spend.\n\n[slow] Cheap, capable, and it swapped in almost overnight. The adoption leader now flips month to month. So if you wired your whole app straight to one provider, you've anchored yourself to the fastest-moving, most replaceable piece of the stack.\n\n[curious] And watch what the big players are actually buying. OpenAI bought an agent-runtime startup. Other labs are snapping up the tools that wrap around models — the coding harnesses, the context engines, the identity layers. [pause] Nobody's getting rich selling the raw model. The value moved up, into the software you build around it.\n\nSo here's my read, and it ties the whole day together. Treat the model as the part you rent — and the software around it as the part you own. Route every call through one gateway you control, so swapping a model is a config change, not a rewrite. Keep your context, your tools, your guardrails in your own code. [slow] Because the model will change next month. Your layer shouldn't have to.\n\n[curious] So, one thing worth trying this week. Next time an agent of yours misbehaves — before you touch the prompt or reach for a bigger model — go read your tool descriptions the way the agent reads them. [pause] Just the name, the description, the data shape. Nothing else. [warm] Ask yourself, honestly — could a stranger figure out what this does from only that? If not, you've probably found your bug.\n\n[pause] An agent that couldn't cancel an order. A team that tripled their speed without a faster model. A whole industry quietly betting the model is the cheap part. None of it was about the brain. The agent broke where we built around it — and that's exactly where you fix it.\n\nThat's today's Agentic Daily Brief. [pause] Brought to you by Agent Native Engineering — open knowledge for building and running AI agents. The full write-ups, with their sources, are at agent native engineering dot com. [warm] See you next time."
+}

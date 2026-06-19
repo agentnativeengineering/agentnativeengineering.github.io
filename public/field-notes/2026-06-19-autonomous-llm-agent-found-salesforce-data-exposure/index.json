@@ -1,0 +1,28 @@
+{
+  "type": "note",
+  "slug": "autonomous-llm-agent-found-salesforce-data-exposure",
+  "title": "An autonomous LLM agent found real Salesforce data-exposure bugs from just a URL",
+  "date": "2026-06-19",
+  "summary": "A security team's autonomous pentest agent surfaced guest-readable Apex methods and blind SOQL injection across live Salesforce sites, retiring the comfort of a \"low exploitability\" rating.",
+  "domain": "security",
+  "tags": [
+    "security",
+    "salesforce",
+    "soql-injection",
+    "pentest-agent"
+  ],
+  "takeaways": [
+    "Re-audit anything you down-rated as 'low exploitability' — an LLM agent now chains the tedious recon a human attacker used to skip.",
+    "Use SOQL bind variables, not string concatenation, and avoid 'without sharing' Apex classes unless you truly need them.",
+    "Treat guest-accessible Apex on Experience Cloud sites as an exposed API and systematically enumerate every method."
+  ],
+  "sourceName": "Reco.ai",
+  "sourceUrl": "https://www.reco.ai/blog/hacking-salesforce-sites-with-an-llm-agent",
+  "sources": [
+    {
+      "title": "Reco: Hacking Salesforce Sites with an LLM Agent",
+      "url": "https://www.reco.ai/blog/hacking-salesforce-sites-with-an-llm-agent"
+    }
+  ],
+  "body": "## What happened\n\nIn a [post dated 2026-06-12](https://www.reco.ai/blog/hacking-salesforce-sites-with-an-llm-agent), Reco's security research team (author Nitay Bachrach) described an autonomous LLM-driven agent that performs end-to-end penetration testing of Salesforce Experience Cloud sites — the public-facing portals many companies build on Salesforce — given only a URL. Across two live case studies, the agent found that a guest-accessible Apex method (Apex is Salesforce's server-side language) returned full contact records and billing addresses from a single email parameter, and that a second site had blind SOQL injection (SOQL is Salesforce's query language). The agent then [validated and extracted real PII](https://www.reco.ai/blog/hacking-salesforce-sites-with-an-llm-agent) — names, emails, phone numbers — to prove each finding was exploitable, not theoretical.\n\n## Why it matters\n\nFor years, teams triaged Salesforce findings as \"low exploitability\" because the recon was tedious: a human had to enumerate objects, map controller methods, and probe parameters by hand, so buried bugs stayed buried. Bachrach's argument is that [automated analysis doesn't miss things because they're buried](https://www.reco.ai/blog/hacking-salesforce-sites-with-an-llm-agent). An agent runs the boring enumeration at machine speed and never gets bored, so the cost of an attacker actually reaching a weak endpoint collapses. That retires \"nobody would bother to find this\" as a reason to defer a fix.\n\n## How it works\n\n1. **Reconnaissance.** The agent maps the attack surface by enumerating Salesforce objects, Apex controller methods, and routes through the Aura framework.\n2. **Object analysis.** It inspects each object for sensitive data that should not be readable by an unauthenticated guest user.\n3. **Method probing.** It fuzzes Apex methods, including testing whether a query mishandles injected quote characters.\n4. **Exploit and validate.** It writes and runs code to confirm a finding returns real data, rather than stopping at a maybe.\n5. **Severity self-review.** An adversarial pass rates the finding's true impact before reporting.\n\n> The recon a human attacker used to skip is exactly the work an agent does for free.\n\n## What broke\n\nThe [root causes were textbook](https://www.reco.ai/blog/hacking-salesforce-sites-with-an-llm-agent): broken access control, dynamic SOQL built by string concatenation instead of bind variables, `without sharing` Apex classes that bypass record-level permissions, and misconfigured ContentDocument visibility. The fixes are not new prompts but ordinary platform hygiene Bachrach calls \"Salesforce Security 101\": use bind variables in every SOQL query, avoid `without sharing` unless a method genuinely needs it, enforce least privilege for the guest user, and systematically audit all Experience Cloud sites now that the recon barrier is gone.\n\n[Security](/guide/security/)"
+}
