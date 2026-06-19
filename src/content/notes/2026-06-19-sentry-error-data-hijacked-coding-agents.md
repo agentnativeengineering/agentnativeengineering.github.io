@@ -1,0 +1,42 @@
+---
+title: "Sentry error data hijacked Claude Code, Cursor, and Codex 85% of the time"
+date: 2026-06-19
+summary: "A coding agent can't tell error-monitoring data from instructions, so a fake Sentry event becomes a command it executes — inside its own trust boundary, where your WAF and audit logs see nothing."
+takeaways:
+  - "Treat every tool and error feed an agent reads as untrusted input, and strip or sandbox its rendered content before the model acts on it."
+  - "Public write-only credentials like a Sentry DSN are an injection surface, not a low-risk leak."
+  - "WAF, RBAC, and audit logs don't see this attack because the agent runs it inside its own authorized session."
+tags: ["security", "prompt-injection", "mcp", "coding-agents"]
+sourceName: "Tenet Security"
+sourceUrl: "https://tenetsecurity.ai/blog/agentjacking-coding-agents-with-fake-sentry-errors/"
+sources:
+  - title: "Tenet Security: Agentjacking coding agents with fake Sentry errors"
+    url: "https://tenetsecurity.ai/blog/agentjacking-coding-agents-with-fake-sentry-errors/"
+draft: false
+---
+## What happened
+
+Your coding agent pulls a stack trace from Sentry to debug a crash. It reads the error message as data. But the agent can't tell that data apart from a command — and that gap is now a remote attack.
+
+In research [published 2026-06-17](https://tenetsecurity.ai/blog/agentjacking-coding-agents-with-fake-sentry-errors/), Tenet Security demonstrated "Agentjacking": untrusted error-monitoring data flowing through a trusted MCP integration (Model Context Protocol, the standard interface agents use to call tools) becomes executable instructions the agent acts on. In controlled testing it [hijacked Claude Code, Cursor, and Codex agents 85% of the time](https://tenetsecurity.ai/blog/agentjacking-coding-agents-with-fake-sentry-errors/). Tenet found [2,388 exposed organizations](https://tenetsecurity.ai/blog/agentjacking-coding-agents-with-fake-sentry-errors/), from a $250bn enterprise down to solo developers and a cloud-security vendor.
+
+## Why it matters
+
+The attacker needs almost nothing: a [Sentry DSN](https://tenetsecurity.ai/blog/agentjacking-coding-agents-with-fake-sentry-errors/) — a public, write-only credential discoverable from browser JavaScript or GitHub search — and any HTTP client to inject a crafted error event. Most teams treat a DSN as harmless because it can only write, not read. That assumption is the wall: write access is now enough to plant instructions an agent will later obey.
+
+This is the core security lesson for agents — [the weakness is in how agents handle tool output, not a flaw in any single product](https://tenetsecurity.ai/blog/agentjacking-coding-agents-with-fake-sentry-errors/). Your WAF, RBAC, and audit logs can't see it, because the agent acts entirely within its own authorized session.
+
+## How it works
+
+1. **Find a DSN.** The attacker scrapes a public Sentry DSN from a site's JavaScript or a GitHub search.
+2. **Inject an event.** They POST a fake error whose [message field and context keys contain carefully formatted markdown](https://tenetsecurity.ai/blog/agentjacking-coding-agents-with-fake-sentry-errors/).
+3. **Wait for the agent.** A developer asks their coding agent to investigate recent errors; the agent pulls the event through the Sentry MCP server.
+4. **Markdown renders as structure.** [When the MCP server returns the event, the markdown renders as structured content](https://tenetsecurity.ai/blog/agentjacking-coding-agents-with-fake-sentry-errors/) — and the agent reads it as a directive, not a log line.
+
+> AI coding agents cannot tell the difference between the data they read and an instruction to act.
+
+## What broke
+
+The fix is harness engineering, not a sharper prompt. Treat every tool and error feed as untrusted input: don't let an agent render or execute content from a third-party feed inline. Neutralize markup before it reaches the model, isolate tool output in a clearly-labeled data channel the model is told never to follow as instructions, and require human confirmation for any action triggered by externally-sourced data. The same pattern recurs anywhere a connected agent reads attacker-influenced records and then calls its own authorized tools — error feeds, databases, ticket queues are all injection surfaces inside the trust boundary.
+
+[Security](/guide/security/)
