@@ -1,0 +1,56 @@
+---
+title: "Why MCP tool descriptions are a trust boundary, and how to pin them"
+date: 2026-06-19
+summary: "The MCP spec calls tool descriptions untrusted, yet the model obeys them, so a poisoned or silently-changed description can hijack an agent — pin and re-check them like a dependency."
+takeaways:
+  - "Treat every MCP tool description as untrusted input with the same authority as your own prompt, and pin it at approval."
+  - "The model reads the full description while the user sees a simplified one, so hidden or later-changed instructions run without anyone noticing."
+  - "Hash the tool definition at approval, re-prompt on any change, scan servers for poisoned descriptions, and route calls through a policy gateway."
+tags: ["security", "mcp", "tool-poisoning", "prompt-injection", "supply-chain"]
+sourceName: "Invariant Labs"
+sourceUrl: "https://invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks"
+sources:
+  - title: "Invariant Labs: MCP Tool Poisoning Attacks"
+    url: "https://invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks"
+  - title: "Invariant Labs: WhatsApp MCP Exploited (rug pull)"
+    url: "https://invariantlabs.ai/blog/whatsapp-mcp-exploited"
+  - title: "Invariant Labs: Introducing MCP-Scan"
+    url: "https://invariantlabs.ai/blog/introducing-mcp-scan"
+  - title: "Invariant Labs: Guardrails / Gateway proxy"
+    url: "https://invariantlabs.ai/blog/guardrails"
+  - title: "Invariant Labs: GitHub MCP Exploited (toxic agent flow)"
+    url: "https://invariantlabs.ai/blog/mcp-github-vulnerability"
+  - title: "Model Context Protocol: Specification — Security & Trust"
+    url: "https://modelcontextprotocol.io/specification/2025-11-25"
+  - title: "Model Context Protocol: The MCP Registry"
+    url: "https://modelcontextprotocol.io/registry/about"
+  - title: "TrueFoundry: MCP tool poisoning (CVE-2025-54136), gateway defense"
+    url: "https://www.truefoundry.com/blog/blog-mcp-tool-poisoning-gateway-defense"
+  - title: "ATTP/MCPS: signed tool definitions (IETF draft)"
+    url: "https://dev.to/razashariff/the-nsa-just-published-an-mcp-security-playbook-heres-the-ietf-spec-the-openapi-extension-and-28pa"
+draft: false
+---
+## What happened
+
+The Model Context Protocol lets a server ship "tools" whose text descriptions the model reads in full. Invariant Labs disclosed that this is an attack surface: a tool description can carry instructions that are ["invisible to users but visible to AI models"](https://invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks), and demonstrated a [WhatsApp server that looked benign at install, then changed its description on a later run](https://invariantlabs.ai/blog/whatsapp-mcp-exploited) to exfiltrate a user's chat history. The flaw now carries a CVE — [CVE-2025-54136, "MCPoison"](https://www.truefoundry.com/blog/blog-mcp-tool-poisoning-gateway-defense) — and the MCP spec itself concedes the point: tool descriptions ["should be considered untrusted"](https://modelcontextprotocol.io/specification/2025-11-25), and the protocol "cannot enforce these security principles at the protocol level." A newer proposal to [sign tool definitions so clients can detect tampering](https://dev.to/razashariff/the-nsa-just-published-an-mcp-security-playbook-heres-the-ietf-spec-the-openapi-extension-and-28pa) exists but remains a draft the spec has not adopted.
+
+## Why it matters
+
+To the model, a tool description has the same standing as your system prompt. As one analysis puts it, ["every byte that reaches the model carries the same authority weight"](https://www.truefoundry.com/blog/blog-mcp-tool-poisoning-gateway-defense): your prompt, the developer's message, and a third-party server's tool description collapse into one context window. Approval does not save you, because a server can show a clean description at install and [swap it on a later run](https://invariantlabs.ai/blog/whatsapp-mcp-exploited) — a "rug pull" — and most clients never surface the change. So a tool you vetted last week can be hostile today, with no signal to the user.
+
+## How it works
+
+1. **Pin the tool definition at approval.** Hash each tool's full definition and [verify the hash before executing](https://invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks); a changed hash means re-approve.
+2. **Re-prompt on any change.** Treat a description edit like a new permission request rather than a silent update.
+3. **Scan for poisoned descriptions.** Run a scanner such as [mcp-scan](https://invariantlabs.ai/blog/introducing-mcp-scan), which flags tool poisoning and tracks definition drift.
+4. **Route through a gateway.** Put a [policy proxy between the agent and the MCP servers](https://invariantlabs.ai/blog/guardrails) so every tool call is checked before it fires.
+5. **Read the registry as identity only.** The official registry [authenticates the publisher's namespace](https://modelcontextprotocol.io/registry/about); it does not vet the server's code, so presence is not a vouch.
+
+> A tool description is untrusted input with full agent authority — pin it and re-check it like a dependency.
+
+## What broke
+
+The protocol gap is still open. The official spec pushes enforcement onto host implementors, the signed-definition proposal is a recent vendor IETF draft the working group has not adopted, and the registry proves who published a server without vetting that it is safe. Mind the standing of the demos, too: the WhatsApp case is the clean tool-description rug-pull, while the [GitHub MCP private-repo leak](https://invariantlabs.ai/blog/mcp-github-vulnerability) is a sibling class — a "toxic agent flow" via injected content rather than description poisoning. Until the spec signs descriptions, pinning and scanning are the defense you own.
+
+[Security](/guide/security/)
+
