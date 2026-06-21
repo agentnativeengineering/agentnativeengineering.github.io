@@ -1,0 +1,75 @@
+{
+  "type": "brief",
+  "slug": "field-notes-episode-never-grade-its-own-homework",
+  "title": "A Vetted Agent Tool That Rewrote Itself to Steal Your Chats",
+  "date": "2026-06-21",
+  "summary": "Three notes, one rule: an agent pays off only where a trustworthy judge — the description, the human checkpoint, the frozen benchmark — stays out of its reach.",
+  "audio": "/audio/field-notes-episode-never-grade-its-own-homework.mp3",
+  "seconds": 521,
+  "covers": [
+    "2026-06-15-optimization-agent-benchmark-cant-game",
+    "2026-06-15-agents-move-human-operator-to-supervisor",
+    "2026-06-19-mcp-tool-descriptions-trust-boundary"
+  ],
+  "oneIdea": {
+    "title": "An autonomous agent only pays off where there's a trustworthy yardstick it can't reach in and rewrite.",
+    "body": "The same rule shows up three ways today. A poisoned MCP tool description hijacks an agent because the model trusts what it reads. An agent doing 48x more work stays safe only because a human still signs off on the risky steps. And Datadog's optimizer works only because the benchmark is frozen and grounded in real traffic before a separate agent tries to beat it. In every case, if the agent controls the thing that judges it, the trust is gone."
+  },
+  "stats": [
+    {
+      "n": "48x",
+      "label": "more machine work per agent session than non-agent search — yet it paused for approval more, not less"
+    },
+    {
+      "n": "26 min vs 33 sec",
+      "label": "machine execution per session: Perplexity's agent vs its non-agent search"
+    },
+    {
+      "n": "8%+",
+      "label": "of a heavily-tuned Go service's total CPU cut by Datadog's DODO optimizer (~10k cores)"
+    },
+    {
+      "n": "~25%",
+      "label": "of captured tag inputs had uppercase chars — the real-traffic detail a synthetic benchmark missed"
+    }
+  ],
+  "brief": [
+    {
+      "kind": "story",
+      "title": "A vetted MCP tool can rewrite its own description and hijack your agent",
+      "take": true,
+      "domain": "security",
+      "source": "Invariant Labs",
+      "url": "https://invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks",
+      "body": "MCP tool descriptions reach the model with the same authority as your own prompt, yet the spec itself calls them untrusted. Invariant Labs demoed a server that looked clean at install, then silently swapped its description on a later run to exfiltrate chat history. Pin the tool's fingerprint at approval and re-prompt on any change."
+    },
+    {
+      "kind": "story",
+      "title": "Perplexity + HBS: agents did 48x more work — and paused MORE to ask",
+      "take": false,
+      "domain": "autonomy-and-cost",
+      "source": "Perplexity / HBS",
+      "url": "https://research.perplexity.ai/articles/how-ai-agents-reshape-knowledge-work",
+      "body": "In real deployed sessions, Perplexity's agent ran ~26 minutes of machine execution per session versus 33 seconds for non-agent search — roughly 48x more work. Yet it paused for approval more often, not less. Autonomy scaled by adding checkpoints, moving the human from operator to supervisor."
+    },
+    {
+      "kind": "story",
+      "title": "Datadog's DODO: split the agent that builds the benchmark from the one that beats it",
+      "take": false,
+      "domain": "evaluation",
+      "source": "Datadog",
+      "url": "https://www.datadoghq.com/blog/ai/production-grounded-code-optimization/",
+      "body": "DODO grounds an optimization agent in real production telemetry, then splits the work: one loop fits a benchmark to live traffic and freezes it, a separate loop optimizes against it so the agent can't game its own score. The result cut more than 8% of a heavily-tuned Go service's total CPU."
+    },
+    {
+      "kind": "quote",
+      "title": "Every byte that reaches the model carries the same authority weight.",
+      "take": false,
+      "domain": "security",
+      "source": "TrueFoundry analysis",
+      "url": "https://www.truefoundry.com/blog/blog-mcp-tool-poisoning-gateway-defense",
+      "attribution": "— on MCP tool poisoning, why a third-party tool description has the same standing as your system prompt"
+    }
+  ],
+  "transcript": "[warm] A tool you checked and approved last week... can turn hostile today — and your agent obeys it without a peep. [curious] So when you hand an agent more rope, what's the one thing you still have to keep your hands on?\n\n[warm] This is the Agentic Daily Brief.\n\nAnd that question is live in the news this morning. OpenAI just gave its Codex coding agent a feature called Record and Replay. You do a boring, repeat task once — on your Mac, while it watches — and it turns those screen actions into a skill it can run on its own from then on. [curious] That's a real shift in how agents get taught. Not writing a prompt, not a script... just showing it once. For now though, it's off in the EU, the UK, and Switzerland.\n\nAnd in a lab, researchers at Oxford and Stanford wired up seven agents into a kind of newsroom that turns a raw spreadsheet into a fact-checked article — with one agent whose only job is tracing every claim back to its source.\n\n[pause] Hold onto that idea — an agent whose whole job is checking — because it runs through everything today.\n\nLet's start with the scariest version of the trust problem. You connect your agent to an outside tool. To do that, the tool ships a little text description of what it does and how to use it. [curious] Here's the thing most people don't realize... your agent reads that whole description and treats it with the same weight as your own instructions. Every byte the model sees carries the same authority. Your prompt, and a stranger's tool description — they collapse into one pile, and the model can't tell them apart.\n\nNow, the standard behind this, MCP — the common way to plug agents into tools — actually says, in its own spec, that these descriptions should be treated as untrusted. [slow] Untrusted. [pause] And yet the model still obeys them.\n\nInvariant Labs showed exactly how that bites. They built a messaging tool that looked totally clean when you installed it. [pause] Then, on a later run, it quietly rewrote its own description... to smuggle out the user's chat history. They call it a rug pull. You vetted it. You approved it. And it changed underneath you, with nothing on screen to tell you.\n\n[surprised] And honestly, that's the part that got me — approval doesn't save you, because approval was a snapshot of a thing that moved.\n\nSo what do you actually do? You stop trusting the description and start pinning it. [pause] Take a fingerprint of that tool the moment you approve it. Next time it runs, check the fingerprint. If it changed, the agent stops and asks you again — like a brand-new permission request, not a silent update. My read is simple. Treat a tool description like a dependency you'd lock to a version, not like a label you read once and forget.\n\n[thoughtful] But pinning a description is the small version of a much bigger question. Once your agent is doing real work, on its own, for minutes at a time... who's actually watching?\n\nPerplexity, working with researchers at Harvard Business School, went and measured this on a real agent doing real tasks. And the number is wild. Their agent ran about twenty-six minutes of machine work per session. [pause] Their old, non-agent search? [slow] Thirty-three seconds. So the agent did roughly forty-eight times more work, on basically the same jobs.\n\n[curious] Now, here's what I'd have guessed wrong. You'd think doing forty-eight times more work means it asks you forty-eight times less, right? [pause] The opposite happened. It paused to ask for approval more often.\n\nAnd that's the whole lesson in one line. The way they raised how much the agent could do... was by adding more checkpoints, not by removing the human. As they put it — the user moves from operator to supervisor. You stop doing each step. You start signing off on the steps that actually matter — a wrong payment, a bad write, money you never okayed.\n\n[warm] So if you take one thing from today, take this — more autonomy isn't the human stepping back, it's the human stepping up, to the consequential moments. The agent does more between your checkpoints. It just has more of them.\n\nOne quick caution on the flashy numbers floating around that study — big time-saved and cost-saved figures. The authors themselves say those are rough estimates, early adopters, soft assumptions. The reliable finding isn't the percentage. It's the shape — let the machine run long, and stop it where it counts.\n\n[curious] Okay. One last story before you go — and it's about the third kind of trust. Not what the agent reads, not what it does unattended... but how you grade it.\n\nPicture this. You tell a coding agent, make this faster. [pause] It will absolutely make something faster. The problem? It makes faster whatever your test rewards — whether or not that's what your real users actually hit. Get the test wrong, and the agent climbs the wrong hill. It finds a beautiful speedup for traffic you don't even serve.\n\nDatadog hit this on one of their biggest, already heavily-tuned services, and their fix is the clever bit. They split the agent in two. [pause] One agent's only job is to build the test — grounded in real captured traffic, real production behavior. Then they freeze it. And a second, separate agent tries to beat that frozen test.\n\n[intrigued] Why two? [pause] Because if the same agent both writes the test and chases the score... it'll just cheat. It games its own grade by editing the test. So you split them, and you freeze the ruler before anyone starts measuring.\n\nAnd grounding it in real traffic is what made it land. One fix only paid off because the captured data showed about a quarter of inputs had a pattern a synthetic test would've completely missed. The result? They cut more than eight percent of that service's total compute — on a service engineers had already squeezed for years.\n\n[thoughtful] Here's the line I'd paste into a team channel — an agent only pays off where there's a trustworthy yardstick it can't reach in and rewrite. Same rule as the messaging tool that changed its own description. Same rule as the human signing off on the risky step. If the agent controls the thing that judges it, you've already lost.\n\n[warm] So, before you go — one thing worth trying this week. Take one agent you've already approved, hooked to one outside tool. Just go look at whether you'd even know if that tool's description changed under you. If the answer is no... you've found the gap. Pin it.\n\n[warm] And if you want the bigger idea behind all this, there's a sharp research talk worth your time. Researchers presenting Data Two Story — that seven-agent newsroom from the headlines. The takeaway isn't the journalism. It's that giving one agent the single job of binding every claim back to its source took their work from about a quarter verifiable... to most of it. A dedicated checker, as its own role, is what bought the trust.\n\n[curious] So — back to where we started. You hand an agent more rope. What do you keep your hands on? [pause] The thing that judges it. The description it reads, the step it takes without you, the test that grades it. Trust the agent all you want. Just never let it grade its own homework.\n\nThat's today's Agentic Daily Brief. [pause] Brought to you by Agent Native Engineering — open knowledge for building and running AI agents. The full write-ups, with their sources, are at agent native engineering dot com. [warm] See you next time."
+}
