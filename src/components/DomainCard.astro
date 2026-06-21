@@ -1,36 +1,52 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { accentOf, phaseLabel, type Phase } from '../data/phase';
+import ShareRow from './ShareRow.astro';
 
 interface Props { domain: CollectionEntry<'guide'> }
 const { domain } = Astro.props;
 const phase = domain.data.phase as Phase;
 const accent = accentOf(phase);
 const num = String(domain.data.order).padStart(2, '0');
+const href = `/guide/${domain.id}/`;
+const url = new URL(href, Astro.site).href;
+const shareText = `${domain.data.title} — ${domain.data.question}`;
 ---
 
-<a class="card hover domain-card" href={`/guide/${domain.id}/`} style={`--accent:${accent}`}>
-  <span class="badge" style="align-self:flex-start">{phaseLabel(phase)}</span>
-  <h3 class="domain-name">{domain.data.title}</h3>
-  <p class="domain-essence">{domain.data.question}</p>
-  <div class="domain-principles">
-    {domain.data.principles.map((p) => (
-      <div class="dp"><span class="dp-mark">/</span><span>{p}</span></div>
-    ))}
-  </div>
-  <div class="domain-foot">
-    <span>FIELD GUIDE · {num}</span>
-    <span style={`color:${accent}`}>{phaseLabel(phase)}</span>
-  </div>
-</a>
+<article
+  class="card hover domain-card"
+  data-shareable
+  data-share-url={url}
+  data-share-title={domain.data.title}
+  data-share-text={shareText}
+  data-share-slug={`ane-guide-${domain.id}`}
+  style={`--accent:${accent}`}
+>
+  <a class="domain-link" href={href}>
+    <span class="badge" style="align-self:flex-start">{phaseLabel(phase)}</span>
+    <h3 class="domain-name">{domain.data.title}</h3>
+    <p class="domain-essence">{domain.data.question}</p>
+    <div class="domain-principles">
+      {domain.data.principles.map((p) => (
+        <div class="dp"><span class="dp-mark">/</span><span>{p}</span></div>
+      ))}
+    </div>
+    <div class="domain-foot">
+      <span>FIELD GUIDE · {num}</span>
+      <span style={`color:${accent}`}>{phaseLabel(phase)}</span>
+    </div>
+  </a>
+  <ShareRow />
+</article>
 
 <style>
-  .domain-card { padding: 24px 24px 18px; display: flex; flex-direction: column; gap: 14px; text-decoration: none; }
+  .domain-card { padding: 24px 24px 18px; display: flex; flex-direction: column; gap: 14px; }
+  .domain-link { display: flex; flex-direction: column; gap: 14px; text-decoration: none; color: inherit; }
   .domain-name { font-family: var(--serif); font-weight: 600; font-size: 23px; line-height: 1.08; letter-spacing: -0.01em; margin: 0; color: var(--ink); }
   .domain-essence { font-family: var(--serif); font-size: 16px; line-height: 1.45; color: var(--ink-3); margin: 0; text-wrap: pretty; }
   .domain-principles { display: flex; flex-direction: column; gap: 11px; padding-top: 15px; border-top: 1px dashed var(--hair-dash); }
   .dp { display: grid; grid-template-columns: auto 1fr; gap: 11px; align-items: start; }
   .dp-mark { font-family: var(--mono); font-weight: 600; font-size: 13px; line-height: 1.5; color: var(--accent); }
   .dp span:last-child { font-family: var(--sans); font-size: 13px; line-height: 1.5; color: var(--ink-3); text-wrap: pretty; }
-  .domain-foot { margin-top: auto; padding-top: 15px; display: flex; align-items: center; justify-content: space-between; font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; color: var(--faint); }
+  .domain-foot { padding-top: 15px; display: flex; align-items: center; justify-content: space-between; font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; color: var(--faint); }
 </style>

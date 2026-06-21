@@ -76,5 +76,82 @@ const schemas = [siteSchema, ...jsonLd];
     <Nav active={active} />
     <main><slot /></main>
     <slot name="footer"><Footer /></slot>
+
+    <script>
+      // Delegated share handler for every `[data-shareable]` card on the page.
+      // Actions read the card's data-share-url / -title / -text / -slug.
+      const flash = (btn: HTMLElement, msg: string) => {
+        const label = btn.querySelector<HTMLElement>('.share-label');
+        if (!label) return;
+        const old = label.textContent;
+        label.textContent = msg;
+        btn.classList.add('done');
+        window.setTimeout(() => {
+          label.textContent = old;
+          btn.classList.remove('done');
+        }, 1400);
+      };
+
+      document.addEventListener('click', async (e) => {
+        const btn = (e.target as HTMLElement)?.closest<HTMLElement>('[data-share]');
+        if (!btn) return;
+        const card = btn.closest<HTMLElement>('[data-shareable]');
+        if (!card) return;
+        e.preventDefault();
+
+        const url = card.dataset.shareUrl || location.href;
+        const title = card.dataset.shareTitle || document.title;
+        const text = card.dataset.shareText || title;
+        const slug = card.dataset.shareSlug || 'ane-card';
+
+        try {
+          switch (btn.dataset.share) {
+            case 'link':
+              await navigator.clipboard.writeText(url);
+              flash(btn, 'COPIED');
+              break;
+            case 'copy':
+              await navigator.clipboard.writeText(`${text}\n\n${url}`);
+              flash(btn, 'COPIED');
+              break;
+            case 'x':
+              window.open(
+                `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+                '_blank',
+                'noopener,noreferrer',
+              );
+              break;
+            case 'linkedin':
+              window.open(
+                `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
+                '_blank',
+                'noopener,noreferrer',
+              );
+              break;
+            case 'image': {
+              flash(btn, '…');
+              const { toPng } = await import('html-to-image');
+              const paper =
+                getComputedStyle(document.documentElement).getPropertyValue('--paper').trim() ||
+                '#f6f4ee';
+              const dataUrl = await toPng(card, {
+                pixelRatio: 2,
+                backgroundColor: paper,
+                filter: (n) => !(n instanceof HTMLElement && n.dataset.shareSkip !== undefined),
+              });
+              const a = document.createElement('a');
+              a.download = `${slug}.png`;
+              a.href = dataUrl;
+              a.click();
+              flash(btn, 'SAVED');
+              break;
+            }
+          }
+        } catch (err) {
+          console.error('share action failed', err);
+          flash(btn, 'ERROR');
+        }
+      });
+    </script>
   </body>
 </html>
