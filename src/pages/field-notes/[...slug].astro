@@ -4,6 +4,7 @@ import { marked } from 'marked';
 import Base from '../../layouts/Base.astro';
 import Footer from '../../components/Footer.astro';
 import ForAgents from '../../components/ForAgents.astro';
+import ShareRow from '../../components/ShareRow.astro';
 import { accentOf, type Phase } from '../../data/phase';
 
 export async function getStaticPaths() {
@@ -110,14 +111,23 @@ const jsonLd = [
       </header>
 
       {lead && (
-        <section class="callout" style="margin-top:34px">
-          <span class="eyebrow">// THE TAKEAWAY</span>
+        <section
+          class="callout"
+          style="margin-top:34px"
+          data-shareable
+          data-share-url={canonical}
+          data-share-title={title}
+          data-share-text={`${title} — ${lead}`}
+          data-share-slug={`ane-note-${note.id}`}
+        >
+          <span class="eyebrow">// THE ONE IDEA</span>
           <p>{lead}</p>
           {takeaways && takeaways.length > 1 && (
             <ul class="extra-takeaways">
               {takeaways.slice(1).map((t) => <li>{t.replace(/\*\*/g, '')}</li>)}
             </ul>
           )}
+          <ShareRow />
         </section>
       )}
 

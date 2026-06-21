@@ -61,10 +61,16 @@ Shared chrome lives in `src/components/`:
 - **`ForAgents.astro`** — the dark "For agents ▸" band that closes every page; buttons via slot.
 - **`Player.astro`** — custom audio player (play/seek/persist) wrapping a real `<audio>`.
 - **`DomainCard.astro`** — the offset sticker card for a guide domain (badge + name + essence +
-  principles), phase-colored. Used on home + `/guide/`.
+  principles), phase-colored. Used on home + `/guide/`. It is a **shareable card** (carries
+  `data-shareable` + `data-share-*`) and ends with a `<ShareRow />`.
+- **`ShareRow.astro`** — the per-card action row (LINK · COPY · IMAGE · X · LinkedIn). Drop it inside
+  any element marked `data-shareable` that also sets `data-share-url` / `-title` / `-text` / `-slug`.
+  Behaviour is wired once site-wide by the delegated handler in `Base.astro` (clipboard for LINK/COPY,
+  share intents for X/LinkedIn, `html-to-image` PNG export for IMAGE — the row is excluded from the
+  capture via `data-share-skip`). Styling is the `.share-row` / `.share-btn` classes in `global.css`.
 - **`CopyGuideButton.astro`** — generates the guide as markdown and copies it client-side.
 
-CSS component classes (in `global.css`): `.card`(`.hover`,`.card-dark`) · `.badge` · `.chip`/`.chip-alt`
+CSS component classes (in `global.css`): `.card`(`.hover`,`.card-dark`) · `.share-row`/`.share-btn` · `.badge` · `.chip`/`.chip-alt`
 · `.eyebrow` · `.masthead`/`.dateline`/`.nameplate`/`.ticker` · `.entries`/`.entry-row` ·
 `.layer-panel`/`.layer-connect` · `.for-agents` · `.coming-soon` · `.footer`(+`.footer-slim`) ·
 `.player` · `.prose` · `.article`/`.callout`. Page-specific layout lives in each page's scoped
