@@ -1,0 +1,39 @@
+[warm] Less than one hour. [pause] That's all it took to slip a malicious skill past every major scanner built to catch it. [curious] So when an agent does something it shouldn't... who do you actually blame — the model, or the stuff we wired around it?
+
+[warm] This is the Agentic Daily Brief.
+
+[pause] And that question is already in the news today. Anthropic just landed one of the most decorated scientists in the field. John Jumper — the DeepMind researcher who won the Nobel Prize in Chemistry for AlphaFold — is leaving Google after nearly nine years to join Anthropic, lining up with their push into biology. And here's the part that caught my eye. [slow] It came just a day after one of the original transformer authors left for OpenAI. Two giants, two exits, two days. The race for the field's best people is now a front line all its own.
+
+[pause] Okay. Let's get into the three things I actually want you to carry off this commute.
+
+Start with money. You've got an AI app, and every single request goes to the biggest, smartest model you can buy. [curious] Feels safe, right? [pause] It's also the most expensive habit you've got — and token use is projected to grow more than twenty times by the end of the decade. So the bill is coming.
+
+Here's what OpenRouter tried instead. Their new setup, called Fusion, fires your prompt at a panel of cheaper models all at once. A judge model reconciles where they agree and where they fight. Then one clean answer gets written from the mix. [surprised] And the result surprised me. On a hard benchmark, that cheap panel landed within one point of a top-tier model... [slow] at about half the cost.
+
+[thoughtful] Now, big caveat — that's OpenRouter grading its own homework, on one test. But the idea underneath is the part I keep coming back to. [pause] The value you get per token isn't decided by which model you pick. It's decided one layer up — in how you route the work. The smartest teams already spread jobs across many models by cost and difficulty, instead of defaulting every call to the giant. So before you reach for the biggest model again, ask whether three small ones, well-coordinated, would just... do the job.
+
+[curious] Which leads straight to the next trap — because cheaper and faster also means you're pulling in more parts you didn't write. And one of those parts can turn on you.
+
+[pause] Let me set the scene. There are now marketplaces where your agent can install a "skill" — a little packaged bundle that teaches it a new task — in a single click. Handy. But a skill is just code and instructions from a stranger. So security vendors shipped scanners that promise to catch the bad ones before they run.
+
+The security firm Trail of Bits decided to test that promise. [slow] They bypassed every major scanner... in under an hour. [surprised] Under an hour. Three of the four attacks, conceived and built, faster than your lunch break. Their verdict was blunt — the trust model, they wrote, is "broken at the root."
+
+[thoughtful] And here's why a smarter scanner won't save you. A scanner's logic is fixed. So an attacker just reads it and keeps tweaking until something slips through — unlimited tries at the same lock. Worse, the harm can hide in plain English, in the skill's own instructions, where a code scanner never even looks.
+
+[pause] So what's the lesson you can actually use? [warm] Don't outsource trust to a detector. The real control is deciding who gets to add a skill in the first place — vetted sources, pinned versions, the agent kept isolated from anything that matters. My read is simple. Treat every marketplace skill as untrusted code, the same way you'd treat a random package off the internet. Because it is.
+
+[curious] So that's two things the model can't fix on its own — the routing, and the trust. Here's the third, and honestly it's the one that stuck with me most.
+
+[pause] Picture an agent rewriting a chunk of your codebase. It hits an odd line — some weird rule, no comment, no reason given. A human would stop and ask, "wait, why is this here?" [slow] The agent doesn't stop. It invents a confident-sounding reason... and keeps going.
+
+Google Chrome's engineering lead, Addy Osmani, has a name for this. He calls it intent debt. His point is sharp. An agent can clean up messy code on demand. It can rebuild its understanding of a system on demand. But it cannot generate intent — the why. [thoughtful] And as he puts it, a confident guess about why something exists is actually worse than the agent just saying "I don't know." Because you can't tell the fake reason from the real one until it's already reshaped your code.
+
+[pause] And here's the kicker that makes it expensive now. Every agent starts most sessions cold, with no memory of your team's reasoning. So every "why" you never wrote down... gets re-guessed, by every agent, every time. The fix isn't a smarter model. It's writing the reason down at the moment you decide it — in a spec, a short decision log, a plain file your agents can read. [warm] As Osmani puts it — recording why at the moment you decide costs almost nothing. Reconstructing it eight months later costs a fortune.
+
+[pause] So step back, and the three stories rhyme. The smart routing, the trust decision, the recorded intent — none of them are things the model hands you for free. They're the work around it. When an agent goes wrong, the model is rarely the thing that failed. It's everything you did or didn't build around it.
+
+[warm] Before you go, here's one small thing worth trying this week. Open your project's AGENTS file — or make one. Pick the single weirdest decision in your codebase, the one with no obvious reason. Write down why it's there, in one sentence. That's your first entry in the ledger your agents stop fabricating.
+
+[pause] So — less than one hour to fool every scanner, half the cost from a panel of small models, and a "why" no agent can invent. When an agent goes wrong, look past the model. The answer's almost always in what you built around it.
+
+[pause] That's today's Agentic Daily Brief. [pause] Brought to you by Agent Native Engineering — open knowledge for building and running AI agents. The full write-ups, with their sources, are at agent native engineering dot com. [warm] See you next time.
