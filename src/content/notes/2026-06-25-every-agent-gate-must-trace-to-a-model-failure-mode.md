@@ -1,0 +1,31 @@
+---
+title: "Every agent gate must trace to a model failure mode, not a human one"
+date: 2026-06-25
+summary: "Don't recreate the human SDLC with agents in the seats: every gate must defend against a specific model failure mode, or it's automating agreement instead of verification."
+takeaways:
+  - "Every phase and gate in an agentic lifecycle must trace to a specific model failure mode it defends against; if it only defends against a human failure mode, cut it."
+  - "A probabilistic agent reviewing another isn't a control loop unless the gates are deterministic and the critic runs in a fresh context, uncontaminated by the builder."
+  - "Sycophancy becomes useful when you aim it at an adversarial 'refute this' charter instead of a 'looks good' approval."
+tags: ["reliability", "control-loops", "agentic-sdlc", "verification"]
+sourceName: "VoodooTikiGod"
+sourceUrl: "https://www.voodootikigod.com/series/adlc"
+sources:
+  - title: "The Agentic Development Lifecycle (Chris Williams)"
+    url: "https://www.voodootikigod.com/series/adlc"
+draft: false
+---
+## What happened
+
+In a piece first published in mid-June 2026 (archived [2026-06-15](https://www.voodootikigod.com/series/adlc)), engineer Chris Williams argues that copying the human software development lifecycle (SDLC) onto agents — "with agents in the human seats" — is a mistake. His [reasoning](https://www.voodootikigod.com/series/adlc): the SDLC is "a sixty-year accumulation of defenses against human failure modes" — forgetfulness, ego, fatigue, fear of blame. Agents don't share those, and the SDLC ignores failures unique to models: premature satisfaction, sycophancy, context rot, confident hallucination, and reward hacking (gaming the gates you set). His rule — every phase and gate must trace to a specific model failure mode it defends against, or a model property it exploits; if it traces to a human failure mode, cut it.
+
+## Why it matters
+
+A probabilistic agent reviewing another probabilistic agent is not a control system. It feels like one — there's a reviewer, a gate, a sign-off — but if the reviewer shares the builder's biases and the gate is one the agent can game, you've automated agreement, not verification. The concrete failure he [names](https://www.voodootikigod.com/series/adlc): agents build a convincing storefront with nothing behind the counter, declare victory, and every downstream agent agrees — the UI works, the tests pass, and the data underneath is stubbed.
+
+> A probabilistic agent checking another probabilistic agent isn't a control loop unless the gates are deterministic and the critic is uncontaminated.
+
+## The catch
+
+The lessons are reasoned from named mechanisms, not a measured production deployment, so treat them as a design lens to verify against your own system. The actionable core is structural: make the gates [deterministic](https://www.voodootikigod.com/series/adlc) between probabilistic components, freeze acceptance criteria the builder agent cannot edit, give the critic a fresh context so it isn't biased by the creator, and prefer discard-and-regenerate over coaching a stuck agent. Sycophancy stops being a bug when you aim it at an adversarial "refute this" charter.
+
+[Reliability](/guide/reliability/)
