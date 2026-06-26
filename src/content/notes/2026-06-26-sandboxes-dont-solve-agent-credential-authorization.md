@@ -1,0 +1,38 @@
+---
+title: "Sandboxes Don't Solve Coding-Agent Credential Authorization"
+date: 2026-06-26
+summary: "A locked-down container contains an agent's code execution but not its authority; the real blast radius is the credentials it holds, so give it zero standing permissions and grant access just-in-time."
+takeaways:
+  - "Sandboxing an agent contains code execution, not authority — if its token can merge to main or deploy prod, the blast radius is the credential, not the container."
+  - "Most damaging agent incidents will be authorized misuse of legitimate APIs, not host breakout."
+  - "Start the agent with no persistent authority; grant capability just-in-time, scoped to the task, and auto-expired."
+tags: ["access-and-identity", "credentials", "least-privilege", "coding-agents"]
+sourceName: "Permit.io"
+sourceUrl: "https://www.permit.io/blog/coding-agent-sandboxes-credentials"
+sources:
+  - title: "Coding Agent Sandboxes Don't Solve Credential Authorization (Permit.io)"
+    url: "https://www.permit.io/blog/coding-agent-sandboxes-credentials"
+draft: false
+---
+## What happened
+
+In a post dated 2026-06-12, Permit.io's Or Weis argued that moving a coding agent into a [locked-down container does not solve credential authorization](https://www.permit.io/blog/coding-agent-sandboxes-credentials). Sandboxes and VM isolation contain *code execution* — the host-compromise problem. They say nothing about *authority*: what the agent can do through legitimate APIs. "An agent doesn't need a kernel escape if it already has a token that can merge to main, trigger production deploy, or read secrets from a vault."
+
+## Why it matters
+
+The real blast radius is the credentials the agent holds — GitHub tokens, cloud keys, CI/CD secrets, browser sessions, and MCP (Model Context Protocol, the standard for connecting agents to external tools) connections. Weis notes teams [underestimate this surface](https://www.permit.io/blog/coding-agent-sandboxes-credentials) by counting only environment variables while ignoring side channels: already-authenticated local CLIs and MCP-proxied capabilities. The most damaging incidents will be authorized misuse, not host breakout — and namespace isolation does nothing to stop it.
+
+## How it works
+
+1. **No standing authority.** The agent starts with zero persistent permissions.
+2. **Just-in-time grants.** Capability is granted only when needed, scoped to the declared task, and auto-expired by default.
+3. **Intersect the rights.** Effective access is the intersection of the human principal's permissions, the task scope, the tool tier, and a time window.
+4. **Decide and record at runtime.** A policy decision point enforces each call, with invocation-specific approval showing exact parameters and an audit record binding principal, delegation chain, operation, decision, and outcome.
+
+> Container hardening contains code; it does not answer what the process can do through legitimate APIs.
+
+## The catch
+
+Weis is clear that sandboxing is still necessary — it just addresses a different dimension. The hard part is the plumbing: a real policy decision point, parameter-level approval flows, and forensic-grade audit trails are work to build, and JIT scoping only helps if you can actually enumerate the agent's side-channel credentials, including those proxied through MCP.
+
+[Access & Identity](/guide/access-and-identity/)
