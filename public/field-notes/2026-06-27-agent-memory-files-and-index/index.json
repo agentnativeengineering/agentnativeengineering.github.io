@@ -1,0 +1,52 @@
+{
+  "type": "note",
+  "slug": "agent-memory-files-and-index",
+  "title": "Agent memory is converging on plain files and an index",
+  "date": "2026-06-27",
+  "summary": "Anthropic, Manus, Cline, and Cognition have independently moved agent memory and retrieval onto plain files the agent greps and reads, plus a lightweight index — treating vector search as a targeted optimization rather than the default. The open AI Research OS packages the same pattern.",
+  "domain": "memory-and-context",
+  "tags": [
+    "memory-and-context",
+    "agent-memory",
+    "rag",
+    "context-engineering"
+  ],
+  "takeaways": [
+    "Default agent memory to plain files plus a lightweight index the agent reads and greps, and reach for vector search only where it measurably wins.",
+    "Files are inspectable, cheap to update, and let the agent navigate by reading instead of embedding similarity — which is why several independent teams converged on it.",
+    "Keep immutable raw sources, an index of summaries the agent reads first, and load full sources on demand; add semantic search as an optimization for large or non-navigable corpora."
+  ],
+  "sourceName": "Anthropic / Manus / Cline — file-based agent memory (pattern)",
+  "sourceUrl": "https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk",
+  "sources": [
+    {
+      "title": "Anthropic — Building agents with the Claude Agent SDK (agentic search default; semantic fallback)",
+      "url": "https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk"
+    },
+    {
+      "title": "Anthropic — Claude Code memory (MEMORY.md as an index of the memory directory)",
+      "url": "https://docs.anthropic.com/en/docs/claude-code/memory"
+    },
+    {
+      "title": "Manus — Context Engineering for AI Agents (the file system as the ultimate context)",
+      "url": "https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus"
+    },
+    {
+      "title": "Cline — Why we don't index your codebase (grep/read over embeddings)",
+      "url": "https://cline.bot/blog/why-cline-doesnt-index-your-codebase-and-why-thats-a-good-thing"
+    },
+    {
+      "title": "Anthropic — Effective context engineering (just-in-time retrieval)",
+      "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+    },
+    {
+      "title": "iusztinpaul/ai-research-os-workshop — the open AI Research OS",
+      "url": "https://github.com/iusztinpaul/ai-research-os-workshop"
+    },
+    {
+      "title": "Is Grep All You Need? (Sen et al., arXiv:2605.15184) — counter-evidence",
+      "url": "https://arxiv.org/html/2605.15184"
+    }
+  ],
+  "body": "## What happened\n\nSeveral independent teams have moved agent memory and retrieval off vector databases and onto plain files. Anthropic [recommends starting with agentic filesystem search](https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk) and removed vector search from Claude Code; its [Claude Code memory](https://docs.anthropic.com/en/docs/claude-code/memory) uses a `MEMORY.md` that \"acts as an index of the memory directory.\" [Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus) calls the file system \"the ultimate context,\" and [Cline](https://cline.bot/blog/why-cline-doesnt-index-your-codebase-and-why-thats-a-good-thing) deliberately \"doesn't index your codebase,\" navigating by grep and read instead. The open [AI Research OS](https://github.com/iusztinpaul/ai-research-os-workshop) from Paul Iusztin and Louis-François Bouchard packages the same shape — raw files, an `index.yaml`, and a derived wiki.\n\n## Why it matters\n\nFor an agent, the context window is working memory, and it vanishes when the session ends. A vector-RAG pipeline is infrastructure that is hard to inspect and drifts stale; plain files compound across sessions, a human can read them, and the agent retrieves by navigating — list, grep, read — rather than by embedding similarity. That four teams reached this independently is the signal — it is a genuine pattern rather than a single tool.\n\n## How it works\n\n1. **Immutable raw sources.** Fetched articles, code, and transcripts live in files the model reads but never rewrites.\n2. **An index the agent reads first.** A small catalog of summaries and metadata (an `index.yaml`, a `MEMORY.md`); the agent follows its pointers, so [the index is the retrieval layer](https://github.com/iusztinpaul/ai-research-os-workshop).\n3. **Just-in-time loading.** The agent pulls a full source only when the summary is not enough, keeping the window lean — Anthropic's [just-in-time context](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) strategy.\n4. **Vector search as an add-on.** [Add semantic retrieval only where it measurably helps](https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk), not by default.\n\n> Make the index the retrieval layer, let the agent grep and read, and add embeddings only where they earn it.\n\n## The catch\n\nThe win is not universal. A [May 2026 study](https://arxiv.org/html/2605.15184) (\"Is Grep All You Need?\") found grep beats vector under inline context delivery but vector wins on five of ten harness pairs under programmatic delivery, and bounds the grep advantage to verbatim-span tasks; dense or hybrid retrieval still wins for semantic synthesis and large, non-navigable corpora. Even Anthropic and Cognition run hybrid systems. The honest claim is file-and-index as the default, with vector search as a targeted optimization.\n\n[Memory & Context](/guide/memory-and-context/)"
+}
