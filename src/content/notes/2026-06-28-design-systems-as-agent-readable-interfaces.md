@@ -1,0 +1,33 @@
+---
+title: "Meta and Google Labs ship design systems agents can read"
+date: 2026-06-28
+summary: "Meta's Astryx and Google Labs' design.md both ship design systems as machine-readable interfaces — a self-describing CLI manifest, an MCP server, and agent-scannable token files — so coding agents stop guessing from human-facing docs."
+takeaways:
+  - "When you want an agent to build UI from your design system, ship a machine-readable interface — a self-describing manifest or token file — not just the docs you wrote for humans."
+  - "Meta's Astryx and Google Labs' design.md independently land on the same pattern: structured tokens plus an MCP server or JSON manifest the agent reads directly."
+  - "The reported accuracy and token-savings gains come from single early benchmarks on Beta/alpha tools — adopt the pattern, verify the numbers yourself."
+tags: ["harness-engineering", "mcp", "design-systems", "coding-agents"]
+sourceName: "MarkTechPost"
+sourceUrl: "https://www.marktechpost.com/2026/06/27/metas-astryx-brings-a-cli-and-mcp-server-to-an-open-source-react-design-system-agents-can-read/"
+sources:
+  - title: "Meta open-sources Astryx, an agent-ready React design system"
+    url: "https://www.marktechpost.com/2026/06/27/metas-astryx-brings-a-cli-and-mcp-server-to-an-open-source-react-design-system-agents-can-read/"
+  - title: "Google Labs design.md: a design-system spec for coding agents"
+    url: "https://www.youtube.com/watch?v=UM6blERUnO8"
+draft: false
+---
+## What happened
+
+In a writeup dated 2026-06-27, [Meta open-sourced Astryx](https://www.marktechpost.com/2026/06/27/metas-astryx-brings-a-cli-and-mcp-server-to-an-open-source-react-design-system-agents-can-read/), a React design system grown inside its monorepo over eight years and built on StyleX, the compile-time CSS engine that styles Facebook, Instagram, WhatsApp, and Threads. Its headline feature is not the 90+ components but that it is built for agents to read: components carry JSDoc composition hints, and a CLI plus a Model Context Protocol (MCP) server let an agent scaffold and document UIs. The CLI emits a self-describing JSON manifest — every command, argument, flag, and response type — so an agent reads one structured payload instead of scraping `--help` text. The same week, [Google Labs published design.md](https://www.youtube.com/watch?v=UM6blERUnO8), a spec that encodes design tokens into a plain-text file at the repo root for coding agents to scan before generating UI.
+
+## Why it matters
+
+Point a coding agent at a Figma board or a human-prose style guide and it hallucinates color palettes across sessions and drifts from brand standards, because the design intent was never machine-readable. Both Meta and Google Labs are converging on the same fix: give the agent a structured, self-describing surface — a manifest or a token file — instead of making it guess from docs written for people.
+
+> The interface an agent needs is a structured manifest of your system, not the human-facing docs.
+
+## The catch
+
+This is two early projects, not a settled standard. Astryx is Beta with a v0.0.14 CLI and no proven adoption outside Meta; design.md is alpha, with reported bugs where a missing package-manager field breaks monorepo builds and the Tailwind exporter silently drops color palettes. The design.md "82%-to-100% accuracy" and "80% fewer tokens" figures come from a single cited 77-component benchmark, not independent replication — treat them as a direction, not a guarantee. The durable lesson is the pattern: ship a machine-readable interface alongside the human one.
+
+[Harness Engineering](/guide/harness-engineering/)
