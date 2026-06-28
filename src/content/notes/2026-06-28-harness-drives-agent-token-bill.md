@@ -1,0 +1,33 @@
+---
+title: "The harness around the model drives your agent's token bill"
+date: 2026-06-28
+summary: "Sebastian Raschka's local-agent benchmarks show the same model burns very different token budgets across Claude Code, Codex, and Qwen-Code — and models aren't tied to their native harness."
+takeaways:
+  - "Run the same model through different coding harnesses and token usage changes dramatically — Claude Code accumulates far more input context than Codex, so the harness, not the model, often sets your bill."
+  - "Open-weight models aren't locked to their native harness: you can wire Qwen into Codex or Claude Code, or run Qwen-Code with a different model."
+  - "Audit any harness for shell-execution scope, file permissions, telemetry egress, and prompt-injection surface before installing it — it runs with your privileges."
+tags: ["harness-engineering", "coding-agents", "token-cost", "local-llm"]
+sourceName: "Ahead Of AI"
+sourceUrl: "https://magazine.sebastianraschka.com/p/using-local-coding-agents"
+sources:
+  - title: "Raschka: Using Local Coding Agents (tutorial + benchmarks)"
+    url: "https://magazine.sebastianraschka.com/p/using-local-coding-agents"
+  - title: "Hacker News discussion of the tutorial"
+    url: "https://news.ycombinator.com/item?id=48697529"
+draft: false
+---
+## What happened
+
+In a tutorial [published 2026-06-27](https://magazine.sebastianraschka.com/p/using-local-coding-agents), Sebastian Raschka (ML researcher and author of *Build a Large Language Model from Scratch*) ran the *same* open-weight model — Qwen3.6 35B-A3B served locally via [Ollama](https://magazine.sebastianraschka.com/p/using-local-coding-agents) — through three different coding harnesses (the software loop that lets a model read files, edit, and run commands). His benchmarks found that the harness, not the model, drives token usage: Claude Code "uses far more input tokens than Codex" because it keeps accumulating input context, while Codex uses the least. He also found models aren't tied to their native harness — you can wire Qwen into Codex or Claude Code, or Qwen-Code with a different model.
+
+## Why it matters
+
+Token cost is usually blamed on model choice, but a chunk of your bill is set by *which harness* you run. If two harnesses burn wildly different input-token budgets on identical work, picking the harness is a cost-and-context decision, not a cosmetic one — and the same logic applies to context-window pressure, not just spend.
+
+> Same model, same task: Claude Code uses far more input tokens than Codex because it keeps accumulating input context, while Codex uses the least.
+
+## The catch
+
+Before installing any harness, Raschka [audits the code](https://magazine.sebastianraschka.com/p/using-local-coding-agents) for shell-execution scope, file permissions, telemetry/data egress, and prompt-injection surface — for Qwen-Code he sets `~/.qwen/settings.json` to disable telemetry and enable sandboxing. A harness runs commands and reads your files with your privileges, so an unaudited one is an exfiltration and injection risk. The token findings come from small, informal benchmarks on one author's hardware ([surfaced and discussed on Hacker News](https://news.ycombinator.com/item?id=48697529)), so treat the direction as the signal and measure your own workload before switching.
+
+[Harness Engineering](/guide/harness-engineering/)
