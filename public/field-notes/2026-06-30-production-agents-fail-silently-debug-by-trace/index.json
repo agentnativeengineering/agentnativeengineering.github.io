@@ -1,0 +1,32 @@
+{
+  "type": "note",
+  "slug": "production-agents-fail-silently-debug-by-trace",
+  "title": "Production agents fail silently — debug by trace, not by re-running the prompt",
+  "date": "2026-06-30",
+  "summary": "Agents return wrong answers and loop without crashing, and the bad run usually can't be reproduced — so debugging has to move to recorded node-level traces, not a fresh re-run of the prompt.",
+  "domain": "observability",
+  "tags": [
+    "observability",
+    "tracing",
+    "debugging",
+    "agent-failures"
+  ],
+  "takeaways": [
+    "Most production agent failures are silent: the execution succeeds while the agent returns a wrong answer or loops, so no error fires and standard logs never show why the decision went wrong.",
+    "Sort failures into quality (wrong answer), reliability (tool errors, lost context), and efficiency (loops, token blowups) to narrow the investigation fast.",
+    "Don't chase bitwise determinism to reproduce a bad run — record each node's input/output envelope so a single trace becomes a rerunnable test case."
+  ],
+  "sourceName": "AWS Machine Learning Blog",
+  "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/debugging-production-agents-with-amazon-bedrock-agentcore-observability/",
+  "sources": [
+    {
+      "title": "AWS: Debugging production agents with AgentCore Observability",
+      "url": "https://aws.amazon.com/blogs/machine-learning/debugging-production-agents-with-amazon-bedrock-agentcore-observability/"
+    },
+    {
+      "title": "Microsoft talk: Your agent failed in prod, good luck reproducing it",
+      "url": "https://www.youtube.com/watch?v=Lc8zRh9muoY"
+    }
+  ],
+  "body": "## What happened\n\nIn an AWS engineering post dated 2026-06-29, the team behind Amazon Bedrock AgentCore Observability makes a blunt point: production AI agents \"can fail silently.\" They [return plausible but incorrect answers, enter infinite reasoning loops, or select the wrong tools without triggering error alerts](https://aws.amazon.com/blogs/machine-learning/debugging-production-agents-with-amazon-bedrock-agentcore-observability/). Because the execution still completes, standard logs and metrics never capture *how* the decision was made. The post sorts these failures into three buckets — quality (wrong answer), reliability (tool errors, lost context), and efficiency (loops, token blowups) — so you know where to look.\n\n## Why it matters\n\nA crash is loud; a confidently wrong answer is not. An agent that loops or picks the wrong tool can run for weeks before anyone notices, and your dashboards will show green the whole time. Observability for agents means tracing the reasoning steps and tool calls, not just the request — moving you from \"a failure happened\" to \"here is the step where it diverged.\"\n\n## How it works\n\n1. **Classify first.** Triage the symptom into quality, reliability, or efficiency before you dig.\n2. **Read the trace.** Spot infinite loops by high token usage and repeated reasoning; map tool failures by HTTP code (401 auth, 403 IAM, 400 schema).\n3. **Record at node boundaries.** In a 2026-06-29 Microsoft talk, [Tisha Chawla and Susheem Koul](https://www.youtube.com/watch?v=Lc8zRh9muoY) capture each node's full input/output envelope plus model version and sampling params.\n4. **Replay as a test.** Freeze that trace, stub the unchanged nodes, and rerun the fixed one with assertions.\n\n> The bad run is gone the second it finishes — only a recorded trace lets you debug what you can't reproduce.\n\n## The catch\n\nThe Microsoft engineers warn against the instinct to chase reproducibility by pinning temperature to zero: LLM output stays non-deterministic anyway (GPU floating-point non-associativity, mixture-of-experts routing), and teams \"waste weeks chasing bitwise determinism\" when the real goal is replayability. Record the run; don't freeze the model.\n\n[Observability](/guide/observability/)"
+}
