@@ -1,0 +1,75 @@
+{
+  "type": "brief",
+  "slug": "field-notes-episode-trust-boundaries-silent-failures",
+  "title": "A Clean Repo That Runs Malware, and a Silent Six-Figure Trade",
+  "date": "2026-07-01",
+  "summary": "A clean repo that runs malware, a silent six-figure trade, and Portkey's trust-boundary map: agent risk lives between the pieces, not in the model.",
+  "audio": "/audio/field-notes-episode-trust-boundaries-silent-failures.mp3",
+  "seconds": 566,
+  "covers": [
+    "2026-06-30-clean-repo-tricks-coding-agent-into-running-malware",
+    "2026-06-30-agent-vulnerability-trust-boundary-failure",
+    "2026-06-30-production-agents-fail-silently-debug-by-trace"
+  ],
+  "oneIdea": {
+    "title": "Every agent attack is the same shape: a trust boundary between two parts of different authority that nobody made the infrastructure responsible for guarding.",
+    "body": "Portkey maps the four classic agent attacks — prompt injection, identity spoofing, budget bombs, and tool poisoning — to a single failure: an undefined line between components that trust each other differently. Because the model picks tools at runtime from text the developer never wrote, identity, budget, and authority can't live in the model. They have to be enforced by infrastructure at each boundary."
+  },
+  "stats": [
+    {
+      "n": "$190,000",
+      "label": "a $1,000 stock order the agent turned into 1,000 shares — with a clean 200 OK"
+    },
+    {
+      "n": "30ms",
+      "label": "how fast the broker API returned success on the wrong trade — zero alerts"
+    },
+    {
+      "n": "4",
+      "label": "classic agent attacks Portkey maps to one undefined trust boundary each"
+    },
+    {
+      "n": "3",
+      "label": "failure buckets to triage first: quality, reliability, efficiency"
+    }
+  ],
+  "brief": [
+    {
+      "kind": "story",
+      "title": "A clean GitHub repo can make Claude Code run malware it never saw",
+      "take": true,
+      "domain": "security",
+      "source": "BleepingComputer",
+      "url": "https://www.bleepingcomputer.com/news/security/clean-github-repo-tricks-ai-coding-agents-into-running-malware/",
+      "body": "0DIN, Mozilla's GenAI bug-bounty platform, showed a repo with no malicious code steering an AI coding agent into auto-running a payload. A package fails on first run, tells the agent to run a recovery command, and that command fetches and executes an attacker-controlled script from a DNS record — invisible to scanners, reviewers, and the agent. Fix: agents should show the full execution chain before running, and treat third-party setup instructions as untrusted code."
+    },
+    {
+      "kind": "story",
+      "title": "Treat every agent vulnerability as a trust-boundary failure",
+      "take": false,
+      "domain": "security",
+      "source": "Portkey",
+      "url": "https://portkey.ai/blog/why-every-agent-vulnerability-is-a-trust-boundary-failure/",
+      "body": "Portkey reframes agent security around trust boundaries: an agent is a loop where the model picks tools at runtime from text the developer never wrote, so identity, budget, and authority can't live in the model. The four common attacks each map to one undefined boundary. No single control covers everything — draw your agent's boundaries and ask which infrastructure component owns each."
+    },
+    {
+      "kind": "story",
+      "title": "Production agents fail silently — debug by trace, not by re-running the prompt",
+      "take": false,
+      "domain": "observability",
+      "source": "AWS",
+      "url": "https://aws.amazon.com/blogs/machine-learning/debugging-production-agents-with-amazon-bedrock-agentcore-observability/",
+      "body": "Agents return wrong answers and loop without crashing, and the bad run usually can't be reproduced. AWS's Bedrock AgentCore team and Microsoft engineers argue debugging must move to recorded node-level traces, not a fresh re-run of the prompt. Don't chase bitwise determinism — record each node's input/output envelope so a single trace becomes a rerunnable test case."
+    },
+    {
+      "kind": "quote",
+      "title": "Teams waste weeks chasing bitwise determinism when the real goal is replayability — record the run, don't freeze the model.",
+      "take": false,
+      "domain": "observability",
+      "source": "Microsoft (Chawla & Koul)",
+      "url": "https://www.youtube.com/watch?v=Lc8zRh9muoY",
+      "attribution": "— Tisha Chawla & Susheem Koul, Microsoft"
+    }
+  ],
+  "transcript": "[warm] Three harmless pieces, put together, and an AI coding tool hands your machine to a stranger. [curious] So when an agent does something disastrous... where does the trouble actually live?\n\n[warm] This is the Agentic Daily Brief.\n\n[pause] Let's start with the headline everybody's going to be talking about. Anthropic shipped Claude Sonnet Five this morning — a midsize model, and here's the surprising part. It beats its bigger, pricier sibling, Opus, on a key knowledge-work test. [pause] It runs your agents for a fraction of the cost — about two dollars per million tokens in, ten dollars out, through August. And it reportedly finishes long, messy tasks that older versions would just... give up on. Checking its own work, unprompted. [curious] Cheaper autonomy, out of the box — that's the story.\n\nAnthropic didn't stop there. They also launched Claude Science, a research workbench aimed straight at drug discovery — it runs analyses on its own and can stay inside a lab's own walls, so sensitive data never leaves.\n\n[pause] Two more, fast. A chip startup called Etched came out of hiding with a working chip, a billion dollars in orders, and a five-billion-dollar valuation — they bake the model's architecture straight into the silicon to run it cheaper than a general Nvidia card. And OpenClaw, the free open-source agent, landed on phones this week — agents walking off the desktop and into your pocket, though the makers admit the results so far are, uh, mixed.\n\n[thoughtful] Which is a nice bridge to the harder question underneath today. Because the more capable and cheaper these agents get, the more of them you'll run — and the more places they can quietly go wrong.\n\n[curious] Picture this. You clone a GitHub repo. Looks totally normal — clean setup instructions, a package to install. Your AI coding tool starts setting it up, hits an error on the first run, and the error politely says, \"run this recovery command.\" [pause] The agent, being helpful, runs it. [slow] And that command reaches out to the internet, pulls down a hidden instruction, and opens a door straight to the attacker — with all your access.\n\n[surprised] Here's what got me. There is, I mean, no malware in that repo. Nothing. Researchers at Zero-D-I-N — that's Mozilla's bug-bounty platform for AI — showed this off, and BleepingComputer walked the same chain. The nasty part is fetched at runtime, so it's invisible to scanners, invisible to a human reviewer, invisible to the agent itself. It lives nowhere in the code you'd think to check.\n\n[thoughtful] And the way it gets in? The agent's own eagerness. It auto-fixes an error you never even read. One repo link — in a job post, a tutorial, a Slack message — is enough. [pause] For now, this is a proof of concept, not something loose in the wild. But the fix both reports name is worth saying out loud. Have your agent show you the full chain of what a setup command actually does — including anything it pulls down — before it runs. And treat setup instructions from strangers the way you'd treat a stranger's code. Which is to say... carefully.\n\n[curious] So if the danger isn't hiding in the model, and it isn't hiding in the repo — where is it? A company called Portkey, which builds agent gateways, has, I think, the cleanest way to name it. They call it a trust-boundary failure.\n\n[thoughtful] Here's their framing, and it stuck with me. An agent, stripped down, is just a loop — read some text, pick a tool, call it, repeat. The catch is the model decides which tool to call, at runtime, after reading text you never wrote. So the usual spot where you'd enforce the rules — the developer's own code — just... isn't there anymore. Identity, budget, who's allowed to do what — none of that lives in the model. It lives in the loop.\n\n[pause] Portkey lines up the four classic agent attacks — a poisoned prompt, a faked identity, a runaway spending loop, a tool that quietly rewrites its own description — and shows they're all, um, the same shape. Every one is a line between two parts of the system, where the two parts trust each other differently, and nobody made the plumbing responsible for guarding that line.\n\nTrust boundaries in a real system have to be enforced by the infrastructure — not by good intentions, and not by hoping the model behaves.\n\n[thoughtful] The honest limit here: it's Portkey describing its own product, so take the four-boundary map as the durable idea, and check the actual controls against your own setup. But the map itself? [warm] That's a genuinely useful thing to draw on a whiteboard.\n\n[curious] Which leaves the quietest failure of all — the one where nothing looks broken at all. Let me set the scene. An agent is hooked to a brokerage. The user says, \"sell a thousand dollars of stock.\" Instead of doing the math, the agent dumps the raw number — one thousand — into the shares field. [pause] At a hundred ninety bucks a share... that's a hundred-ninety-thousand-dollar mistake.\n\n[surprised] And the terrifying part? The system returned a clean success in thirty milliseconds. Zero exceptions. Zero alerts. The dashboards stayed green. That's from Microsoft engineers Tisha Chawla and Susheem Koul, in a talk, and Amazon's Bedrock team makes the same point. Agents fail silently. They return a confident wrong answer, or loop forever, or grab the wrong tool — and nothing crashes.\n\n[thoughtful] Your instinct — mine too, right? — is to grab the exact prompt, run it again, and watch it break. Except it won't. You'll run it ten times and it works perfectly every time. The one bad run? Gone the second it finished.\n\nThe Microsoft engineers have a warning I'd frame on the wall: don't waste weeks chasing bitwise determinism when the real goal is replayability. [pause] You can't force these models to be perfectly repeatable — so stop trying. Instead, record each step of the run as it happens — what went in, what came out. Then a single bad trace becomes something you can replay and turn into a test. You don't reproduce the failure. You keep the receipt.\n\n[warm] Before you go, one small thing to try this week. Take one agent you're running and just... draw its boundaries. Every place it hands work to a tool, another agent, or an outside service — mark that line, and ask one question: who enforces the rules there? Not the model. Something in the plumbing. If the answer is \"nobody,\" you found your next fix.\n\n[thoughtful] There's also a talk worth your time. Shawn Lewis — the founder of Weights and Biases, now part of CoreWeave — walks through the loop that actually makes agents better over time. His point that stuck: humans stay essential for the hard part, defining what \"good\" even means. He mentions one new benchmark that took, uh, roughly six thousand hours of expert work just to build. [pause] The model can grind. Deciding what it should grind toward — that's still on us.\n\n[curious] So back to where we started. A clean repo, a silent trade, a loop that picks its own tools. [pause] In every one, the model did more or less what it was told. What went wrong was the space between the pieces — the boundaries nobody had put a guard on. [warm] Draw those lines. That's the whole job this week.\n\n[pause] That's today's Agentic Daily Brief. [pause] Brought to you by Agent Native Engineering — open knowledge for building and running AI agents. The full write-ups, with their sources, are at agent native engineering dot com. [warm] See you next time."
+}
