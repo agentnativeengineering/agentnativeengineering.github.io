@@ -3,18 +3,21 @@ import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Footer from '../../components/Footer.astro';
 import NoteEntries from '../../components/NoteEntries.astro';
+import MonthPager from '../../components/MonthPager.astro';
 
-// The Daily Notes index shows a rolling ONE-MONTH window on a single page. Older notes stay live
-// (their /field-notes/<slug>/ pages, the RSS feed, and each episode's cross-links still resolve) —
-// they're just not listed here, so the index stays a short, current, single page as the corpus grows.
-const WINDOW_DAYS = 31;
-const cutoff = new Date();
-cutoff.setDate(cutoff.getDate() - WINDOW_DAYS);
-
+// The Daily Notes index paginates BY MONTH: this page shows the latest month; older months live at
+// /field-notes/archive/<YYYY-MM>/. Nothing is orphaned — every note is listed on its month's page.
+const monthOf = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 const all = (await getCollection('notes', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
-const notes = all.filter((n) => n.data.date.valueOf() >= cutoff.valueOf());
+const months = [...new Set(all.map((n) => monthOf(n.data.date)))]; // desc, since `all` is desc
+const current = months[0] ?? monthOf(new Date());
+const notes = all.filter((n) => monthOf(n.data.date) === current);
+const monthLabel = current
+  ? new Date(Number(current.split('-')[0]), Number(current.split('-')[1]) - 1, 1)
+      .toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }).toUpperCase()
+  : '';
 ---
 
 <Base
@@ -24,14 +27,15 @@ const notes = all.filter((n) => n.data.date.valueOf() >= cutoff.valueOf());
 >
   <div class="wrap" data-r="pad">
     <header class="page-header">
-      <div class="eyebrow">// DAILY NOTES · LAST 30 DAYS</div>
+      <div class="eyebrow">// DAILY NOTES · {monthLabel}</div>
       <h1 class="page-h1" data-r="page-h1" style="margin-top:16px">Daily Notes</h1>
       <p class="page-dek">What was tried, what broke, what was learned — dated and attributable. Drawn from real-world examples and studies, not opinion.</p>
     </header>
 
     <section class="section" style="padding-top:30px">
-      {notes.length === 0 && <p style="font-family:var(--mono);color:var(--faint)">No notes in the last 30 days.</p>}
+      {notes.length === 0 && <p style="font-family:var(--mono);color:var(--faint)">No notes yet.</p>}
       <NoteEntries notes={notes} />
+      <MonthPager months={months} current={current} />
     </section>
   </div>
 
