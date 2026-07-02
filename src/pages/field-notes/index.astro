@@ -3,14 +3,18 @@ import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Footer from '../../components/Footer.astro';
 import NoteEntries from '../../components/NoteEntries.astro';
-import Pager from '../../components/Pager.astro';
 
-const PAGE_SIZE = 24; // keep in sync with field-notes/page/[n].astro
-const notes = (await getCollection('notes', ({ data }) => !data.draft)).sort(
+// The Daily Notes index shows a rolling ONE-MONTH window on a single page. Older notes stay live
+// (their /field-notes/<slug>/ pages, the RSS feed, and each episode's cross-links still resolve) —
+// they're just not listed here, so the index stays a short, current, single page as the corpus grows.
+const WINDOW_DAYS = 31;
+const cutoff = new Date();
+cutoff.setDate(cutoff.getDate() - WINDOW_DAYS);
+
+const all = (await getCollection('notes', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
-const totalPages = Math.max(1, Math.ceil(notes.length / PAGE_SIZE));
-const pageNotes = notes.slice(0, PAGE_SIZE);
+const notes = all.filter((n) => n.data.date.valueOf() >= cutoff.valueOf());
 ---
 
 <Base
@@ -20,15 +24,14 @@ const pageNotes = notes.slice(0, PAGE_SIZE);
 >
   <div class="wrap" data-r="pad">
     <header class="page-header">
-      <div class="eyebrow">// DAILY NOTES</div>
+      <div class="eyebrow">// DAILY NOTES · LAST 30 DAYS</div>
       <h1 class="page-h1" data-r="page-h1" style="margin-top:16px">Daily Notes</h1>
       <p class="page-dek">What was tried, what broke, what was learned — dated and attributable. Drawn from real-world examples and studies, not opinion.</p>
     </header>
 
     <section class="section" style="padding-top:30px">
-      {notes.length === 0 && <p style="font-family:var(--mono);color:var(--faint)">No notes yet.</p>}
-      <NoteEntries notes={pageNotes} />
-      <Pager current={1} total={totalPages} />
+      {notes.length === 0 && <p style="font-family:var(--mono);color:var(--faint)">No notes in the last 30 days.</p>}
+      <NoteEntries notes={notes} />
     </section>
   </div>
 
