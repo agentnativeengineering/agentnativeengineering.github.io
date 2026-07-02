@@ -2,20 +2,15 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Footer from '../../components/Footer.astro';
+import NoteEntries from '../../components/NoteEntries.astro';
+import Pager from '../../components/Pager.astro';
 
+const PAGE_SIZE = 24; // keep in sync with field-notes/page/[n].astro
 const notes = (await getCollection('notes', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
-const fmt = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: '2-digit' }).toUpperCase();
-const readMin = (body: string) => Math.max(1, Math.round((body.trim().split(/\s+/).length) / 200));
-
-const byYear = new Map<number, typeof notes>();
-for (const n of notes) {
-  const y = n.data.date.getFullYear();
-  if (!byYear.has(y)) byYear.set(y, []);
-  byYear.get(y)!.push(n);
-}
-const years = [...byYear.keys()].sort((a, b) => b - a);
+const totalPages = Math.max(1, Math.ceil(notes.length / PAGE_SIZE));
+const pageNotes = notes.slice(0, PAGE_SIZE);
 ---
 
 <Base
@@ -32,23 +27,8 @@ const years = [...byYear.keys()].sort((a, b) => b - a);
 
     <section class="section" style="padding-top:30px">
       {notes.length === 0 && <p style="font-family:var(--mono);color:var(--faint)">No notes yet.</p>}
-      {years.map((year) => (
-        <div style="margin-bottom:14px">
-          <div class="section-head"><span class="section-no">{year}</span></div>
-          <div class="entries">
-            {byYear.get(year)!.map((n) => (
-              <a class="entry-row" href={`/field-notes/${n.id}/`}>
-                <span class="date">{fmt(n.data.date)}</span>
-                <span class="ttl">{n.data.title}</span>
-                <span class="meta">
-                  {n.data.tags[0] && <span class="domain" style="--accent:#b8430f">{n.data.tags[0]}</span>}
-                  <span class="pill">{readMin(n.body ?? '')} min</span>
-                </span>
-              </a>
-            ))}
-          </div>
-        </div>
-      ))}
+      <NoteEntries notes={pageNotes} />
+      <Pager current={1} total={totalPages} />
     </section>
   </div>
 
