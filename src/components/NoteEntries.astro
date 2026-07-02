@@ -1,0 +1,36 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { notes: CollectionEntry<'notes'>[] }
+const { notes } = Astro.props;
+
+const fmt = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: '2-digit' }).toUpperCase();
+const readMin = (body: string) => Math.max(1, Math.round((body.trim().split(/\s+/).length) / 200));
+
+// group the given slice by year (a page slice usually spans one year; both headers show if it straddles)
+const byYear = new Map<number, typeof notes>();
+for (const n of notes) {
+  const y = n.data.date.getFullYear();
+  if (!byYear.has(y)) byYear.set(y, []);
+  byYear.get(y)!.push(n);
+}
+const years = [...byYear.keys()].sort((a, b) => b - a);
+---
+
+{years.map((year) => (
+  <div style="margin-bottom:14px">
+    <div class="section-head"><span class="section-no">{year}</span></div>
+    <div class="entries">
+      {byYear.get(year)!.map((n) => (
+        <a class="entry-row" href={`/field-notes/${n.id}/`}>
+          <span class="date">{fmt(n.data.date)}</span>
+          <span class="ttl">{n.data.title}</span>
+          <span class="meta">
+            {n.data.tags[0] && <span class="domain" style="--accent:#b8430f">{n.data.tags[0]}</span>}
+            <span class="pill">{readMin(n.body ?? '')} min</span>
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+))}
