@@ -1,0 +1,37 @@
+---
+// Month-based pager for the Daily Notes index. `months` is the full list of months that have notes,
+// newest-first (e.g. ["2026-07","2026-06","2026-05"]). The latest month is canonical at /field-notes/;
+// every older month lives at /field-notes/archive/<YYYY-MM>/. Left = newer month, right = older.
+interface Props { months: string[]; current: string }
+const { months, current } = Astro.props;
+const label = (ym: string) => {
+  const [y, m] = ym.split('-').map(Number);
+  return new Date(y, m - 1, 1).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }).toUpperCase();
+};
+const href = (ym: string) => (ym === months[0] ? '/field-notes/' : `/field-notes/archive/${ym}/`);
+const i = months.indexOf(current);
+const newer = i > 0 ? months[i - 1] : null;                    // more recent month
+const older = i >= 0 && i < months.length - 1 ? months[i + 1] : null;
+---
+
+{months.length > 1 && (
+  <nav class="pager" aria-label="Browse notes by month">
+    {newer ? <a class="pager-link" href={href(newer)} rel="prev">← {label(newer)}</a>
+           : <span class="pager-link is-off">← Newer</span>}
+    <span class="pager-now">{label(current)}</span>
+    {older ? <a class="pager-link" href={href(older)} rel="next">{label(older)} →</a>
+           : <span class="pager-link is-off">Older →</span>}
+  </nav>
+)}
+
+<style>
+  .pager {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    margin-top: 34px; padding-top: 20px; border-top: 1px solid var(--ink);
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .pager-link { text-decoration: none; color: var(--build); }
+  .pager-link:hover { text-decoration: underline; }
+  .pager-link.is-off { color: var(--faint); pointer-events: none; }
+  .pager-now { color: var(--muted); }
+</style>

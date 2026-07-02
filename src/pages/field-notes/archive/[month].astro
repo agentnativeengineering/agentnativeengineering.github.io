@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import Footer from '../../../components/Footer.astro';
+import NoteEntries from '../../../components/NoteEntries.astro';
+import MonthPager from '../../../components/MonthPager.astro';
+
+export async function getStaticPaths() {
+  const monthOf = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  const all = (await getCollection('notes', ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  );
+  const months = [...new Set(all.map((n) => monthOf(n.data.date)))]; // desc
+  // page 1 (latest month) is served by index.astro; generate archive pages for the older months
+  return months.slice(1).map((m) => ({
+    params: { month: m },
+    props: { months, current: m, notes: all.filter((n) => monthOf(n.data.date) === m) },
+  }));
+}
+
+interface Props { months: string[]; current: string; notes: CollectionEntry<'notes'>[] }
+const { months, current, notes } = Astro.props;
+const monthLabel = new Date(Number(current.split('-')[0]), Number(current.split('-')[1]) - 1, 1)
+  .toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }).toUpperCase();
+---
+
+<Base
+  active="notes"
+  title={`Daily Notes — ${monthLabel} — Agent Native Engineering`}
+  description="Dated notes from building and operating AI agents in production — what was tried, what broke, what was learned. Grounded in real-world examples and studies."
+>
+  <div class="wrap" data-r="pad">
+    <header class="page-header">
+      <div class="eyebrow">// DAILY NOTES · {monthLabel}</div>
+      <h1 class="page-h1" data-r="page-h1" style="margin-top:16px">Daily Notes</h1>
+      <p class="page-dek">What was tried, what broke, what was learned — dated and attributable. Drawn from real-world examples and studies, not opinion.</p>
+    </header>
+
+    <section class="section" style="padding-top:30px">
+      <NoteEntries notes={notes} />
+      <MonthPager months={months} current={current} />
+    </section>
+  </div>
+
+  <Footer slot="footer" variant="slim" left={'Daily Notes · <span class="strong">Agent Native Engineering</span> · CC BY 4.0'} />
+</Base>
