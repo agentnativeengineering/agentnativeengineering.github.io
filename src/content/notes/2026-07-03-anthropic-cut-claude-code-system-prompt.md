@@ -1,0 +1,31 @@
+---
+title: "Anthropic cut ~80% of Claude Code's system prompt for its newest models"
+date: 2026-07-03
+summary: "An Anthropic staffer says the newest model class wants a smaller system prompt, and that supplied examples now constrain more than they help."
+takeaways:
+  - "As models get more capable, examples and hard 'do not' rules in a system prompt start to constrain them more than they help — steer through context instead."
+  - "Anthropic reports cutting roughly 80% of Claude Code's system prompt for its newest model class."
+  - "Prompt length is not monotonic: it grew as models learned to follow instructions, and is now shrinking again."
+tags: ["harness-engineering", "system-prompt", "claude-code", "prompting"]
+sourceName: "The Decoder"
+sourceUrl: "https://the-decoder.com/anthropic-says-it-cut-80-percent-of-claude-codes-system-prompt-because-fable-5-models-want-a-smaller-system-prompt/"
+sources:
+  - title: "The Decoder: Anthropic cut 80% of Claude Code's system prompt"
+    url: "https://the-decoder.com/anthropic-says-it-cut-80-percent-of-claude-codes-system-prompt-because-fable-5-models-want-a-smaller-system-prompt/"
+draft: false
+---
+## What happened
+
+In a report dated 2026-07-02, [The Decoder](https://the-decoder.com/anthropic-says-it-cut-80-percent-of-claude-codes-system-prompt-because-fable-5-models-want-a-smaller-system-prompt/) quotes Tariq Shihipar, a member of technical staff at Anthropic, saying the team [cut roughly 80% of Claude Code's system prompt](https://the-decoder.com/anthropic-says-it-cut-80-percent-of-claude-codes-system-prompt-because-fable-5-models-want-a-smaller-system-prompt/) for its newest model class. The reason he gives: "this new class of models want a smaller system prompt," and examples "tend to constrain it because it's actually more imaginative than the examples we give it." Instead of hard rules like "do not do this," he says Anthropic now steers the model through context.
+
+## Why it matters
+
+The system prompt is the load-bearing part of a coding harness — it is where teams encode behavior. The intuition from earlier models was to add more: more examples, more restrictive instructions. Shihipar describes that intuition reversing for the most capable models. Over-specifying now costs you: a rigid example or a "never do X" rule pins the model below what it could produce on its own, and a bloated prompt is context you pay for on every turn.
+
+> With capable-enough models, your carefully written examples can hold the output back rather than lift it.
+
+## The catch
+
+This is one Anthropic engineer's account of one internal harness, not a measured before/after you can reproduce, and Shihipar himself frames prompt length as non-monotonic — short with many examples early, longer as models learned to follow instructions, shorter again now. So the lesson is not "shorter is always better." It is that prompt length should track a specific model's capability, and the way to find the line is to evaluate: strip examples and rules on your own tasks and check whether quality holds before you trust that less is more here.
+
+[Harness Engineering](/guide/harness-engineering/)

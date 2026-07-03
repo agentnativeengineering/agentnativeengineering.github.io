@@ -1,0 +1,28 @@
+{
+  "type": "note",
+  "slug": "zero-trust-agent-identity-live-networks",
+  "title": "Zero-trust agent identity: proving which agent acted on a live network",
+  "date": "2026-07-03",
+  "summary": "Solo.io and major telecom operators ran autonomous agents on live network environments by giving each agent a verifiable workload identity, traceable delegation, and scoped two-layer enforcement — so you can prove which agent acted under whose authority.",
+  "domain": "access-and-identity",
+  "tags": [
+    "access-and-identity",
+    "zero-trust",
+    "spiffe",
+    "token-exchange"
+  ],
+  "takeaways": [
+    "Before asking how capable an agent is, you must be able to prove which agent acted, under whose authority, and what it was allowed to touch — treat every agent as a first-class non-human identity.",
+    "Capture parent-child hand-offs with RFC 8693 token exchange so a delegated agent's authority is traceable, not assumed.",
+    "Enforce scope in two layers — network (L4) and application (L7) down to individual tools — so an overscoped or hijacked agent is blocked at its boundary while the audit trail survives."
+  ],
+  "sourceName": "Solo.io",
+  "sourceUrl": "https://www.solo.io/blog/zero-trust-agents-for-autonomous-networks-winning-best-moonshot-catalyst-at-dtw-ignite-2026",
+  "sources": [
+    {
+      "title": "Solo.io: Zero-Trust AI Agents for Autonomous Networks (TM Forum DTW Ignite 2026 Catalyst)",
+      "url": "https://www.solo.io/blog/zero-trust-agents-for-autonomous-networks-winning-best-moonshot-catalyst-at-dtw-ignite-2026"
+    }
+  ],
+  "body": "## What happened\n\nIn a [post dated 2026-07-02](https://www.solo.io/blog/zero-trust-agents-for-autonomous-networks-winning-best-moonshot-catalyst-at-dtw-ignite-2026), Solo.io described a TM Forum DTW Ignite 2026 Catalyst — built with Telefónica, Orange, Vodafone, Telstra and others — that let autonomous AI agents act on [live partner network environments](https://www.solo.io/blog/zero-trust-agents-for-autonomous-networks-winning-best-moonshot-catalyst-at-dtw-ignite-2026). The framing is blunt: before you ask how capable an agent is, you must know \"which agent is acting, under whose authority it is acting, and what it is actually allowed to touch,\" and be able to prove it after the fact. Their answer, IPOE (Identity, Policy, Observability, Evidence), gives each agent a verifiable workload identity and enforces its scope at two layers.\n\n## Why it matters\n\nAgents are probabilistic and rarely act alone — they plan, call tools, and hand work to other agents across domains. So the thing you have to trust is a whole chain of behavior, not one call. A single overscoped or hijacked agent that can alter a production network is a real incident, and \"fingers-crossed automation\" is not autonomy you can trust. The identity layer is what makes the chain auditable.\n\n## How it works\n\n1. **Verifiable identity.** Each agent gets an OIDC/SPIFFE (SPIFFE = a spec for cryptographic workload identity) identity with mutual TLS, so calls are authenticated, not assumed.\n2. **Delegation you can trace.** Parent-child hand-offs are captured via [RFC 8693 token exchange](https://www.solo.io/blog/zero-trust-agents-for-autonomous-networks-winning-best-moonshot-catalyst-at-dtw-ignite-2026), recording whose authority a child agent acts under.\n3. **Two-layer enforcement.** Istio ztunnel enforces at L4 (network) and the agentgateway waypoint at L7 (application), down to [individual MCP tools](https://www.solo.io/blog/zero-trust-agents-for-autonomous-networks-winning-best-moonshot-catalyst-at-dtw-ignite-2026) — MCP being the Model Context Protocol agents use to call tools.\n4. **Evidence kept.** Demonstrated scenarios included blocking an overreaching agent at its domain boundary and containing a hijacked one while preserving the audit trail.\n\n> If you can't prove which agent acted under whose authority, you have automation you hope goes well, not autonomy you can trust.\n\n## The catch\n\nThis was an award-winning Catalyst demonstration across three clusters and partner environments, not a general-availability rollout — the point is the identity model, not a claim of universal telecom production maturity. And the model leans on a specific open-source-rooted stack (Istio ambient mesh, agentgateway, agentregistry, kagent); the transferable lesson is treating each agent as a first-class non-human identity with scoped, provable delegation, whatever mesh you run.\n\n[Access & Identity](/guide/access-and-identity/)"
+}
