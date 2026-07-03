@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Footer from '../../components/Footer.astro';
 import ForAgents from '../../components/ForAgents.astro';
 import Player from '../../components/Player.astro';
+import { accentOf, type Phase } from '../../data/phase';
 
 export async function getStaticPaths() {
   const episodes = (await getCollection('episodes', ({ data }) => !data.draft)).sort(
@@ -47,9 +48,14 @@ const ticker = tickerNotes.slice(0, 4).map((n) => n.data.title);
 const stats = ep.data.stats ?? [];
 const brief = ep.data.brief ?? [];
 const useBrief = brief.length > 0;
-// cycle the phase palette so the number cards read lively (aidailybrief "By the Numbers" style),
-// all within the design tokens — no new colors.
-const accents = ['var(--engineer)', 'var(--operate)', 'var(--signal)', 'var(--build)'];
+
+// map each guide-domain slug -> its phase accent, so a story card carries its real domain color
+// (the same phase palette used across the site) — keeping every card on the ANE sticker theme.
+const guide = await getCollection('guide');
+const accentByDomain = new Map(guide.map((g) => [g.id, accentOf(g.data.phase as Phase)]));
+const RUST = accentOf('build');
+// the three phase colors, cycled for the number cards (no semantic domain there)
+const phaseCycle = [accentOf('build'), accentOf('operate'), accentOf('engineer')];
 let sec = 0;
 const nextNo = () => String(++sec).padStart(2, '0');
 ---
@@ -112,7 +118,7 @@ const nextNo = () => String(++sec).padStart(2, '0');
         </div>
         <div class="num-grid">
           {stats.map((s, i) => (
-            <div class="num-card card-dark" style={`--accent:${accents[i % accents.length]}`}>
+            <div class="card num-card" style={`--accent:${phaseCycle[i % phaseCycle.length]}`}>
               <div class="num">{s.n}</div>
               <div class="num-label">{s.label}</div>
             </div>
@@ -135,14 +141,15 @@ const nextNo = () => String(++sec).padStart(2, '0');
           <div class="brief-grid">
             {brief.map((b) => (
               b.kind === 'quote' ? (
-                <blockquote class="card card-dark brief-quote" style="--accent:#b8430f">
+                <blockquote class="card brief-quote" style={`--accent:${(b.domain && accentByDomain.get(b.domain)) || RUST}`}>
+                  <span class="bq-tag">◆ THE TAKE</span>
                   <p class="bq-text">{b.title}</p>
                   {b.attribution && <cite class="bq-cite">{b.attribution}</cite>}
                 </blockquote>
               ) : (
-                <article class="card story" style="--accent:#b8430f">
+                <article class="card story" style={`--accent:${(b.domain && accentByDomain.get(b.domain)) || RUST}`}>
                   <div class="story-head">
-                    {b.domain && <span class="badge">{b.domain.toUpperCase()}</span>}
+                    {(b.cat || b.domain) && <span class="badge">{(b.cat || b.domain)!.toUpperCase()}</span>}
                     {b.take && <span class="story-take">TAKE</span>}
                   </div>
                   <h3 class="story-title">{b.title}</h3>
@@ -194,11 +201,12 @@ const nextNo = () => String(++sec).padStart(2, '0');
   .brief-btn { font-family: var(--mono); font-size: 12px; text-decoration: none; padding: 7px 14px; border-radius: 3px; }
   .brief-btn.ghost { color: #e8e2d6; background: transparent; border: 1px solid #45403a; }
 
-  /* By the Numbers — self-contained stat cards (aidailybrief style): big accent number + mono label */
-  .num-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 22px 20px; }
+  /* By the Numbers — light parchment sticker cards (the ANE "two-layer" card: offset shadow in the
+     phase accent). Big accent number + muted mono label. */
+  .num-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 26px 22px; }
   .num-card { padding: 22px 22px 20px; display: flex; flex-direction: column; gap: 10px; }
-  .num { font-family: var(--serif); font-weight: 700; font-size: 40px; line-height: 1; letter-spacing: -0.02em; color: var(--accent); }
-  .num-label { font-family: var(--mono); font-size: 11.5px; line-height: 1.5; letter-spacing: 0.03em; color: #cfc9bd; text-transform: uppercase; }
+  .num { font-family: var(--serif); font-weight: 700; font-size: 42px; line-height: 1; letter-spacing: -0.02em; color: var(--accent); }
+  .num-label { font-family: var(--mono); font-size: 11.5px; line-height: 1.5; letter-spacing: 0.03em; color: var(--muted); text-transform: uppercase; }
 
   /* The Brief — self-contained news cards (no link-out to a separate page) */
   .brief-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(372px, 1fr)); gap: 28px 22px; }
@@ -211,9 +219,11 @@ const nextNo = () => String(++sec).padStart(2, '0');
   .story-source { margin-top: auto; padding-top: 14px; border-top: 1px dashed var(--hair-dash); font-family: var(--mono); font-size: 11px; color: var(--accent); text-decoration: none; }
   a.story-source:hover { text-decoration: underline; }
 
-  .brief-quote { padding: 24px 26px; display: flex; flex-direction: column; gap: 14px; }
-  .brief-quote .bq-text { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 20px; line-height: 1.36; letter-spacing: -0.01em; color: var(--paper); margin: 0; text-wrap: pretty; }
-  .brief-quote .bq-cite { font-family: var(--mono); font-size: 11px; color: #b8b1a4; font-style: normal; }
+  /* THE TAKE — a light sticker card (matches the story cards + callout), italic serif pull-quote */
+  .brief-quote { padding: 22px 24px; display: flex; flex-direction: column; gap: 12px; }
+  .brief-quote .bq-tag { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; color: var(--accent); }
+  .brief-quote .bq-text { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 20px; line-height: 1.36; letter-spacing: -0.01em; color: var(--ink); margin: 0; text-wrap: pretty; }
+  .brief-quote .bq-cite { font-family: var(--mono); font-size: 11px; color: var(--muted); font-style: normal; margin-top: auto; padding-top: 12px; border-top: 1px dashed var(--hair-dash); }
 
   @media (max-width: 640px) { .brief-grid { grid-template-columns: 1fr; } }
 </style>
