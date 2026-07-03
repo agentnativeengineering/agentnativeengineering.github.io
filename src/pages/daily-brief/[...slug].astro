@@ -13,6 +13,7 @@ export async function getStaticPaths() {
   const noteById = new Map(notes.map((n) => [n.id, n]));
 
   return episodes.map((ep, i) => {
+    // fallback story cards (used only when the episode has no `brief` news cards)
     const stories = ep.data.covers
       .map((id) => noteById.get(id))
       .filter(Boolean)
@@ -33,11 +34,24 @@ export async function getStaticPaths() {
 const { ep, stories, editionNo } = Astro.props;
 const { Content } = await render(ep);
 const fmt = (d: Date) => d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
+
 // Same news ticker as the home masthead — newest headlines scrolling across the edition.
 const tickerNotes = (await getCollection('notes', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 const ticker = tickerNotes.slice(0, 4).map((n) => n.data.title);
+
+// The news content already lives in the episode file: `stats` → "By the Numbers" cards, `brief` →
+// "The Brief" news cards. Both render self-contained (no link-out to a separate page). `brief` falls
+// back to the covers-derived note cards only for older episodes that predate the brief data.
+const stats = ep.data.stats ?? [];
+const brief = ep.data.brief ?? [];
+const useBrief = brief.length > 0;
+// cycle the phase palette so the number cards read lively (aidailybrief "By the Numbers" style),
+// all within the design tokens — no new colors.
+const accents = ['var(--engineer)', 'var(--operate)', 'var(--signal)', 'var(--build)'];
+let sec = 0;
+const nextNo = () => String(++sec).padStart(2, '0');
 ---
 
 <Base
@@ -78,39 +92,89 @@ const ticker = tickerNotes.slice(0, 4).map((n) => n.data.title);
       </div>
     </section>
 
-    {ep.data.summary && (
+    {ep.data.oneIdea?.title ? (
+      <section class="callout" style="--accent:#b8430f;margin-top:46px;max-width:880px">
+        <span class="eyebrow">// THE ONE IDEA</span>
+        <p>{ep.data.oneIdea.title}</p>
+      </section>
+    ) : ep.data.summary && (
       <section class="callout" style="--accent:#b8430f;margin-top:46px;max-width:880px">
         <span class="eyebrow">// THE ONE IDEA</span>
         <p>{ep.data.summary}</p>
       </section>
     )}
 
-    {stories.length > 0 && (
+    {stats.length > 0 && (
       <section class="section">
         <div class="section-head">
-          <span class="section-no">// 01</span>
-          <h2 class="section-title">The Brief</h2>
-          <span class="section-meta" style="margin-left:auto">{stories.length} {stories.length === 1 ? 'story' : 'stories'}</span>
+          <span class="section-no">// {nextNo()}</span>
+          <h2 class="section-title">By the Numbers</h2>
         </div>
-        <div class="brief-grid">
-          {stories.map((s) => (
-            <a class="card hover story" href={`/field-notes/${s.id}/`} style="--accent:#b8430f">
-              <div class="story-head">
-                {s.tag && <span class="badge">{s.tag.toUpperCase()}</span>}
-                <span class="story-read">{s.readMin} min</span>
-              </div>
-              <h3 class="story-title">{s.title}</h3>
-              {s.summary && <p class="story-body">{s.summary}</p>}
-              <span class="story-source">Read the note →</span>
-            </a>
+        <div class="num-grid">
+          {stats.map((s, i) => (
+            <div class="num-card card-dark" style={`--accent:${accents[i % accents.length]}`}>
+              <div class="num">{s.n}</div>
+              <div class="num-label">{s.label}</div>
+            </div>
           ))}
         </div>
       </section>
     )}
 
+    {(useBrief ? brief.length > 0 : stories.length > 0) && (
+      <section class="section">
+        <div class="section-head">
+          <span class="section-no">// {nextNo()}</span>
+          <h2 class="section-title">The Brief</h2>
+          <span class="section-meta" style="margin-left:auto">
+            {useBrief ? brief.length : stories.length} {(useBrief ? brief.length : stories.length) === 1 ? 'item' : 'items'}
+          </span>
+        </div>
+
+        {useBrief ? (
+          <div class="brief-grid">
+            {brief.map((b) => (
+              b.kind === 'quote' ? (
+                <blockquote class="card card-dark brief-quote" style="--accent:#b8430f">
+                  <p class="bq-text">{b.title}</p>
+                  {b.attribution && <cite class="bq-cite">{b.attribution}</cite>}
+                </blockquote>
+              ) : (
+                <article class="card story" style="--accent:#b8430f">
+                  <div class="story-head">
+                    {b.domain && <span class="badge">{b.domain.toUpperCase()}</span>}
+                    {b.take && <span class="story-take">TAKE</span>}
+                  </div>
+                  <h3 class="story-title">{b.title}</h3>
+                  {b.body && <p class="story-body">{b.body}</p>}
+                  {b.url && b.source && (
+                    <a class="story-source" href={b.url} target="_blank" rel="noopener nofollow">{b.source} ↗</a>
+                  )}
+                </article>
+              )
+            ))}
+          </div>
+        ) : (
+          <div class="brief-grid">
+            {stories.map((s) => (
+              <a class="card hover story" href={`/field-notes/${s.id}/`} style="--accent:#b8430f">
+                <div class="story-head">
+                  {s.tag && <span class="badge">{s.tag.toUpperCase()}</span>}
+                  <span class="story-read">{s.readMin} min</span>
+                </div>
+                <h3 class="story-title">{s.title}</h3>
+                {s.summary && <p class="story-body">{s.summary}</p>}
+                <span class="story-source">Read the note →</span>
+              </a>
+            ))}
+          </div>
+        )}
+      </section>
+    )}
+
     {ep.body && ep.body.trim().length > 0 && (
       <section class="section">
-        <div class="section-head"><span class="section-no">// 02</span><h2 class="section-title">Show notes</h2></div>
+        <div class="section-head"><span class="section-no">// {nextNo()}</span><h2 class="section-title">Show notes</h2></div>
         <div class="prose"><Content /></div>
       </section>
     )}
@@ -129,12 +193,27 @@ const ticker = tickerNotes.slice(0, 4).map((n) => n.data.title);
   .listen-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: #8a857a; margin-right: 4px; }
   .brief-btn { font-family: var(--mono); font-size: 12px; text-decoration: none; padding: 7px 14px; border-radius: 3px; }
   .brief-btn.ghost { color: #e8e2d6; background: transparent; border: 1px solid #45403a; }
+
+  /* By the Numbers — self-contained stat cards (aidailybrief style): big accent number + mono label */
+  .num-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 22px 20px; }
+  .num-card { padding: 22px 22px 20px; display: flex; flex-direction: column; gap: 10px; }
+  .num { font-family: var(--serif); font-weight: 700; font-size: 40px; line-height: 1; letter-spacing: -0.02em; color: var(--accent); }
+  .num-label { font-family: var(--mono); font-size: 11.5px; line-height: 1.5; letter-spacing: 0.03em; color: #cfc9bd; text-transform: uppercase; }
+
+  /* The Brief — self-contained news cards (no link-out to a separate page) */
   .brief-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(372px, 1fr)); gap: 28px 22px; }
   .story { padding: 22px 22px 16px; display: flex; flex-direction: column; gap: 14px; text-decoration: none; }
   .story-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
   .story-read { font-family: var(--mono); font-size: 11px; color: var(--faint); white-space: nowrap; }
+  .story-take { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--build); border: 1px solid var(--build); border-radius: 99px; padding: 2px 8px; }
   .story-title { font-family: var(--serif); font-weight: 600; font-size: 21px; line-height: 1.18; letter-spacing: -0.01em; margin: 0; color: var(--ink); text-wrap: pretty; }
   .story-body { font-family: var(--sans); font-size: 13.5px; line-height: 1.58; color: var(--ink-3); margin: 0; text-wrap: pretty; }
-  .story-source { margin-top: auto; padding-top: 14px; border-top: 1px dashed var(--hair-dash); font-family: var(--mono); font-size: 11px; color: var(--accent); }
+  .story-source { margin-top: auto; padding-top: 14px; border-top: 1px dashed var(--hair-dash); font-family: var(--mono); font-size: 11px; color: var(--accent); text-decoration: none; }
+  a.story-source:hover { text-decoration: underline; }
+
+  .brief-quote { padding: 24px 26px; display: flex; flex-direction: column; gap: 14px; }
+  .brief-quote .bq-text { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 20px; line-height: 1.36; letter-spacing: -0.01em; color: var(--paper); margin: 0; text-wrap: pretty; }
+  .brief-quote .bq-cite { font-family: var(--mono); font-size: 11px; color: #b8b1a4; font-style: normal; }
+
   @media (max-width: 640px) { .brief-grid { grid-template-columns: 1fr; } }
 </style>
