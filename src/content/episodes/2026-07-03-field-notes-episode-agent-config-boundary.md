@@ -4,6 +4,7 @@ date: 2026-07-03
 summary: "Agent config files are executable policy: Pentera weaponized synced preferences, and a scan of 34,266 repos found 1 in 4 orgs with gaps."
 audio: "/audio/field-notes-episode-agent-config-boundary.mp3"
 seconds: 517
+youtube: "https://youtu.be/PYqtPO5ywdE"
 covers:
   - "2026-07-02-claude-desktop-synced-preferences-injection"
   - "2026-07-02-agent-config-files-security-boundary"
