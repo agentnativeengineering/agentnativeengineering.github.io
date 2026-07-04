@@ -4,6 +4,7 @@ date: 2026-07-02
 summary: "Silent model swaps, self-amplifying retry loops, and unverifiable AI pull requests — why the dangerous agent failure is the quiet one that looks fine."
 audio: "/audio/field-notes-episode-quiet-agent-failures.mp3"
 seconds: 540
+youtube: "https://youtu.be/ot8nbevr42A"
 covers:
   - "2026-06-13-vendor-silent-model-swap-breaks-evals"
   - "2026-07-01-model-proposes-infrastructure-enforces"

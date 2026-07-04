@@ -4,6 +4,7 @@ date: 2026-06-30
 summary: "Three findings show an agent's output is shaped by the surface around the model: a leaky eval, a costly harness, and human-only docs."
 audio: "/audio/field-notes-episode-agent-reads-the-surface.mp3"
 seconds: 617
+youtube: "https://youtu.be/gZXziircqU4"
 covers:
   - "2026-06-28-harness-drives-agent-token-bill"
   - "2026-06-28-reward-hacking-inflates-coding-agent-benchmarks"

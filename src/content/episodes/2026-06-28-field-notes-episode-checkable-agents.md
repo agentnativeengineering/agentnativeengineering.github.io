@@ -4,6 +4,7 @@ date: 2026-06-28
 summary: "Stripe grounds compliance agents in fetched evidence, two teams gate every write behind humans, and four teams move agent memory onto plain files."
 audio: "/audio/field-notes-episode-checkable-agents.mp3"
 seconds: 571
+youtube: "https://youtu.be/1_0j92L1H7k"
 covers:
   - "2026-06-27-agent-memory-files-and-index"
   - "2026-06-27-enterprise-agents-approval-gates-audit-trails"
