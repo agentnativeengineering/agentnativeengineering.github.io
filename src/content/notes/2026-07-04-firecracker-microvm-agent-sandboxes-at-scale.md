@@ -1,0 +1,37 @@
+---
+title: "Running a Firecracker microVM per agent conversation at scale"
+date: 2026-07-04
+summary: "Adapt outgrew gVisor's syscall overhead and boot-control limits running a VM per conversation, and moved to Firecracker microVMs with a custom OCI-to-rootfs control plane that killed the warm pool."
+takeaways:
+  - "To run untrusted model-generated code at scale, hardware-virtualized Firecracker microVMs beat a user-space syscall emulator like gVisor once you need real isolation plus control over boot, packing, and networking."
+  - "gVisor reimplements the Linux syscall surface in user space, which costs fidelity and takes away control of boot time, machine packing, and hardware recycling."
+  - "Sub-second microVM boot let Adapt drop the warm pool entirely — spin a sandbox up when a chat starts, tear it down when it ends."
+tags: ["security", "sandboxing", "firecracker", "isolation"]
+sourceName: "Adapt"
+sourceUrl: "https://adapt.com/blog/orchestrating-agent-sandboxes"
+sources:
+  - title: "Adapt: How we run sandboxes for agents at scale"
+    url: "https://adapt.com/blog/orchestrating-agent-sandboxes"
+draft: false
+---
+## What happened
+
+In a post dated 2026-07-03, [Sean Smith, CTO and co-founder of Adapt, described how they run agent sandboxes at scale](https://adapt.com/blog/orchestrating-agent-sandboxes): every user conversation gets its own isolated VM the model can do anything with — install software, run programs, browse, call APIs. To run this untrusted, model-generated code safely, Adapt first used [gVisor via GKE Sandbox — gVisor reimplements the Linux syscall surface in user space](https://adapt.com/blog/orchestrating-agent-sandboxes), so a container gets a software kernel instead of the host's. They hit syscall and IO overhead, imperfect kernel emulation, and lost control over boot time, machine packing, networking, and hardware recycling. They moved to [Firecracker microVMs — real hardware-virtualized VMs stripped down to boot in a few hundred milliseconds with a few megabytes of overhead](https://adapt.com/blog/orchestrating-agent-sandboxes).
+
+## Why it matters
+
+An agent that writes and runs its own code is untrusted code by definition, so the isolation boundary is your blast radius. A user-space syscall emulator like gVisor trades away both fidelity (things behave subtly differently than on a real kernel) and control (boot, packing, networking, recycling). At per-conversation scale, those become the wall.
+
+> The stronger the isolation you need for model-generated code, the more the lightweight sandbox costs you — in fidelity and in the knobs you don't get to turn.
+
+## How it works
+
+1. **Boot a real microVM per chat.** Firecracker gives hardware virtualization, not an emulated kernel, so untrusted code sees a real Linux kernel.
+2. **Convert images on demand.** Adapt's own control plane, [orc, turns any OCI/Docker image into a bootable VM rootfs on the fly and caches it](https://adapt.com/blog/orchestrating-agent-sandboxes), preserving the Dockerfile workflow.
+3. **Drop the warm pool.** [Sub-second boot removed the need for pre-warmed VMs](https://adapt.com/blog/orchestrating-agent-sandboxes); spin one up when a chat starts, kill it when it ends.
+
+## The catch
+
+Firecracker buys isolation and control, but you inherit what GKE Sandbox gave you for free: scheduling, networking, and lifecycle. Adapt had to build orc to get Docker's developer experience back. Right-sized CPU/memory per VM is what makes thousands of sandboxes economical — that tuning is now your job, not the platform's.
+
+[Security](/guide/security/)
