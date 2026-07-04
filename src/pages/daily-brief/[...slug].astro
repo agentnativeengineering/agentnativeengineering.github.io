@@ -94,7 +94,9 @@ const nextNo = () => String(++sec).padStart(2, '0');
         <span class="listen-label">LISTEN ▸</span>
         <a class="brief-btn ghost" href="/daily-brief/">Spotify</a>
         <a class="brief-btn ghost" href="/daily-brief/">Apple</a>
-        <a class="brief-btn ghost" href="/daily-brief/">YouTube</a>
+        {ep.data.youtube ? (
+          <a class="brief-btn ghost" href={ep.data.youtube} target="_blank" rel="noopener">YouTube</a>
+        ) : null}
       </div>
     </section>
 
