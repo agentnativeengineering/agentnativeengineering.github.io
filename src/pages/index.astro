@@ -80,7 +80,9 @@ const ticker = notesAll.slice(0, 4).map((n) => n.data.title);
           </div>
           <div class="brief-links">
             <a class="brief-btn solid" href={`/daily-brief/${featured.id}/`}>Open full edition</a>
-            <a class="brief-btn ghost" href="/daily-brief/">YouTube</a>
+            {featured.data.youtube && (
+              <a class="brief-btn ghost" href={featured.data.youtube} target="_blank" rel="noopener">YouTube</a>
+            )}
             <a class="brief-btn ghost" href="/daily-brief/">Spotify</a>
           </div>
         </div>

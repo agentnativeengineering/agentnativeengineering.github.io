@@ -60,6 +60,8 @@ const episodes = defineCollection({
     summary: z.string().optional(),
     // Site-relative mp3 path, e.g. /audio/<slug>.mp3
     audio: z.string(),
+    // The episode's YouTube "Audio Edition" watch URL (youtu.be/…), present once uploaded.
+    youtube: z.string().url().optional(),
     // Duration in seconds (from the audio master), rendered as mm:ss.
     seconds: z.number().int().positive(),
     // Field-note ids (YYYY-MM-DD-slug) this episode covers — the canonical episode↔note linkage.

@@ -4,6 +4,7 @@ date: 2026-07-04
 summary: "AI bug-hunters, agents on live networks, and a shrinking system prompt all point one way: the leverage is the judgment around the model."
 audio: "/audio/field-notes-episode-bug-hunters-and-agent-identity.mp3"
 seconds: 615
+youtube: "https://youtu.be/uhNBSSKdoMg"
 covers:
   - "2026-07-03-anthropic-cut-claude-code-system-prompt"
   - "2026-07-03-bake-reachability-rules-into-agent-fuzzing-goals"
