@@ -1,0 +1,37 @@
+---
+title: "A malicious agent skill passed three scanners, then changed after review"
+date: 2026-07-05
+summary: "AIR's fake skill cleared Cisco, Nvidia, and skills.sh scans, reached 26,000 users, then swapped its remotely-fetched instructions — point-in-time review can't govern skills that load content at runtime."
+takeaways:
+  - "Static, point-in-time scanning cannot secure a skill that fetches instructions remotely — after review, the author can swap the content, so pin anything fetched to a cryptographic hash."
+  - "Treat agent skills as third-party supply-chain dependencies: keep an enterprise-wide inventory with visibility into their external connections and data flows."
+  - "Restrict a skill's network calls to approved domains and monitor for unusual egress — distribution channels and trust signals (GitHub stars, repo merges) are gameable."
+tags: ["security", "skills", "supply-chain", "rug-pull"]
+sourceName: "CSO Online"
+sourceUrl: "https://www.csoonline.com/article/4188840/how-a-malicious-ai-agent-skill-passed-security-checks-and-reached-26000-users.html"
+sources:
+  - title: "How a malicious AI agent skill passed security checks and reached 26,000 users (CSO Online)"
+    url: "https://www.csoonline.com/article/4188840/how-a-malicious-ai-agent-skill-passed-security-checks-and-reached-26000-users.html"
+draft: false
+---
+## What happened
+
+In research reported on 2026-06-24, security firm AIR [built a fake agent skill called brand-landingpage](https://www.csoonline.com/article/4188840/how-a-malicious-ai-agent-skill-passed-security-checks-and-reached-26000-users.html) — pitched as a helper for Google's Stitch design tool — and ran it against skill scanners from Cisco, Nvidia, and skills.sh. All three marked it safe. After building trust signals (GitHub reputation, a merge into a popular open-source agents repository), the skill reached over 26,000 users via Instagram, some of them agents tied to corporate accounts. Then came the real lesson: AIR changed the content behind the fake documentation the skill fetched, showing a skill can pass review and alter its behavior later. The benign test payload collected only email addresses so users could be notified.
+
+## Why it matters
+
+A skill is an executable instruction bundle your agent obeys. If it fetches any instructions at runtime, a point-in-time scan proves nothing about tomorrow's behavior — AIR says [a similar attack could have exposed private conversations and internal systems](https://www.csoonline.com/article/4188840/how-a-malicious-ai-agent-skill-passed-security-checks-and-reached-26000-users.html).
+
+## How it works
+
+1. **Inventory.** Maintain an enterprise-wide list of installed skills, with visibility into each one's external connections and data flows.
+2. **Pin.** For any skill that fetches external instructions, use version pinning and immutable references — tie fetched content to a cryptographic hash, hosted in an environment you control.
+3. **Restrict egress.** Limit a skill's network calls to approved domains and monitor for unusual activity.
+
+> A skill scan is a snapshot; a skill that fetches remote instructions is a movie — it has to be governed like a third-party supply-chain dependency.
+
+## The catch
+
+Hash pinning only protects content that is fetched; it does not vet what the pinned instructions do, and re-pinning on every upstream update reintroduces the review burden. The scanners named here failed on this one crafted sample — that shows the class of gap, not that scanning is useless.
+
+[Security](/guide/security/)

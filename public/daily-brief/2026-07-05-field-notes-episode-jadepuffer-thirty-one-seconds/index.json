@@ -1,0 +1,85 @@
+{
+  "type": "brief",
+  "slug": "field-notes-episode-jadepuffer-thirty-one-seconds",
+  "title": "The First AI-Run Ransomware Recovered From Its Own Mistake in Thirty-One Seconds",
+  "date": "2026-07-05",
+  "summary": "Sysdig's JADEPUFFER ransomware ran itself, AISI shows capped benchmarks read the floor, and Adapt boots a microVM per chat — defense at machine speed.",
+  "audio": "/audio/field-notes-episode-jadepuffer-thirty-one-seconds.mp3",
+  "youtube": "https://youtu.be/d0QtdC5s9YM",
+  "seconds": 561,
+  "covers": [
+    "2026-07-04-firecracker-microvm-agent-sandboxes-at-scale",
+    "2026-07-04-fixed-token-budgets-benchmarks-read-the-floor",
+    "2026-07-04-ai-bug-hunting-flipped-bottleneck-patching-cves"
+  ],
+  "oneIdea": {
+    "title": "A fixed compute budget makes an agent benchmark report the minimum capability: AISI found 10x the tokens stretched the frontier time horizon from ~2 hours to 14.",
+    "body": "The UK's AI Security Institute tested frontier models across seven benchmarks at varying compute budgets and found performance still climbing when standard caps cut it off — with the biggest gains on tasks where the agent can verify its own work, like code and exploits. That matters beyond leaderboards: the same week, Sysdig documented JADEPUFFER, the first LLM-run ransomware, exploiting old unpatched flaws at machine speed. Planning security around capped benchmark scores means planning around a floor while attackers work from the curve."
+  },
+  "stats": [
+    {
+      "n": "31 s",
+      "label": "JADEPUFFER went from a failed login to a working fix — no human in the loop"
+    },
+    {
+      "n": "~1,500",
+      "label": "high/critical CVEs reported in June 2026, over 3.5x the previous monthly record"
+    },
+    {
+      "n": "2→14 hrs",
+      "label": "frontier agent time horizon when the token budget grows tenfold (AISI)"
+    },
+    {
+      "n": "24%",
+      "label": "best model's solve rate on Snorkel's Senior SWE-Bench of real, under-specified tasks"
+    }
+  ],
+  "brief": [
+    {
+      "kind": "story",
+      "title": "The first LLM-run ransomware got in through a years-old unpatched flaw",
+      "take": true,
+      "domain": "security",
+      "source": "Sysdig",
+      "url": "https://www.sysdig.com/blog/jadepuffer-agentic-ransomware-for-automated-database-extortion",
+      "body": "Sysdig's threat research team documented JADEPUFFER, which it assesses as the first ransomware operation driven end-to-end by an LLM agent. It entered through a known unpatched Langflow CVE, pivoted to a production database, and recovered from a failed step in 31 seconds. With AI bug-hunting driving a record ~1,500 high/critical CVEs in June, the binding constraint is now triage and patching, not discovery."
+    },
+    {
+      "kind": "story",
+      "title": "AISI: fixed token budgets make agent benchmarks read the floor, not the true curve",
+      "take": false,
+      "domain": "evaluation",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/uks-ai-security-institute-finds-standard-benchmarks-systematically-underestimate-what-ai-agents-can-actually-do/",
+      "body": "The UK's AI Security Institute tested frontier models across seven benchmarks and found capability is a curve over compute — 10x the token budget lifted software-engineering success ~25% and stretched the frontier time horizon from ~2 to 14 hours. Gains concentrate where agents can verify their own work; Snorkel's Senior SWE-Bench shows realism cuts the other way, with the best model at 24%."
+    },
+    {
+      "kind": "story",
+      "title": "Adapt runs a Firecracker microVM for every agent conversation",
+      "take": false,
+      "domain": "security",
+      "source": "Adapt",
+      "url": "https://adapt.com/blog/orchestrating-agent-sandboxes",
+      "body": "Adapt CTO Sean Smith describes outgrowing gVisor's syscall overhead and boot-control limits, and moving to hardware-virtualized Firecracker microVMs — one per conversation. Sub-second boots let them kill the warm pool entirely, at the cost of building their own control plane for scheduling, networking, and OCI-to-rootfs conversion."
+    },
+    {
+      "kind": "story",
+      "title": "Alibaba bans employees from Claude Code, labeling it high-risk software",
+      "take": false,
+      "domain": "security",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/07/04/alibaba-reportedly-bans-employees-from-using-claude-code/",
+      "body": "Alibaba will reportedly bar employees from Anthropic's Claude Code starting July 10, steering staff to its in-house Qoder tool after a Reddit post claimed a version could identify Chinese users — which an Anthropic developer described as a March anti-reseller experiment being removed. A sharp escalation in the tug-of-war over Chinese access to frontier coding agents."
+    },
+    {
+      "kind": "quote",
+      "title": "AI didn't just speed up finding bugs; it turned your unpatched backlog into a machine-speed attack surface.",
+      "take": false,
+      "domain": "security",
+      "source": "Agent Native Engineering",
+      "url": "https://www.sysdig.com/blog/jadepuffer-agentic-ransomware-for-automated-database-extortion",
+      "attribution": "— the lesson from Sysdig's JADEPUFFER research"
+    }
+  ],
+  "transcript": "[warm] Thirty-one seconds. [pause] That's how long a ransomware agent needed to fix its failed break-in... and keep moving. [curious] So when attacks run at machine speed — what on our side keeps up?\n\n[pause] [warm] This is the Agentic Daily Brief.\n\nAlibaba just told its engineers to put down Claude Code. Starting July tenth, the company reportedly bans Anthropic's coding agent as high-risk software and points everyone at its in-house tool, Qoder, instead. The spark was a Reddit post claiming one version of Claude Code could quietly identify Chinese users — an Anthropic developer called that a March experiment aimed at unauthorized resellers, now being removed — but the ban still marks a sharp escalation in the fight over Chinese access to frontier coding agents.\n\nOne more: England's NHS says an AI triage agent will sit in its app for every patient by twenty twenty-eight, deciding whether you need a doctor, a pharmacist, or the emergency room.\n\n[pause] Right — let's go back to that break-in, because it lands close to home. Somewhere in your company there's a list of known bugs nobody has patched yet. Every team has one. This week, that list quietly changed from a chore... into a target.\n\nSysdig's threat research team documented what they assess is the first ransomware operation run end-to-end by a language model. They named it JADEPUFFER. No human at a keyboard — the agent broke into an internet-facing Langflow server, a tool for building agent workflows, then pivoted to a production database and ran a full extortion playbook against it. If you run anything agent-shaped that faces the internet, this one is about you.\n\n[curious] The part that stopped me was the way in. How did it get through? ... Not with anything clever. Through a known, public flaw — old, fix long available, never applied. When one login attempt failed, the agent diagnosed — well, guessed, then tested — a repair, and had it working [slow] thirty-one seconds after the failure. Its own code narrated its reasoning as it went, you know, the way model-written code explains itself without being asked.\n\nZoom out, and the other half of the picture is a chart from Epoch AI. June set a record: roughly fifteen hundred high or critical vulnerabilities reported in a single month, more than triple the old monthly record — right as the big labs' AI bug-hunting programs spun up. [surprised] Finding flaws has gotten that cheap, that quickly.\n\nThe more important question isn't how many bugs the machines can find — it's how fast anyone fixes them. Discovery used to be the expensive half of security. um... not anymore. The slow half now is everything after: deciding what matters, shipping the patch, rolling it out. The human half.\n\nWhere the scary number oversells: that spike counts reports, not your exposure — most of those flaws live in software you may not even run, and better hunting isn't the same as new risk. What JADEPUFFER proves is duller, and worse. It didn't need a fresh discovery at all. Your unpatched backlog is now an attack surface, and it gets probed faster than any human team moves.\n\nWhich left me squinting at the other numbers we lean on... because if a bug count can read too high, a capability score can read too low.\n\n[curious] Nearly every decision you make about agents — what to buy, what to allow, what to worry about — rests on benchmark scores. The UK's AI Security Institute just showed those scores are systematically understated. Their study ran frontier models across a spread of benchmarks and varied one thing: the compute budget, how many tokens the agent may burn before time's up. Standard evals cap that budget. Performance, it turns out, is still climbing when the cap cuts it off. Hand the agent ten times the budget, and the stretch of human work it can finish grows from about two hours... [slow] to fourteen.\n\nCut the budget while the curve is still climbing, and the score tells you the minimum, not the maximum.\n\n[thoughtful] My read is that this is a safety finding wearing a benchmark costume. If you plan around what agents can't do, a floor dressed up as a ceiling means you're under-planning — and the gains concentrate where an agent can check its own work, running code, testing an exploit... uh, exactly the territory from our first story.\n\nSo is more compute the whole answer? No. Extra tokens barely move tasks where the agent gets no feedback — medical benchmarks plateau early. Realism cuts the other way too: Snorkel built a benchmark from real senior-engineer work, or rather, work the way it actually arrives — vague, half-specified — and the best model there solves fewer than one in four tasks. Same agent, two rulers. A fourteen-hour worker on one, a struggling junior on the other, and the ruler you pick decides what you believe.\n\nOne last story. Measurement is one kind of defense. Walls are the other — and one team just wrote up what real walls cost.\n\nWhen a chat agent can install software, browse, and run programs it wrote itself, I mean — that's untrusted code, full stop. What keeps one person's agent out of everyone else's data? ... At Adapt, the answer is a whole computer. Sean Smith, their CTO, described giving every single conversation its own virtual machine, born the moment the chat starts.\n\nThey didn't begin there. The first try was gVisor, a software stand-in for the operating system's kernel — and at scale it hurt. Everything ran a little slower, some things behaved subtly wrong, and they had no control over boot times or how machines packed together. The switch was to Firecracker — stripped-down virtual machines with real hardware walls, booting in [surprised] a few hundred milliseconds.\n\nThat speed changed the whole shape of the system. Boot fast enough, and you don't need idle spares warmed up and waiting. Spin a machine up when the conversation starts. Tear it down when it ends. [whispers] Nothing lingers.\n\nTheir bet isn't free, though. Owning real virtual machines means owning the plumbing a managed platform used to handle — scheduling, networking, turning container images into bootable disks — so Adapt built an entire control plane just to win back the convenience they gave up. Set that next to the break-in story and Adapt reads like the other side of the same day: assume the agent's code might go wrong, and shrink the blast radius to one conversation.\n\n[warm] Before you head off, one small thing worth doing Monday: list your internet-facing services and ask a single question — which one has a published fix we haven't applied, and for how long? That exact gap, on one exposed server, was JADEPUFFER's entire way in.\n\n[curious] If you've got a little time this weekend, Peter Yang has a talk worth watching, called Agents will use apps more than humans. His argument, leaning on Cloudflare data, is that bot traffic already tops human traffic — so an app built for human clicks risks becoming a dumb pipe an agent steers from the outside. The idea to carry: make your product something agents can discover and use, through APIs, command lines, and MCP, the standard plug for wiring tools to agents.\n\n[pause] So, the question from the top: when an attacker recovers from its own mistake in half a minute, what keeps pace on defense? [slow] Mostly, boring things. The old patch applied this week instead of next quarter. A throwaway machine around every conversation. A longer ruler before we decide what agents can't do. Unglamorous, all of it — and right now, that's the half that decides.\n\nThat's today's Agentic Daily Brief. [pause] Brought to you by Agent Native Engineering — open knowledge for building and running AI agents. The full write-ups, with their sources, are at agent native engineering dot com. [warm] See you next time."
+}
