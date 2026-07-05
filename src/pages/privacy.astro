@@ -1,0 +1,93 @@
+---
+import Base from '../layouts/Base.astro';
+import Footer from '../components/Footer.astro';
+
+const updated = 'July 5, 2026';
+---
+
+<Base
+  title="Privacy Policy — Agent Native Engineering"
+  description="What agentnativeengineering.com collects (almost nothing), what your browser stores locally, and who processes the technical data needed to serve the site."
+>
+  <div class="wrap" data-r="pad">
+    <article class="article">
+      <a class="backlink" href="/">← Home</a>
+      <header style="margin:22px 0 0">
+        <div class="eyebrow">// PRIVACY</div>
+        <h1 class="page-h1" data-r="page-h1" style="margin-top:14px">Privacy Policy</h1>
+        <p class="page-dek" style="margin-top:10px">Last updated: {updated}</p>
+      </header>
+      <div class="prose" style="margin-top:30px">
+        <p>
+          <strong>The short version.</strong> Agent Native Engineering (<a href="https://agentnativeengineering.com">agentnativeengineering.com</a>)
+          is a static, open publication. It has no accounts, no sign-in, no forms, no advertising, and
+          no analytics or tracking cookies. We do not collect, sell, or share your personal information.
+          The only data involved is the technical information any website needs to be delivered to your
+          browser, plus one small preference your own browser stores locally.
+        </p>
+
+        <h2>What we collect directly</h2>
+        <p>
+          Nothing. There is no login, contact form, comment system, newsletter signup, or tracking
+          pixel on this site. We do not run Google Analytics or any equivalent, and we do not set
+          advertising or tracking cookies.
+        </p>
+
+        <h2>What your browser stores locally</h2>
+        <p>
+          The audio player on the <a href="/daily-brief/">Daily Brief</a> uses your browser's
+          <code>localStorage</code> to remember your playback position in an episode, so you can resume
+          where you left off. This value stays on your device, is readable only by this site, and is
+          never transmitted to us or anyone else. Clearing your browser storage removes it.
+        </p>
+
+        <h2>Hosting and delivery</h2>
+        <p>
+          The site is hosted on <a href="https://pages.github.com/">GitHub Pages</a> and served through
+          <a href="https://www.cloudflare.com/">Cloudflare</a>'s content-delivery network. To deliver
+          pages and protect against abuse, these providers automatically process standard technical
+          request data — such as your IP address, browser user-agent, and the URLs you request — in
+          their server logs. That processing is governed by their policies, not ours:
+          <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub's Privacy Statement</a>
+          and <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare's Privacy Policy</a>.
+          We do not receive individually identifying analytics from them.
+        </p>
+
+        <h2>Share buttons and external links</h2>
+        <p>
+          Some cards include share actions (copy link, X, LinkedIn). These do nothing until you click
+          them; when you do, they hand off to that service or your clipboard using its own share
+          mechanism, subject to that service's privacy policy. The site also links out to primary
+          sources across the web — those destinations have their own policies, and we are not
+          responsible for their practices.
+        </p>
+
+        <h2>Podcast and RSS</h2>
+        <p>
+          Audio files and the <a href="/rss.xml">RSS feed</a> are plain static files. Requesting them
+          involves the same hosting/CDN processing described above and no additional tracking.
+        </p>
+
+        <h2>Children</h2>
+        <p>
+          This site is intended for a general professional audience and is not directed to children
+          under 13. We do not knowingly collect information from children.
+        </p>
+
+        <h2>Changes</h2>
+        <p>
+          If our practices change, we will update this page and revise the date above. Because the site
+          is open source, the full history of this policy is visible in the project's git history.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          Questions about this policy can be raised through the project on GitHub at
+          <a href="https://github.com/agentnativeengineering">github.com/agentnativeengineering</a>.
+        </p>
+      </div>
+    </article>
+  </div>
+
+  <Footer slot="footer" variant="slim" left={'Privacy · <span class="strong">Agent Native Engineering</span> · CC BY 4.0'} />
+</Base>
