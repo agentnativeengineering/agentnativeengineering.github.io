@@ -4,6 +4,7 @@ date: 2026-06-27
 summary: "Curated context made GitHub's Qubot 3x sharper, GLM-5.2 crossed the open-agent line, and a sandbox can't contain an agent's credentials."
 audio: "/audio/field-notes-episode-what-makes-agents-reliable.mp3"
 seconds: 504
+youtube: "https://youtu.be/7mWQ_hWsB-E"
 covers:
   - "2026-06-26-sandboxes-dont-solve-agent-credential-authorization"
   - "2026-06-26-open-model-crosses-agent-reliability-line"

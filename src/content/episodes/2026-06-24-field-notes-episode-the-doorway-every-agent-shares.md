@@ -4,6 +4,7 @@ date: 2026-06-24
 summary: "Where to put agent controls: at the one boundary every harness shares, treating agents as well-meaning insiders, not outside attackers."
 audio: "/audio/field-notes-episode-the-doorway-every-agent-shares.mp3"
 seconds: 474
+youtube: "https://youtu.be/7W14hvDxe7Y"
 covers:
   - "2026-06-15-bound-agent-llm-spend-at-the-gateway"
   - "2026-06-23-deepmind-agents-as-insider-threats"

@@ -4,6 +4,7 @@ date: 2026-06-25
 summary: "A nine-second database deletion, an agent emailing strangers, and 80% of agent code that's plumbing — why agent safety lives in structure."
 audio: "/audio/field-notes-episode-the-structure-around-the-model.mp3"
 seconds: 501
+youtube: "https://youtu.be/IMVw1bvpK74"
 covers:
   - "2026-06-13-harness-not-model-decides-production-reliability"
   - "2026-06-13-intersection-rule-agent-delegated-access"
