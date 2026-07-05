@@ -10,10 +10,12 @@ permissions:
   pages: write
   id-token: write
 
-# Allow one concurrent deployment; never cancel an in-progress publish.
+# One deployment at a time. Cancel an older in-progress/queued deploy when a newer push arrives —
+# for a static content site latest-always-wins is correct, and it prevents GitHub Pages'
+# "Deployment failed, try again later" collision when two deploys overlap on rapid pushes.
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
