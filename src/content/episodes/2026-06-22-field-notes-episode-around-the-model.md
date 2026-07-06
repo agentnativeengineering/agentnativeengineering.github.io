@@ -4,6 +4,7 @@ date: 2026-06-22
 summary: "A cheap model panel matched a frontier model at half cost, skill scanners fell in under an hour, and agents fabricate the why."
 audio: "/audio/field-notes-episode-around-the-model.mp3"
 seconds: 458
+youtube: "https://youtu.be/4KrpZ5cF5yA"
 covers:
   - "2026-06-15-intent-debt-agents-fabricate-instead-of-fixing"
   - "2026-06-15-skill-scanners-failed-treat-marketplaces-untrusted-code"
