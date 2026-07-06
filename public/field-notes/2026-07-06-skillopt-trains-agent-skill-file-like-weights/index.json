@@ -1,0 +1,28 @@
+{
+  "type": "note",
+  "slug": "skillopt-trains-agent-skill-file-like-weights",
+  "title": "SkillOpt trains an agent's skill file like model weights",
+  "date": "2026-07-06",
+  "summary": "Microsoft Research treats an agent's markdown skill file as a trainable parameter, optimized by a rollout-reflection-edit loop that an optimizer model runs against a frozen target.",
+  "domain": "harness-engineering",
+  "tags": [
+    "harness-engineering",
+    "agent-skills",
+    "optimization",
+    "transferability"
+  ],
+  "takeaways": [
+    "A skill file is a markdown document you can optimize like a weight: an optimizer LLM reads the frozen model's execution traces and proposes small add/delete/replace edits, keeping only edits that score strictly higher.",
+    "The learned skill transfers across models: a spreadsheet skill trained inside Codex, dropped into Claude Code with no further tuning, lifted the no-skill baseline from 22.1 to 81.8.",
+    "The loop only works when you can grade outcomes; the validation gate needs a measurable reward signal on a real task set."
+  ],
+  "sourceName": "Microsoft Research",
+  "sourceUrl": "https://www.microsoft.com/en-us/research/blog/skillopt-agent-skills-as-trainable-parameters/",
+  "sources": [
+    {
+      "title": "SkillOpt: Agent Skills as Trainable Parameters (Microsoft Research)",
+      "url": "https://www.microsoft.com/en-us/research/blog/skillopt-agent-skills-as-trainable-parameters/"
+    }
+  ],
+  "body": "## What happened\n\nIn a [Microsoft Research post dated 2026-06-30](https://www.microsoft.com/en-us/research/blog/skillopt-agent-skills-as-trainable-parameters/), a method called SkillOpt reframes an agent's *skill file* — a plain-markdown document holding procedures, domain heuristics, tool-use policies, output constraints, and known failure modes — as a [trainable parameter that lives outside a frozen model](https://www.microsoft.com/en-us/research/blog/skillopt-agent-skills-as-trainable-parameters/). A separate optimizer model watches the target model's execution traces and rewrites the document. Across [52 evaluation cells it reports best or tied-best results](https://www.microsoft.com/en-us/research/blog/skillopt-agent-skills-as-trainable-parameters/), lifting SpreadsheetBench from 41.8 to 80.7.\n\n## Why it matters\n\nMost teams hand-tune their AGENTS.md and skill files by trial and error, with no objective and no memory of what already failed. SkillOpt turns that ad-hoc editing into a systematic training loop, so the artifact your harness actually ships improves against a measured target instead of a hunch.\n\n## How it works\n\n1. **Forward.** The frozen target model runs a batch of training tasks using the current skill.\n2. **Backward.** The optimizer model reads the resulting trajectories in reflection minibatches.\n3. **Update.** It proposes small add/delete/replace edits, clipped by a textual \"learning rate\" (a per-step edit budget).\n4. **Gate.** A candidate is adopted only if it scores strictly higher; [rejected edits enter a buffer that serves as negative feedback](https://www.microsoft.com/en-us/research/blog/skillopt-agent-skills-as-trainable-parameters/).\n\n> The only object that learns is a single markdown file.\n\n## The catch\n\nThe [validation gate](https://www.microsoft.com/en-us/research/blog/skillopt-agent-skills-as-trainable-parameters/) needs a graded task set — you can only keep the higher-scoring skill if you can score outcomes, so this suits verifiable tasks, not open-ended ones. The transfer result ([Codex-trained skill lifting Claude Code from 22.1 to 81.8](https://www.microsoft.com/en-us/research/blog/skillopt-agent-skills-as-trainable-parameters/)) is one spreadsheet benchmark, and the numbers are Microsoft's own, not yet independently reproduced.\n\n[Harness Engineering](/guide/harness-engineering/)"
+}
