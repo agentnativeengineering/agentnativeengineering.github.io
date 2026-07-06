@@ -4,6 +4,7 @@ date: 2026-06-21
 summary: "Three notes, one rule: an agent pays off only where a trustworthy judge — the description, the human checkpoint, the frozen benchmark — stays out of its reach."
 audio: "/audio/field-notes-episode-never-grade-its-own-homework.mp3"
 seconds: 521
+youtube: "https://youtu.be/-7cEsLJUZms"
 covers:
   - "2026-06-15-optimization-agent-benchmark-cant-game"
   - "2026-06-15-agents-move-human-operator-to-supervisor"

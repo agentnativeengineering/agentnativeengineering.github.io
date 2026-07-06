@@ -4,6 +4,7 @@ date: 2026-06-23
 summary: "Three production teams converge: don't grep the whole repo, don't route every step to the frontier model, don't over-delegate — spend the expensive thing on purpose."
 audio: "/audio/field-notes-episode-spend-the-expensive-thing-deliberately.mp3"
 seconds: 476
+youtube: "https://youtu.be/F8MzShHkAWA"
 covers:
   - "2026-06-15-github-copilot-cli-selective-delegation"
   - "2026-06-15-reserve-frontier-model-for-reasoning"

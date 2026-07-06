@@ -4,6 +4,7 @@ date: 2026-06-20
 summary: "Three security lessons where the real risk lived in the harness around the model, not the model itself."
 audio: "/audio/field-notes-episode-the-model-wasnt-the-weak-point.mp3"
 seconds: 584
+youtube: "https://youtu.be/Ph_vZibRyIA"
 covers:
   - "2026-06-16-model-is-absorbing-the-harness"
   - "2026-06-19-autonomous-llm-agent-found-salesforce-data-exposure"
