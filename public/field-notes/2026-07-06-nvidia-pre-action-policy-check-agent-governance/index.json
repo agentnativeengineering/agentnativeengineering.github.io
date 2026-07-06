@@ -1,0 +1,40 @@
+{
+  "type": "note",
+  "slug": "nvidia-pre-action-policy-check-agent-governance",
+  "title": "NVIDIA gates every agent action behind a pre-action policy check",
+  "date": "2026-07-06",
+  "summary": "NVIDIA's Secure Agent Workspace reference design treats agent governance as a runtime control — default-deny networking, a credential proxy, signed policy bundles, and a policy check before every single action — a pattern AWS and Microsoft ship independently.",
+  "domain": "security",
+  "tags": [
+    "security",
+    "agent-governance",
+    "guardrails",
+    "least-privilege"
+  ],
+  "takeaways": [
+    "Gate every state-changing agent action behind an inline policy check and a human approval.",
+    "Agents ship faster than the controls around them, so an audit log written after the fact can't stop a bad action — only a check before it can.",
+    "Default-deny the network, proxy credentials so the agent never sees raw secrets, deliver signed policy bundles, and verify them before each step."
+  ],
+  "sourceName": "NVIDIA Developer Blog",
+  "sourceUrl": "https://developer.nvidia.com/blog/how-to-govern-autonomous-agents-in-enterprise-ai-factories/",
+  "sources": [
+    {
+      "title": "How to Govern Autonomous Agents in Enterprise AI Factories (NVIDIA, 2026-06-29)",
+      "url": "https://developer.nvidia.com/blog/how-to-govern-autonomous-agents-in-enterprise-ai-factories/"
+    },
+    {
+      "title": "Four Security Principles for Agentic AI Systems (AWS, 2026-04-02)",
+      "url": "https://aws.amazon.com/blogs/security/four-security-principles-for-agentic-ai-systems/"
+    },
+    {
+      "title": "Introducing the Agent Governance Toolkit (Microsoft, 2026-04-02)",
+      "url": "https://opensource.microsoft.com/blog/2026/04/02/introducing-the-agent-governance-toolkit-open-source-runtime-security-for-ai-agents/"
+    },
+    {
+      "title": "Governing the Agentic Enterprise (California Management Review, 2026-03-20)",
+      "url": "https://cmr.berkeley.edu/2026/03/governing-the-agentic-enterprise-a-new-operating-model-for-autonomous-ai-at-scale/"
+    }
+  ],
+  "body": "## What happened\nOn [2026-06-29](https://developer.nvidia.com/blog/how-to-govern-autonomous-agents-in-enterprise-ai-factories/) NVIDIA published a reference design for running autonomous agents in the enterprise that treats governance as a runtime control enforced before each action. The rules are concrete: [\"Block all internet traffic by default\"](https://developer.nvidia.com/blog/how-to-govern-autonomous-agents-in-enterprise-ai-factories/) with an explicit allowlist; a [\"secure proxy that handles those keys behind the scenes so the agent never sees the raw secrets\"](https://developer.nvidia.com/blog/how-to-govern-autonomous-agents-in-enterprise-ai-factories/); signed policy bundles plus a check that [\"the security rules are active and working before every single action the agent performs\"](https://developer.nvidia.com/blog/how-to-govern-autonomous-agents-in-enterprise-ai-factories/); and human sign-off on [\"any agent action that changes a system (like merging code or updating tickets)\"](https://developer.nvidia.com/blog/how-to-govern-autonomous-agents-in-enterprise-ai-factories/).\n\n## Why it matters\nAgents are being deployed faster than the controls around them. A Google technical lead writing in [California Management Review](https://cmr.berkeley.edu/2026/03/governing-the-agentic-enterprise-a-new-operating-model-for-autonomous-ai-at-scale/) calls it the \"Orchestration Gap,\" where \"decentralized software outpaces centralized human management.\" An audit log tells you what a rogue action did; only a check before the action can stop it.\n\n## How it works\n1. **Least privilege, per agent.** Give each agent its own identity and default-deny access — AWS makes the same point: [\"Agents require their own identities, secure credential storage, and least-privilege authorization\"](https://aws.amazon.com/blogs/security/four-security-principles-for-agentic-ai-systems/).\n2. **Enforce in the execution path.** Microsoft's open-source Agent Governance Toolkit [\"intercepts every agent's action before execution\"](https://opensource.microsoft.com/blog/2026/04/02/introducing-the-agent-governance-toolkit-open-source-runtime-security-for-ai-agents/) — the check sits inline in the execution path, at sub-millisecond latency.\n3. **Human-in-the-loop for mutations.** Route any state-changing action to a person; AWS reserves this for [\"actions that could modify high-value production data, initiate financial transactions, or communicate sensitive information externally\"](https://aws.amazon.com/blogs/security/four-security-principles-for-agentic-ai-systems/).\n\n> Governance you can't enforce before the action is just a record of what went wrong.\n\n## The catch\nThis is NVIDIA describing its own reference stack, and \"AI factory\" is its framing — read it as one vendor's product architecture rather than a neutral standard. But the load-bearing ideas — default-deny, credential proxy, signed policy, pre-action checks, human approval — show up independently at [AWS](https://aws.amazon.com/blogs/security/four-security-principles-for-agentic-ai-systems/) and [Microsoft](https://opensource.microsoft.com/blog/2026/04/02/introducing-the-agent-governance-toolkit-open-source-runtime-security-for-ai-agents/), which is what makes them worth copying no matter whose product you buy.\n\n[Security](/guide/security/)"
+}
