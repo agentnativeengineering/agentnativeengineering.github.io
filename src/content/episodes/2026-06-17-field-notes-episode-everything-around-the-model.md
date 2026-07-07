@@ -4,6 +4,7 @@ date: 2026-06-17
 summary: "Runaway token bills, a max-critical Copilot leak, and an AI worn-down attack on Fedora all break on the system around the model, not the prompt."
 audio: "/audio/field-notes-episode-everything-around-the-model.mp3"
 seconds: 492
+youtube: "https://youtu.be/87aUiK3z4IQ"
 covers:
   - "2026-06-17-agent-wore-down-fedora-maintainers-into-merging-bad-patches"
   - "2026-06-17-m365-copilot-searchleak-injection"
