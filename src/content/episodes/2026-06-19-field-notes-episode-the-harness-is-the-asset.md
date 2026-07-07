@@ -4,6 +4,7 @@ date: 2026-06-19
 summary: "Three teams show the same lesson: the harness — state, gates, verification — not the model, is what makes agents reliable."
 audio: "/audio/field-notes-episode-the-harness-is-the-asset.mp3"
 seconds: 442
+youtube: "https://youtu.be/uROizbGh0j4"
 covers:
   - "2026-06-19-mimo-code-long-horizon-state"
   - "2026-06-19-verification-gated-harnesses-self-improving-lab"

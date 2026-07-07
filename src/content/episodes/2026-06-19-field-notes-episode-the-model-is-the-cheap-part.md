@@ -4,6 +4,7 @@ date: 2026-06-19
 summary: "Three teams found the same thing: agents break in the software around the model, not the model — and that layer is what's worth owning."
 audio: "/audio/field-notes-episode-the-model-is-the-cheap-part.mp3"
 seconds: 454
+youtube: "https://youtu.be/dJnP5WgxEUo"
 covers:
   - "2026-06-16-rocket-close-supercharger-single-call-retrieval"
   - "2026-06-17-mcp-tools-fail-on-interface-clarity"

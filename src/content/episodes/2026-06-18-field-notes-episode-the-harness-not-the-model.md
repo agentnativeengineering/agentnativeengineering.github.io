@@ -4,6 +4,7 @@ date: 2026-06-18
 summary: "Three teams hit the same wall this week — a lying test dashboard, approval fatigue, and idle-pod waste — and in each the fix was the harness, not the model."
 audio: "/audio/field-notes-episode-the-harness-not-the-model.mp3"
 seconds: 583
+youtube: "https://youtu.be/oeMLfbzFB1o"
 covers:
   - "2026-06-18-pod-per-agent-model-wastes-compute"
   - "2026-06-18-when-the-dashboard-lies-adversarial-checks-beat-green-tests"
