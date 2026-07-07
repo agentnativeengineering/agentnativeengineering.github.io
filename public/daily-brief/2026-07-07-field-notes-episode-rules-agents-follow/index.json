@@ -1,0 +1,103 @@
+{
+  "type": "brief",
+  "slug": "field-notes-episode-rules-agents-follow",
+  "title": "Microsoft's Skill File That Trains Like a Weight, and Dropbox's One-in-Eight Gap",
+  "date": "2026-07-07",
+  "summary": "NVIDIA, Microsoft Research, and Dropbox each show a written rule for an agent only holds when something keeps checking or retraining it.",
+  "audio": "/audio/field-notes-episode-rules-agents-follow.mp3",
+  "youtube": "https://youtu.be/W5OTRXKySaM",
+  "seconds": 508,
+  "covers": [
+    "2026-06-12-dropbox-agent-checks-prs-against-threat-models",
+    "2026-07-06-nvidia-pre-action-policy-check-agent-governance",
+    "2026-07-06-skillopt-trains-agent-skill-file-like-weights"
+  ],
+  "oneIdea": {
+    "title": "A skill file optimized inside one coding agent, dropped into a different model untouched, lifted its score from 22 to 82 — the workflow knowledge transferred, not just the benchmark number.",
+    "body": "Microsoft Research's SkillOpt treats an agent's markdown skill file as a trainable parameter, editing it against a measured reward instead of a hunch. The striking result is transfer: a spreadsheet skill learned in one harness worked in a completely different model with no retuning, lifting a 22-out-of-100 baseline to 82. That suggests these files capture reusable workflow knowledge, not benchmark-specific tricks."
+  },
+  "stats": [
+    {
+      "n": "12%",
+      "label": "Share of Dropbox implementing PRs that linked back to their threat model"
+    },
+    {
+      "n": "22→82",
+      "label": "A spreadsheet skill trained in one agent, dropped into another, lifted its score (SkillOpt)"
+    },
+    {
+      "n": "80%",
+      "label": "Design reviews Dropbox's semantic search reconnected to their implementing PRs"
+    },
+    {
+      "n": "69%",
+      "label": "Of those recovered links had no shared ID to grep for — findable only by meaning"
+    }
+  ],
+  "brief": [
+    {
+      "kind": "story",
+      "title": "NVIDIA gates every agent action behind a pre-action policy check",
+      "take": true,
+      "domain": "security",
+      "source": "NVIDIA",
+      "url": "https://developer.nvidia.com/blog/how-to-govern-autonomous-agents-in-enterprise-ai-factories/",
+      "body": "NVIDIA's reference design for enterprise agents enforces governance at runtime: default-deny networking, a credential proxy so the agent never sees raw secrets, signed policy bundles, and a check before every single action. The same load-bearing pieces show up independently at AWS and Microsoft, which is what makes them worth copying whoever you buy from."
+    },
+    {
+      "kind": "story",
+      "title": "Dropbox built an agent that checks PRs against their threat models",
+      "take": false,
+      "domain": "security",
+      "source": "Dropbox.Tech",
+      "url": "https://dropbox.tech/security/dropbox-mcp-dash-design-code-security",
+      "body": "Across 150 design reviews, only 12% of implementing PRs linked back to their threat model. Dropbox's agent retrieves the relevant threat model at code-review time and compares it against the diff — and retrieval was the hard half, with semantic search reconnecting 80% of reviews, 69% of them with no shared ID to grep for."
+    },
+    {
+      "kind": "story",
+      "title": "SkillOpt trains an agent's skill file like model weights",
+      "take": false,
+      "domain": "harness-engineering",
+      "source": "Microsoft Research",
+      "url": "https://www.microsoft.com/en-us/research/blog/skillopt-agent-skills-as-trainable-parameters/",
+      "body": "SkillOpt treats an agent's markdown skill file as a trainable parameter: an optimizer model reads execution traces and proposes small edits, keeping only ones that score strictly higher. A spreadsheet skill trained in Codex, dropped into Claude Code untouched, lifted the no-skill baseline from 22 to 82 — evidence the workflow knowledge transfers across models."
+    },
+    {
+      "kind": "story",
+      "title": "Tencent open-sources Hy3, a lean model it says punches above its weight",
+      "take": false,
+      "domain": "harness-engineering",
+      "source": "Tencent",
+      "url": "https://the-decoder.com/tencent-releases-hy3-open-source-model-that-allegedly-matches-models-up-to-five-times-its-active-size/",
+      "body": "Hy3 is an Apache-2.0 Mixture-of-Experts model with 295B total parameters but only ~21B active per token, which Tencent says matches models two to five times its active size. It also reports hallucinations dropping from 12.5% to 5.4%, and the open license means near-frontier quality at far lower inference cost."
+    },
+    {
+      "kind": "story",
+      "title": "Zhipu launches ZCode, a cut-price rival to Claude Code and Codex",
+      "take": false,
+      "domain": "harness-engineering",
+      "source": "Zhipu AI",
+      "url": "https://the-decoder.com/zhipu-ai-launches-zcode-to-challenge-claude-code-and-openai-codex-at-a-fraction-of-the-cost/",
+      "body": "ZCode is a coding environment built on Zhipu's open GLM-5.2 with a one-million-token context window, handling files, terminal, browser, and Git in one agent workflow. A Snowflake benchmark found GLM-5.2 nearly tied with Anthropic's Opus 4.7 after three attempts, raising competitive pressure on the paid coding agents engineers rely on."
+    },
+    {
+      "kind": "quote",
+      "title": "Governance you can't enforce before the action is just a record of what went wrong.",
+      "take": false,
+      "domain": "security",
+      "source": "NVIDIA",
+      "url": "https://developer.nvidia.com/blog/how-to-govern-autonomous-agents-in-enterprise-ai-factories/",
+      "attribution": "— NVIDIA's Secure Agent Workspace reference design"
+    },
+    {
+      "kind": "quote",
+      "title": "The only object that learns is a single markdown file.",
+      "take": false,
+      "domain": "harness-engineering",
+      "source": "Microsoft Research",
+      "url": "https://www.microsoft.com/en-us/research/blog/skillopt-agent-skills-as-trainable-parameters/",
+      "attribution": "— Microsoft Research, on SkillOpt"
+    }
+  ],
+  "transcript": "[warm] Only about one in eight. [pause] That's how many code changes at Dropbox checked back against their own security plan. [curious] So — is writing a rule down enough to make it stick?\n\n[warm] This is the Agentic Daily Brief.\n\n[curious] The news moved fast overnight, so let's clear the decks first. Tencent open-sourced a model it's calling Hy-three, and the interesting part isn't the raw size — it's the efficiency. It carries about two hundred and ninety-five billion parameters in total, but only around twenty-one billion actually fire for any given token. Tencent says that's enough to match models two to five times its active weight, and, um, they report hallucinations dropping from roughly twelve and a half percent down to about five. It's openly licensed, so anyone can run it — which means near-frontier quality at a fraction of the cost to serve.\n\nSame morning, a second Chinese lab, Zhipu, shipped ZCode — a cut-price coding agent aimed straight at Claude Code and OpenAI's Codex, with a benchmark showing its open model nearly tied with Anthropic's best. [surprised] And Epoch AI put out a number worth sitting with: the top model in the world now holds that crown for, uh, about seven weeks before somebody knocks it off. The lead keeps changing hands — so betting your whole stack on one model looks riskier every month.\n\n[pause] Okay. Picture handing an agent the keys to your production systems. It can merge code, update tickets, touch real customer data. Something goes wrong. What actually stops it?\n\nOn June twenty-ninth, NVIDIA published a reference design for running autonomous agents inside a company, and the core move is almost boringly simple. Every single action the agent takes gets checked against a policy before it happens. Not logged after — checked before. The network's blocked by default, except for a short allowlist. A proxy holds the real secrets, so the agent never sees them. And any action that changes something — merging code, updating a ticket — routes to a human to sign off first.\n\n[slow] Governance you can't enforce before the action is just a record of what went wrong. An audit log tells you what a rogue agent did. Only a check before it can stop it.\n\n[thoughtful] Now, the cynical read is that this is just NVIDIA selling you its own stack — \"AI factory\" branding and all. Fair. But the same pieces show up — well, the same load-bearing pieces — independently at AWS and at Microsoft. When three companies who'd each love to sell you something different all land on the same shape, that's the shape worth copying, whoever you end up buying from.\n\nThat's a rule you enforce. Here's a stranger cousin — a rule that rewrites itself.\n\n[curious] If you run agents, you've probably got a file of instructions for them. Do this, avoid that, here's how our tools behave. And you tuned it by hand, on a hunch, with no real idea whether your last edit helped or quietly made things worse. Microsoft Research published a method called SkillOpt that treats that file — plain markdown — like a trainable weight. A second model watches the agent work, reads where it stumbled, and proposes tiny edits. Add this line. Cut that one. It keeps an edit only if the score actually goes up. The one thing that learns is a single text file.\n\n[surprised] And here's the part that got me. They trained a spreadsheet skill inside one coding agent, then dropped it into a completely different model with no extra tuning — or rather, no further training at all — and it lifted that model from twenty-two out of a hundred... to eighty-two. The workflow knowledge transferred. Not just the benchmark score.\n\nFor anyone hand-editing an agent's instruction file right now, that's the real signal — the thing you're nudging by feel could be trained against a measured target instead. Where it breaks: the loop only works when you can grade the outcome. No score to check against, no learning. So it fits verifiable tasks, not open-ended ones — and the numbers are Microsoft's own, one benchmark, nobody's reproduced it yet.\n\n[warm] One last story, and it circles right back to where we started. Remember that number from the top? Dropbox went looking for where it comes from. They pulled a hundred and fifty security design reviews. A threat model — the list of attacks a design is meant to defend against — gets written during review, everyone agrees on it, and then... it goes quiet. I mean, genuinely, nobody looks at it again. The code lands weeks later, and nobody lines it up against the plan. Only twelve percent of those changes even linked back to their threat model.\n\nTo fix it, Dropbox built an agent that pulls up the relevant threat model right at review time and holds it against the actual change — flagging the controls everyone agreed on that quietly never shipped. [surprised] And the detail that got me? The judging wasn't the hard part. Finding the old reviews was. Their search reconnected about eighty percent of them — and most of those had no shared ticket ID to search for. The match was only findable by meaning, right?\n\nThey keep the findings advisory, not blocking. A citation a reviewer can wave off in a couple of seconds costs way less than a false alarm that jams a good merge — so a wrong flag is cheap, and a caught gap is worth a lot.\n\n[pause] So — back to what we opened on. Does writing a rule down actually make it hold? Across all three, the answer came back the same. [slow] No. A rule you write once and file away is just a record. NVIDIA's held because it got checked before every action. Microsoft's held because it kept retraining against a real target. Dropbox's threat models only held once an agent dragged them back into the room at review time. [thoughtful] The rule doesn't do its job the moment you write it down. It does its job when something keeps it alive at the moment it matters.\n\n[curious] Before you close the laptop, one thing worth trying this week. Take last quarter's design reviews — or whatever your version of \"we agreed on this once\" is — and just count how many of the changes that followed actually reference them. Measure your own gap before you build anything to close it. Dropbox's number came in at twelve percent. Yours might sting more.\n\n[thoughtful] And one talk worth your time if you're building agents. Weights and Biases founder Shawn Lewis, in a conversation with CoreWeave, laid out the development loop he keeps coming back to — ship the app, watch where the model fails in production, cluster those failures into evals, then sharpen your prompts and the setup around the model against those evals, and ship it back. His point that stuck with me: the easy benchmarks are already maxed out, so humans stay essential — for deciding what \"better\" even means.\n\n[warm] That's today's Agentic Daily Brief. [pause] Brought to you by Agent Native Engineering — open knowledge for building and running AI agents. The full write-ups, with their sources, are at agent native engineering dot com. [warm] See you next time."
+}
