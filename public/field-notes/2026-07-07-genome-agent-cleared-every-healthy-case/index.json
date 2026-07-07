@@ -1,0 +1,28 @@
+{
+  "type": "note",
+  "slug": "genome-agent-cleared-every-healthy-case",
+  "title": "A genome agent cleared every healthy case; ChatGPT cleared 30%",
+  "date": "2026-07-07",
+  "summary": "In a blinded Baylor collaboration, Gamow Labs' George-0.1 reproduced 19 rare-disease diagnoses first-line labs missed and cleared all 20 healthy relatives, while general chatbots collapsed on domain data-handling.",
+  "domain": "evaluation",
+  "tags": [
+    "evaluation",
+    "genomics",
+    "verifiable-ground-truth",
+    "benchmarks"
+  ],
+  "takeaways": [
+    "General chatbots fail specialized scientific tasks not on reasoning but on domain data-handling — genome build, population frequency, filter windows — and only a blinded test against lab-confirmed ground truth reveals it.",
+    "George-0.1 matched a Baylor reanalysis lab on 19 cases and added 2, while ChatGPT 5.5 Pro correctly cleared only 6 of 20 healthy relatives and Claude Opus 4.8 and Gemini 3.5 Flash failed to finish.",
+    "Watch for silent filters: a clinical pipeline discarded the real diagnosis because a coding-region filter dropped a pathogenic FOXF1 enhancer sitting a full megabase upstream."
+  ],
+  "sourceName": "Gamow Labs",
+  "sourceUrl": "https://gamowlabs.com/sota-genome-interpretation-with-agentic-ai.html",
+  "sources": [
+    {
+      "title": "Gamow Labs: blinded genome-interpretation case study with Baylor",
+      "url": "https://gamowlabs.com/sota-genome-interpretation-with-agentic-ai.html"
+    }
+  ],
+  "body": "## What happened\n\nOn 2026-07-06, [Gamow Labs described a blinded collaboration](https://gamowlabs.com/sota-genome-interpretation-with-agentic-ai.html) with Pawel Stankiewicz at Baylor College of Medicine on rare interstitial lung disease. His lab had solved 19 of 26 cases that first-line clinical genomics labs missed. Working from raw FASTQ reads — the unprocessed sequencer output — for 46 individuals, [Gamow's agent George-0.1 reproduced all 19 diagnoses and added 2 more](https://gamowlabs.com/sota-genome-interpretation-with-agentic-ai.html). Across 20 healthy relatives it returned [zero false positives; ChatGPT 5.5 Pro cleared only 6 of 20, and Claude Opus 4.8 and Gemini 3.5 Flash failed to finish](https://gamowlabs.com/sota-genome-interpretation-with-agentic-ai.html).\n\n## Why it matters\n\nThe gap wasn't raw reasoning; it was domain data-handling a generic chat interface never performs. And [without a blinded gold standard](https://gamowlabs.com/sota-genome-interpretation-with-agentic-ai.html) you can't separate a plausible-looking diagnosis from a correct one — the same trap in any agent scored on tasks where a wrong answer still looks right.\n\n## How it works\n\nGamow names three failure modes that sank the general models:\n\n1. **Wrong genome build.** A false negative came from [failing to lift over hg19 coordinates onto the hg38 VCF](https://gamowlabs.com/sota-genome-interpretation-with-agentic-ai.html) — right variant, wrong reference build.\n2. **Ignored population priors.** [Chatbot false positives](https://gamowlabs.com/sota-genome-interpretation-with-agentic-ai.html) flagged common, benign variants because they skipped how frequent each one is in the population.\n3. **A silent filter.** A clinical [CCDS filter dropped variants over 1 kilobase from coding regions](https://gamowlabs.com/sota-genome-interpretation-with-agentic-ai.html), discarding the pathogenic FOXF1 enhancer sitting a full megabase upstream.\n\n> The general models didn't lack intelligence — they mishandled the data: wrong build, ignored priors, a filter that deleted the answer.\n\n## The catch\n\nThis is Gamow's own writeup of its own product, on a small set (26 cases, 20 negatives), not independently reproduced; the [comparison chatbots ran off-the-shelf](https://gamowlabs.com/sota-genome-interpretation-with-agentic-ai.html) with no domain scaffolding, so part of the gap measures the harness, not the model ceiling. The transferable lesson holds anyway: on verifiable scientific ground truth, correctness lives in domain-correct data handling, and only a blinded benchmark proves it.\n\n[Evaluation](/guide/evaluation/)"
+}
