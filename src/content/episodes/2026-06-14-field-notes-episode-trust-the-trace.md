@@ -4,6 +4,7 @@ date: 2026-06-14
 summary: "Four converging lessons: check the trace not the answer, sandbox agent code by default, question stored memory, and own the thin loop."
 audio: "/audio/field-notes-episode-trust-the-trace.mp3"
 seconds: 417
+youtube: "https://youtu.be/ft6N4yn7Tmo"
 covers:
   - "2026-06-14-memory-tools-anchor-models-to-user-mistakes"
   - "2026-06-14-harness-is-a-thin-loop-you-own"
