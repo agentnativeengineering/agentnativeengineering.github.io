@@ -1,0 +1,31 @@
+---
+title: "Coding-agent adoption spread through peers and lifted merged PRs 24% at Microsoft"
+date: 2026-07-08
+summary: "A study of tens of thousands of Microsoft engineers found coding-agent adoption spread through visible peer use, not mandates, and sustained a roughly 24% merged-PR lift over four months."
+takeaways:
+  - "Coding agents at org scale spread through visible peer use, not top-down mandates, and adopters sustained a roughly 24% merged-PR lift across a four-month window."
+  - "Retention tracked engineers' own coding activity more than their demographics or team — the people who code more are the ones who keep the tool."
+  - "Merged PRs are a proxy for output, not value delivered; the authors flag the gap, so pair the metric with a quality signal before claiming ROI."
+tags: ["harness-engineering", "coding-agents", "adoption", "claude-code"]
+sourceName: "arXiv"
+sourceUrl: "https://arxiv.org/abs/2607.01418"
+sources:
+  - title: "Microsoft study: adoption and impact of CLI coding agents"
+    url: "https://arxiv.org/abs/2607.01418"
+draft: false
+---
+## What happened
+
+On 2026-07-01, three Microsoft researchers (Emerson Murphy-Hill, Jenna Butler, Alexandra Savelieva) [published an arXiv study](https://arxiv.org/abs/2607.01418) of the company's early-2026 rollout of command-line coding agents — Anthropic's Claude Code and GitHub's Copilot CLI — across tens of thousands of engineers. Their finding: first use "[spread primarily through social networks](https://arxiv.org/abs/2607.01418)," retention tracked coding activity more than demographics, and adopters "[merged roughly 24% more pull requests than they would have otherwise](https://arxiv.org/abs/2607.01418)," a lift that persisted across the four-month window.
+
+## Why it matters
+
+At organizational scale, token spend "[can run into millions of dollars annually](https://arxiv.org/abs/2607.01418)," so a rollout that misreads adoption is expensive without moving engineering velocity. The study's signal is that the lever isn't a mandate or a licensing push — it's visibility. Engineers picked up the tool because they saw peers using it, which makes *who sits near whom* a real input to your rollout plan, not an afterthought.
+
+> Organizations should treat visible peer use as central to rollout strategy.
+
+## The catch
+
+The authors are careful about their proxy: a merged PR "[is not the same as the value it delivers](https://arxiv.org/abs/2607.01418)," so 24% more PRs is a measure of output, not proof of more shipped value — pair it with a quality or review signal before you claim ROI. And this is one company's internal rollout; the social-network effect may look different where engineers aren't already densely connected across shared repos. The counter-signal the paper offers is that the lift held for four months, so it reads as adoption, not a novelty spike.
+
+[Harness Engineering](/guide/harness-engineering/)
