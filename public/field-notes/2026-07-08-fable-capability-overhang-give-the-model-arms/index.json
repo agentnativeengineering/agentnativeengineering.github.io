@@ -1,0 +1,28 @@
+{
+  "type": "note",
+  "slug": "fable-capability-overhang-give-the-model-arms",
+  "title": "The Pokémon a plain chat model can't name, but Claude with a code tool can",
+  "date": "2026-07-08",
+  "summary": "In his \"Field Guide to Fable\" talk, Anthropic's Thariq Shihipar frames a model's latent, spiky \"capability overhang\" — the real gains of a new model live as much in the harness you build around it as in the weights.",
+  "domain": "harness-engineering",
+  "tags": [
+    "harness-engineering",
+    "capability-overhang",
+    "tool-use",
+    "claude-code"
+  ],
+  "takeaways": [
+    "A frontier model's real capability is latent and spiky — the harness you give it (tools, structure) unlocks it far more than harder prompting or a bigger context window.",
+    "When a new model ships, its old-harness behavior undersells it; re-discovering what tools let it do is where most of the gain is.",
+    "The move that led to Claude Code: give the model arms (a shell, ways to act on the environment) so it builds its own context, instead of a giant context window."
+  ],
+  "sourceName": "AI Engineer — Thariq Shihipar (Anthropic), \"A Field Guide to Fable\"",
+  "sourceUrl": "https://www.youtube.com/watch?v=9fubhllmsBU",
+  "sources": [
+    {
+      "title": "A Field Guide to Fable — Thariq Shihipar, Anthropic (AI Engineer, 2026-07-06)",
+      "url": "https://www.youtube.com/watch?v=9fubhllmsBU"
+    }
+  ],
+  "body": "## What happened\nAt the AI Engineer conference, Thariq Shihipar — who works on Claude Code at Anthropic — gave [\"A Field Guide to Fable\"](https://www.youtube.com/watch?v=9fubhllmsBU), published [2026-07-06](https://www.youtube.com/watch?v=9fubhllmsBU), on how to work with a new class of models. His framing: models are, in his words, \"grown, not designed\": so [\"what contains them is us\"](https://www.youtube.com/watch?v=9fubhllmsBU) — the harness and the way we prompt are a function of our understanding of the model. He calls the latent, uneven gains **capability overhang**, with a sharp example: ask a plain chat model which Pokémon names end in \"aw\" and it fails; give Claude a code-execution tool and it [fetches the list and writes a script to filter](https://www.youtube.com/watch?v=9fubhllmsBU) — same knowledge, unlocked by the harness.\n\n## Why it matters\nWhen a new frontier model ships, the instinct is to prompt it the way you prompted the last one. But its real capability is latent and spiky — if you don't re-discover what tools and structure let it do, you leave most of the model on the table.\n\n## How it works\n1. **Give it arms so it builds its own context.** Rather than pasting a whole codebase into an ever-larger window, give the model a shell and ways to act on the environment, and it [builds and searches its own context](https://www.youtube.com/watch?v=9fubhllmsBU) — the insight that led to Claude Code.\n2. **Hunt the spiky unlocks.** Gains aren't uniform: code execution, proactivity, and multiplayer each unlock a specific new capability. The work is finding the tool that turns \"can't\" into \"can.\"\n\n> A new model's gains live as much in the harness you build around it as in its weights.\n\n## The catch\nThis is Anthropic talking about its own model, so read the enthusiasm accordingly — and it's a conference talk rather than a controlled result. \"Capability overhang\" also cuts both ways: every arm you hand the model to unlock capability also widens its blast radius, which is exactly why the same tool-use that unlocks Fable is what this week's other stories say you have to govern.\n\n[Harness Engineering](/guide/harness-engineering/)"
+}
