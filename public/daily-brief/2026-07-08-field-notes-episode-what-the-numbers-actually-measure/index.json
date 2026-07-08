@@ -1,0 +1,94 @@
+{
+  "type": "brief",
+  "slug": "field-notes-episode-what-the-numbers-actually-measure",
+  "title": "JetBrains Measured a Sixty-Five Percent Token Saving and Got Eight",
+  "date": "2026-07-08",
+  "summary": "Microsoft coding agents spread by peers for a 24% PR lift, JetBrains' 65% token promise measured 8%, and model power stays latent till a tool unlocks it.",
+  "audio": "/audio/field-notes-episode-what-the-numbers-actually-measure.mp3",
+  "youtube": "https://youtu.be/reqo_Bq8ejo",
+  "seconds": 479,
+  "covers": [
+    "2026-07-08-fable-capability-overhang-give-the-model-arms",
+    "2026-07-08-compressing-agent-prose-saves-8-percent",
+    "2026-07-08-coding-agent-adoption-peers-merged-prs-microsoft"
+  ],
+  "oneIdea": {
+    "title": "A merged pull request measures output, not the value it delivered — so 24% more of them is a speed signal, not proof you shipped more that mattered.",
+    "body": "Microsoft's study of tens of thousands of engineers found coding-agent adopters merged about 24% more pull requests over four months. But the authors flag that merged PRs are a proxy for output, not delivered value. Pair any velocity number with a quality signal before you call it ROI — the same lesson JetBrains hit when a 65% token promise measured 8%."
+  },
+  "stats": [
+    {
+      "n": "24%",
+      "label": "more pull requests merged by Microsoft engineers who adopted coding agents, held four months"
+    },
+    {
+      "n": "65%→8.5%",
+      "label": "advertised token saving vs measured, in JetBrains' Caveman A/B test"
+    },
+    {
+      "n": "82",
+      "label": "real agentic coding tasks in JetBrains' paired A/B test"
+    },
+    {
+      "n": "p=0.82",
+      "label": "sign test — terse output caused no measurable quality loss"
+    }
+  ],
+  "brief": [
+    {
+      "kind": "story",
+      "title": "Coding-agent adoption spread through peers and lifted merged PRs 24% at Microsoft",
+      "take": true,
+      "domain": "harness-engineering",
+      "source": "arXiv",
+      "url": "https://arxiv.org/abs/2607.01418",
+      "body": "A study of tens of thousands of Microsoft engineers found command-line coding agents spread through visible peer use, not mandates, and adopters sustained a roughly 24% merged-PR lift over four months. The authors caution that merged PRs measure output, not delivered value."
+    },
+    {
+      "kind": "story",
+      "title": "Compressing agent prose saves ~8.5%, not 65%: code and diffs dominate the tokens",
+      "take": false,
+      "domain": "autonomy-and-cost",
+      "source": "JetBrains Blog",
+      "url": "https://blog.jetbrains.com/ai/2026/07/speak-to-ai-agents-like-cavemen-tosave-tokens/",
+      "body": "JetBrains A/B tested the Caveman terse-output skill on 82 real coding tasks and measured about 8.5% output-token savings against an advertised 65%. In agentic work the byte stream is dominated by code, diffs and tool calls the skill leaves verbatim; the real cost lever is input context."
+    },
+    {
+      "kind": "story",
+      "title": "Capability overhang: the Pokémon a chat model can't name until you give it a tool",
+      "take": false,
+      "domain": "harness-engineering",
+      "source": "YouTube — AI Engineer",
+      "url": "https://www.youtube.com/watch?v=9fubhllmsBU",
+      "body": "In 'A Field Guide to Fable,' Anthropic's Thariq Shihipar frames a model's latent, spiky 'capability overhang' — real gains live as much in the tools you give it as in the weights. A plain chat model fails to filter Pokémon names; hand it code execution and it fetches the list and scripts the answer."
+    },
+    {
+      "kind": "story",
+      "title": "Meta ships Muse Image and defaults public Instagram profiles into it",
+      "take": false,
+      "domain": "safety-and-governance",
+      "source": "Wired",
+      "url": "https://www.wired.com/story/meta-now-lets-anyone-use-your-instagram-photos-in-ai-images-unless-you-opt-out/",
+      "body": "Meta launched Muse Image, its first in-house image model, wired into Instagram, WhatsApp and the Meta AI app. Public profiles are auto-opted-in, so anyone can tag a public username to generate images with that person's likeness, and opting out only blocks future generations."
+    },
+    {
+      "kind": "story",
+      "title": "Microsoft starts routing Copilot to its own cheaper models to cut costs",
+      "take": false,
+      "domain": "autonomy-and-cost",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/copilot-goes-cheap-as-microsoft-phases-out-openai-and-anthropic-models-to-cut-costs/",
+      "body": "Microsoft has begun routing a share of Copilot prompts in Excel, Word and Outlook to its in-house MAI models instead of OpenAI and Anthropic, framed openly as reducing what it pays Anthropic. The tension is quality-for-price, as MAI-Thinking 1 has trailed the frontier labs on benchmarks."
+    },
+    {
+      "kind": "quote",
+      "title": "A merged pull request is not the same as the value it delivers.",
+      "take": false,
+      "domain": "harness-engineering",
+      "source": "arXiv",
+      "url": "https://arxiv.org/abs/2607.01418",
+      "attribution": "— Microsoft researchers, on treating coding-agent output as a proxy, not proof of ROI"
+    }
+  ],
+  "transcript": "[warm] Sixty-five percent off your token bill. [pause] That's what a popular little skill promises. [curious] Someone finally measured it. [slow] It came back... eight. [curious] How much of what we believe survives being measured?\n\n[warm] This is the Agentic Daily Brief.\n\nMeta answered part of that the hard way this week. They shipped their first in-house image model — Muse Image — and wired it straight into Instagram, WhatsApp, and the Meta AI app. [surprised] The catch that lit up everyone's feed? If your profile is public, you're opted in by default — anyone can tag your username in a prompt and make images with your face. Opting out only blocks new ones. What's already made stays made.\n\nMeanwhile, Microsoft started quietly swapping the frontier labs out of Copilot. Some prompts in Excel, Word, and Outlook now route to Microsoft's own cheaper in-house models — with AI chief Mustafa Suleyman framing it flatly as cutting what they pay Anthropic, right?\n\nAnthropic, for its part, pushed Claude Cowork up into the cloud — so your agents keep running when the laptop's shut, scheduled tasks firing even when no device is online. And Liquid AI open-sourced a fix for reasoning models that get stuck in loops — repeating the same line until they burn the whole context window.\n\n[curious] Which brings me back to the thing sitting under all of it. Measuring. Say you're rolling a coding agent out to your team — what actually gets people to use it?\n\nThree researchers at Microsoft — Emerson Murphy-Hill and colleagues — tracked tens of thousands of their own engineers picking up command-line coding agents. [pause] And what spread it wasn't a mandate. Wasn't a licensing push from the top. [surprised] It was watching the person next to you use it.\n\nFirst use, they wrote, spread mostly through people's social networks. You saw a teammate lean on it — well, or rather, you saw them stop struggling — so you tried it too. Which makes who-sits-near-whom a real input to your rollout. Not an afterthought. At that scale, token spend runs into the millions a year, so a rollout that misreads why people adopt is expensive and slow at the same time.\n\nThe payoff showed up, too. The engineers who adopted merged about twenty-four percent more pull requests than they otherwise would have — and that held for four months, so it reads like a habit, not a honeymoon.\n\n[thoughtful] But the authors are careful, and I want to sit on this one. A merged pull request measures output — not the value it delivered. Twenty-four percent more of them is a speed signal, not proof you shipped more that was worth shipping.\n\nSo before you call it a win, pair that number with one signal for quality. Which is really a question about cost, too — what are you actually paying for?\n\n[curious] Cost. You've seen the trick — tell your agent to write like a caveman, drop the polite prose, save tokens. The pitch on the tin — I mean the advertised number — sixty-five percent.\n\nThe JetBrains AI team actually ran it. A paired A-B test, dozens of real coding tasks, the skill forced on the whole time. [pause] The measured saving? [slow] About eight and a half percent. And they call that the ceiling — not the everyday case.\n\nWhy so small? [pause] Think about what's actually in a coding session. Code. Diffs. Tool calls. Exact error strings. A good compression trick leaves every bit of that untouched — because mangling a diff breaks the run, right? The only thing that shrinks is the chatter between tools. And, uh, there just isn't much of it.\n\n[thoughtful] Here's the honest part, though. The terseness didn't dent quality — statistically a wash. But that eight percent is fragile; one pricing-tier fluke erases it. And it aims at the wrong lever entirely. Your real bill isn't the words the model writes out — it's the context you re-feed it every single turn.\n\n[curious] One last idea before you go — and this one flips the frame. Ask a plain chat model which Pokémon names end in a certain sound. It'll confidently get it wrong. Hand that same model a tool to run code, and it fetches the whole list, writes a little script, filters it — done. Same knowledge. The tool unlocked it.\n\nThat's from, uh, Thariq Shihipar at Anthropic — he works on Claude Code — in a talk called A Field Guide to Fable. His name for it is capability overhang: the real ability of a fresh model sitting latent, uneven, waiting. Spiky, he says — sharp here, blank there — until the right tool turns can't into can.\n\nSo when a new model ships, the reflex is to prompt it like the last one. His point? You'll leave most of it on the table. The gains hide in what you let the thing actually do.\n\n[surprised] Read the shine carefully, though. This is Anthropic talking up its own model, at a conference, not a controlled study. And every arm you hand a model to unlock it also widens what can go wrong — you know, the same tool that frees it is the one you then have to govern.\n\n[warm] Before you go, one thing worth trying this week. Take a number your AI tooling brags about — a saving, a velocity bump, a benchmark. [pause] And ask the JetBrains question: what is this actually measuring? Then find one signal for the thing you truly care about, and set them side by side. Half the time, the pitch and the real number aren't even close.\n\nOne talk worth your time on exactly that nerve. Angel Ortmann Lee, a security engineer on the Duolingo English Test, gave a talk called Build AI Systems for Discernment, Not Approval. [surprised] Her finding stopped me — trained proctors, over ninety percent accurate on their own, accepted half of the fabricated cheating flags the AI handed them. Half. They rubber-stamped it. Her fix wasn't a smarter model — she reframed the AI's output as a preliminary alert that demands independent evidence, and false acceptances fell by about a fifth. No model change at all.\n\n[thoughtful] How much of what we believe survives the measuring? [slow] Sixty-five became eight. Twenty-four percent more pull requests, but of what. A model that couldn't name a Pokémon until it got a shell. [thoughtful] Less of the pitch holds up than you'd hope — and what's left is truer, and honestly more useful. [curious] So next standup, when someone quotes you a number, ask the quiet one: what did we actually measure?\n\nThat's today's Agentic Daily Brief. [pause] Brought to you by Agent Native Engineering — open knowledge for building and running AI agents. The full write-ups, with their sources, are at agent native engineering dot com. [warm] See you next time."
+}
