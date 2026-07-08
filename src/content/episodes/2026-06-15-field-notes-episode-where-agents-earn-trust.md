@@ -4,6 +4,7 @@ date: 2026-06-15
 summary: "Memory poisoning, durable insurance agents, and Google's SecOps bots all teach the same rule: autonomy where mistakes are cheap, humans where they stick."
 audio: "/audio/field-notes-episode-where-agents-earn-trust.mp3"
 seconds: 436
+youtube: "https://youtu.be/h_G4NFG3pCc"
 covers:
   - "2026-06-15-google-secops-agents-triage-60-seconds"
   - "2026-06-15-coverwatch-temporal-insurance-agents"

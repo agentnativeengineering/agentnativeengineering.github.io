@@ -4,6 +4,7 @@ date: 2026-06-16
 summary: "Why trusting an agent isn't about a smarter model: control what it reads, ground it in hard facts, and keep receipts on what it did."
 audio: "/audio/field-notes-episode-trusting-the-agent.mp3"
 seconds: 546
+youtube: "https://youtu.be/CAucnTWX0es"
 covers:
   - "2026-06-16-stop-prompting-coding-agents-design-loops"
   - "2026-06-16-poisoning-deep-research-agents-through-ugc"

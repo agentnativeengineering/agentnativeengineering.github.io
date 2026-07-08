@@ -4,6 +4,7 @@ date: 2026-06-16
 summary: "Three agent breaches this week — Meta's giveaway, a repo-open worm, an unvetted MCP config — all came from the harness, not the prompt."
 audio: "/audio/field-notes-episode-the-harness-not-the-prompt.mp3"
 seconds: 519
+youtube: "https://youtu.be/4ymwOw8cuZA"
 covers:
   - "2026-06-13-meta-support-agent-instagram-account-takeover"
   - "2026-06-13-miasma-worm-ai-agent-poisoned-microsoft-repo"
