@@ -1,0 +1,93 @@
+{
+  "type": "brief",
+  "slug": "field-notes-episode-trust-where-it-matters",
+  "title": "A Genome Agent Found the Diseases the Labs Missed, and Two More",
+  "date": "2026-07-09",
+  "summary": "A blinded genome agent solved 19 rare-disease cases plus 2 more, while Vercel's production agent shows why identity beats raw smarts.",
+  "audio": "/audio/field-notes-episode-trust-where-it-matters.mp3",
+  "youtube": "https://youtu.be/h97spIxcWOQ",
+  "seconds": 461,
+  "covers": [
+    "2026-07-07-genome-agent-cleared-every-healthy-case",
+    "2026-07-09-production-agent-own-identity-not-your-credentials"
+  ],
+  "oneIdea": {
+    "title": "On any task where a wrong answer still looks reasonable, only a blinded test against the real answer proves your agent is actually right.",
+    "body": "Gamow Labs ran its genome agent George-0.1 blind against a Baylor lab's confirmed diagnoses: it reproduced all 19 solved cases, added 2 more, and cleared every healthy relative. A general chatbot cleared only 6 of 20 healthy genomes. The gap wasn't reasoning — it was domain data-handling — and only the blinded gold standard could tell a plausible-looking answer from a correct one."
+  },
+  "stats": [
+    {
+      "n": "19/26",
+      "label": "unsolved rare-disease cases George-0.1 reproduced that first-line labs missed"
+    },
+    {
+      "n": "+2",
+      "label": "additional diagnoses the agent found beyond the human reanalysis lab"
+    },
+    {
+      "n": "6/20",
+      "label": "healthy relatives ChatGPT 5.5 Pro cleared; George-0.1 cleared all 20"
+    },
+    {
+      "n": "<3 min",
+      "label": "Vercel Agent: from alert to mitigated rollback, with human approval"
+    }
+  ],
+  "brief": [
+    {
+      "kind": "story",
+      "title": "A genome agent cleared every healthy case; ChatGPT cleared 30%",
+      "take": true,
+      "domain": "evaluation",
+      "source": "Gamow Labs",
+      "url": "https://gamowlabs.com/sota-genome-interpretation-with-agentic-ai.html",
+      "body": "In a blinded Baylor collaboration, Gamow Labs' George-0.1 reproduced 19 rare-disease diagnoses first-line labs missed, added 2 more, and returned zero false positives across 20 healthy relatives. General chatbots collapsed — ChatGPT 5.5 Pro cleared only 6 of 20 — not on reasoning but on domain data-handling like genome build and population priors."
+    },
+    {
+      "kind": "story",
+      "title": "Vercel, AWS, and Prime Radiant give agents their own short-lived identity",
+      "take": false,
+      "domain": "access-and-identity",
+      "source": "Vercel",
+      "url": "https://vercel.com/blog/vercel-agent",
+      "body": "Vercel Agent runs as its own read-only principal; to act, it earns a short-lived capability scoped to a single approved plan, then reverts. AWS and Prime Radiant landed on the same rule independently — a distinct identity plus least privilege — though Prime Radiant is blunt that compartmentalization reduces the underlying risk without removing it."
+    },
+    {
+      "kind": "story",
+      "title": "xAI ships Grok 4.5, betting cheap-and-fast beats top-of-the-leaderboard",
+      "take": false,
+      "domain": "model-serving",
+      "source": "xAI",
+      "url": "https://techcrunch.com/2026/07/08/spacexai-releases-grok-4-5-which-elon-describes-as-an-opus-class-model/",
+      "body": "Grok 4.5 is priced at $2 per million input and $6 per million output tokens, trailing Fable 5 and GPT-5.5 on coding benchmarks but needing roughly 4x fewer tokens than Opus. Elon Musk calls it an 'Opus-class' workhorse — the pitch being that price and efficiency matter more than a couple of benchmark points for agentic work."
+    },
+    {
+      "kind": "story",
+      "title": "OpenAI rebuilds ChatGPT voice as a full-duplex model",
+      "take": false,
+      "domain": "orchestration",
+      "source": "OpenAI",
+      "url": "https://techcrunch.com/2026/07/08/openai-releases-new-voice-models-for-more-natural-live-conversations/",
+      "body": "GPT-Live-1 replaces the old speech-to-text-to-speech chain with a single model that speaks and listens at once, handles interruptions, and translates live. It routes hard queries to GPT-5.5, signaling a push toward voice as a primary interface — though demos still showed rough edges."
+    },
+    {
+      "kind": "quote",
+      "title": "The safe default isn't a smarter agent — it's one that can only do the single thing you just approved.",
+      "take": false,
+      "domain": "access-and-identity",
+      "source": "Vercel",
+      "url": "https://vercel.com/blog/vercel-agent",
+      "attribution": "— Vercel, on the Vercel Agent permissions model"
+    },
+    {
+      "kind": "quote",
+      "title": "The general models didn't lack intelligence — they mishandled the data: wrong build, ignored priors, a filter that deleted the answer.",
+      "take": false,
+      "domain": "evaluation",
+      "source": "Gamow Labs",
+      "url": "https://gamowlabs.com/sota-genome-interpretation-with-agentic-ai.html",
+      "attribution": "— Gamow Labs, on its blinded George-0.1 evaluation"
+    }
+  ],
+  "transcript": "[warm] Nineteen rare diseases the hospital labs missed. One agent read the raw genome data and found all nineteen — plus two more. [curious] So what decides whether you can trust an agent?\n\nThis is the Agentic Daily Brief.\n\n[curious] Start with the money, though — because the loudest thing overnight came from xAI. They shipped Grok four-point-five, and the pitch is unusual. Not \"we topped the leaderboard.\" Kind of the opposite. On coding benchmarks it actually trails Fable five and GPT five-point-five. But it runs on roughly four times fewer tokens than Anthropic's Opus, at a small fraction of the price — about two dollars per million tokens going in, six coming out. Elon Musk called it \"Opus-class.\" The bet is that for real agent work, where you're burning millions of tokens a day, cheap and fast beats a couple of benchmark points. And honestly? That's a bet worth taking seriously.\n\nA few more, fast. OpenAI rebuilt ChatGPT's voice as a single model that listens and talks at the same time — it can be interrupted, and it can translate while you're still speaking. Over in Sweden, the vibe-coding startup Lovable is reportedly raising money at more than thirteen billion dollars — double what it was worth in December. And Google's invisible watermark, the one baked into AI images, just got used to debunk a fake photo of a US senator in a hospital bed. The catch there — uh, it only tags images from tools that opt in. And not everyone opts in.\n\nOkay. um, back to that genome agent — because this one genuinely stopped me.\n\n[curious] Picture a family that's spent years chasing a diagnosis. Rare lung disease, no answer. First-line hospital labs ran the genome, came back empty. So a research lab at Baylor, led by Pawel Stankiewicz, took more than two dozen of these unsolved cases and cracked nineteen of them by hand. Then a startup called Gamow Labs pointed its agent — George — at the same raw sequencer output. Blinded. No peeking at the answers. [surprised] George reproduced all nineteen... and then found two the human lab had missed.\n\n[slow] The part that got me — they also handed it the healthy relatives — people who should come back clean. George cleared every one of them. Zero false alarms. Then they ran the exact same job through a general chatbot, straight off the shelf. ChatGPT's best model cleared... uh, six out of twenty. The others didn't even finish.\n\n[thoughtful] So why the gap? You'd assume the smarter model just reasons better. It didn't. The general models mishandled the data. One of them threw away the real answer because a routine filter quietly deleted a stretch of DNA it decided didn't matter — and the disease was hiding right there in the part it deleted. Not a reasoning failure. A data-handling one.\n\n[thoughtful] On any task where a wrong answer still looks completely reasonable, the only way to know your agent is actually right is to test it blind, against the truth. Without that, a confident wrong diagnosis and a correct one look exactly the same.\n\nNow — the honest limits, because they matter. This is Gamow's writeup of Gamow's own product, on a small set of cases. And those chatbots ran bare, with none of the specialized data tooling George had — so part of that gap is the setup, not the raw model. But the lesson survives all of it: in science, being right lives in handling the data correctly, and only a blind test proves you got there.\n\n[curious] Which lands us on a totally different flavor of trust. Not \"is the answer right\" — but \"what is this thing even allowed to touch?\"\n\nHere's the setup. You connect an agent to your production systems — the stuff that actually runs your business. By default, it acts as you. Your access, your permissions, your blast radius. One bad instruction, and it can do anything you could do. And that's the quiet risk almost nobody scopes down.\n\n[curious] This week Vercel shipped an agent built for exactly that — one you can let near production. And the headline isn't what it does. It's who it is. The agent runs under its own separate login — I mean, its own identity, not yours — and it's read-only by default. It can look at everything, dig through an outage, trace a bad deploy... but it can't change a thing. To actually act, it proposes a plan. You approve it. And only then does it get a short-lived key scoped to that one action — then it drops straight back to read-only.\n\nRun the three a.m. version. A bad deploy ships, checkout starts throwing errors. Before the on-call engineer has even opened the laptop, the agent's traced it to a deploy from four minutes earlier and recommends a rollback. Engineer taps approve. [slow] Fixed in under three minutes — and at no point could that agent have wandered off and done something you never signed off on.\n\n[thoughtful] AWS and Prime Radiant, working completely separately, landed on the exact same rule — give the agent its own identity, its own narrow scope. So this isn't one company's clever trick. It's the shape the whole field is settling into. But — and Prime Radiant is refreshingly blunt about this — the deeper problem underneath isn't solved. Boxing an agent in lowers the risk. It doesn't remove it.\n\n[thoughtful] The real question here isn't whether your agent is smart enough to trust. It's whether you've made it impossible for a hijacked one to hurt you.\n\n[warm] One thing worth trying before you close the laptop tonight. Take one agent you've wired into something real. And ask it plainly: if you got a bad instruction right now, what's the worst you could do with my access? If the answer is \"anything you can do\"... that's your next project, right?\n\n[slow] One more thing worth your time. There's a talk this week from Theo Browne — \"What do we build now?\" His argument: the models are improving faster than we are, so the honest response isn't to keep polishing old habits. It's to build wider, and bigger. The line that stuck with me — if an idea doesn't feel almost stupidly ambitious, it probably isn't big enough yet.\n\n[warm] And a real question for you, because I want to know. If you've handed an agent the keys to something that matters — what's the one thing you scoped it down to, and what did you decide it should never, ever touch? I read every reply.\n\n[slow] So — back to where we started. Nineteen diseases found, every healthy person cleared, a production rollback in three minutes flat. [thoughtful] None of it came down to which model was the smartest in the room. It came down to two unglamorous things — whether the agent could only do the one thing you approved... and whether somebody checked its answer against the truth.\n\n[warm] That's today's Agentic Daily Brief. [pause] Brought to you by Agent Native Engineering — open knowledge for building and running AI agents. The full write-ups, with their sources, are at agent native engineering dot com. [warm] See you next time."
+}
