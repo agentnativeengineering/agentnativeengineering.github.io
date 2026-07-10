@@ -1,0 +1,40 @@
+---
+title: "Duolingo's trained proctors rubber-stamped half of fabricated AI cheating flags"
+date: 2026-07-10
+summary: "Duolingo's \"When Machines Mislead\" study found proctors with over 90% standalone accuracy accepted 50% of fabricated AI cheating flags — until reframing the signal as a preliminary alert requiring independent evidence cut false acceptances 21% with zero model changes."
+takeaways:
+  - "A human approval step is not a guardrail by default: Duolingo proctors who were over 90% accurate on their own still accepted half of fabricated AI cheating flags, and a guideline rewrite — not a model change — cut false acceptances 21%."
+  - "Write-access agents tripled year-over-year while guardrails remain mostly human-in-the-loop approvals, so automation bias is now a production risk, not a UX nitpick."
+  - "Treat every human review as a label: capture diffs and overrides so the loop feeds model improvement instead of training reviewers to rubber-stamp."
+tags: ["evaluation", "human-in-the-loop", "automation-bias", "guardrails"]
+sourceName: "AI Engineer"
+sourceUrl: "https://www.youtube.com/watch?v=CDqzWpwkSls"
+sources:
+  - title: "Angel Ortmann Lee (Duolingo) — Build AI Systems for Discernment, Not Approval"
+    url: "https://www.youtube.com/watch?v=CDqzWpwkSls"
+  - title: "AI Engineer World's Fair day 4 — State of AI Engineering survey"
+    url: "https://www.youtube.com/watch?v=I2cbIws9j10"
+draft: false
+---
+## What happened
+
+In a talk published 2026-07-07, [Angel Ortmann Lee](https://www.youtube.com/watch?v=CDqzWpwkSls), a security engineer on the Duolingo English Test, presented the team's "When Machines Mislead" study. Trained proctors — over 90% accurate on their own — accepted 50% of fabricated AI cheating flags planted on innocent sessions. The fix touched neither the model nor the UI: rewritten guidelines framed the AI signal as a preliminary alert and required independent video evidence before action. False acceptances dropped 21%.
+
+## Why it matters
+
+Human approval is the default agent guardrail right now. The [State of AI Engineering survey](https://www.youtube.com/watch?v=I2cbIws9j10) (1,048 respondents), presented at the AI Engineer World's Fair, found agents with write access tripled year-over-year while guardrails remain mostly human-in-the-loop approvals. Ortmann Lee cites Wharton research on "cognitive surrender" — 80% of participants accepted AI answers even when wrong — meaning that approval click often verifies nothing.
+
+## How it works
+
+1. **Reframe the signal.** Present AI output as a preliminary alert to investigate, not a finding to confirm.
+2. **Require independent evidence.** The reviewer must check a source other than the AI's own output before acting.
+3. **Match friction to stakes.** Low-stakes actions flow; high-stakes ones get deliberate review steps.
+4. **Treat every review as a label.** Capture diffs and overrides so reviews feed model improvement instead of an overconfident model training disengaged reviewers.
+
+> A human approval step only guards what the human independently verifies — design the review so the reviewer investigates evidence of their own.
+
+## The catch
+
+The redesign cut false acceptances by 21%, not to zero, and this is [one case study](https://www.youtube.com/watch?v=CDqzWpwkSls) on one high-stakes workflow. It also presumes independent evidence exists to check — many agent approval flows surface nothing but the AI's own output, which is exactly the setup that produced the 50% failure.
+
+[Evaluation](/guide/evaluation/)

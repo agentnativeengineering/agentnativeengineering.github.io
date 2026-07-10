@@ -1,0 +1,37 @@
+---
+title: "Swapping only the harness moved agent benchmark scores from 52% to 76%"
+date: 2026-07-10
+summary: "HarnessBench numbers cited by an Etsy engineer — plus three corroborating experiments — argue that harness and verification fit, not parameter count, decide whether small local models clear production bars."
+takeaways:
+  - "Before paying for a bigger model, invest in the harness: HarnessBench found swapping only the harness moved agent scores from 52.4% to 76.2%, with weaker models gaining the most."
+  - "Deterministic verification — test-case hooks, looped failures, regression evals — is what lets cheaper and smaller models actually clear a production bar."
+  - "Small-model failures are quiet: a model can answer confidently without ever calling a tool, so verify what it executed, not what it said."
+tags: ["model-selection", "harness", "local-models", "verification"]
+sourceName: "Aditya Bhargava (Etsy)"
+sourceUrl: "https://www.youtube.com/watch?v=2e9ANoOEn28"
+sources:
+  - title: "What if the harness mattered more than the model? — Aditya Bhargava, Etsy (talk)"
+    url: "https://www.youtube.com/watch?v=2e9ANoOEn28"
+  - title: "Your coding agent doesn't always follow your rules — Talha Sheikh, Checkout.com (talk)"
+    url: "https://www.youtube.com/watch?v=MpZzWMdmQCE"
+  - title: "Can MCP Help a Small Local Model Shine? Hands-on with Goose — AAIF"
+    url: "https://aaif.io/blog/can-mcp-help-a-small-local-model-shine-hands-on-with-goose/"
+  - title: "Frontier results, on device — RL Nabors, Arize (talk)"
+    url: "https://www.youtube.com/watch?v=fWXJM-J0ZB8"
+draft: false
+---
+## What happened
+
+In a talk published 2026-07-07, [Aditya Bhargava](https://www.youtube.com/watch?v=2e9ANoOEn28) — staff engineer at Etsy and author of Grokking Algorithms — argued the harness (the tooling, safety controls, and control flow wrapped around a model) can matter more than the model itself. He cited HarnessBench, a 106-task benchmark that holds the model and evaluation constant and swaps only the harness: scores ranged from 52.4% to 76.2%, and "for weaker models, the harness matters more." His conclusion: a good enough harness can make local open-source models competitive with proprietary frontier ones.
+
+## Why it matters
+
+Three fresh results point the same way. Checkout.com's [Talha Sheikh](https://www.youtube.com/watch?v=MpZzWMdmQCE) (talk published 2026-07-08) argues model capability does not equal reliability: his Vector harness uses hooks to deterministically check agent output against config-defined test cases and loop failures back until the work passes — and that guardrail is what lets you drop to cheaper or smaller models. An [AAIF hands-on](https://aaif.io/blog/can-mcp-help-a-small-local-model-shine-hands-on-with-goose/) (2026-07-09) found a 7B function-calling model only described tool use while a smaller Gemma 4B reliably invoked the MCP tools — call-format fit with the host, not parameter count, decided it. And Arize's [RL Nabors](https://www.youtube.com/watch?v=fWXJM-J0ZB8) reached parity with a Claude baseline on a 3B on-device model by picking the smallest model that passed her evals, then closing the gap with few-shot prompting and post-processing.
+
+> "More than a 20-point difference, and only the harness changed."
+
+## The catch
+
+HarnessBench is one benchmark, and harness benchmarking is new; Bhargava's Agency language is a six-month-old project. And small-model failures are quiet — the [AAIF test](https://aaif.io/blog/can-mcp-help-a-small-local-model-shine-hands-on-with-goose/) saw models give confident answers without calling any tool, and [Arize](https://www.youtube.com/watch?v=fWXJM-J0ZB8) stresses keeping regression evals running. Deterministic verification is what makes the harness dividend real.
+
+[Model Selection](/guide/model-selection/)
