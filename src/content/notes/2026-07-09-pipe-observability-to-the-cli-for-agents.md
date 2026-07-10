@@ -1,0 +1,36 @@
+---
+title: "Pipe every log and metric to the CLI so the agent can debug itself"
+date: 2026-07-09
+summary: "On Latent Space, Modal CTO Akshat Bubna says the company retooled its SDK for 'agent experience' over developer experience, and moved observability into the CLI because nobody reads the code anymore."
+takeaways:
+  - "Expose every log, metric, and control through a CLI the agent can drive, so it investigates its own failures instead of waiting for a human to read the source."
+  - "When agents write and change the code, humans stop reading it and observability becomes where you debug — so the agent needs that surface too."
+  - "Design the platform for the agent as the primary user: colocate infra config with the code so changes stay legible, and add product surface the moment agents reach for a capability that isn't there."
+tags: ["observability", "agent-experience", "developer-tools", "cli"]
+sourceName: "Latent Space — The 100,000 Sandbox Problem (Akshat Bubna, Modal CTO)"
+sourceUrl: "https://www.latent.space/p/modal2026"
+draft: false
+---
+
+## What happened
+
+In a [July 8, 2026 Latent Space episode](https://www.latent.space/p/modal2026), Modal CTO Akshat Bubna said the company "changed our SDK team to think about agent experience instead of developer experience," arguing "the same benefits that apply for DX also apply for AX." With agents writing the code, "people aren't looking at code," so the surface that matters shifts: "one thing we still see is really important is observability... how good is your dashboard?" Modal [moved its logs and metrics into the CLI](https://www.youtube.com/watch?v=UwxxlTNPjWo) so agents can run their own investigation.
+
+## Why it matters
+
+When agents author and edit the code, the source stops being where anyone debugs — the observable behavior is. If your logs, metrics, and controls live only in a web UI a human clicks through, the agent is blind to the one surface that now decides whether it can fix itself.
+
+## How it works
+
+1. **Design for the agent as the user.** Optimize "agent experience" on the bet that what makes a tool legible to a developer makes it legible to an agent.
+2. **Colocate infra with the code.** Modal defines "compute, storage, and networking in Python... with no YAML" via [decorators](https://modal.com/resources/best-code-execution-sandboxes-coding-agents), so a change is legible and the runtime provisions itself — swyx's [self-provisioning runtime](https://www.swyx.io/self-provisioning-runtime).
+3. **Pipe observability to the CLI.** Put logs and metrics where the agent can reach them, so it self-investigates a failure before a human is pulled in.
+4. **Treat a reached-for feature as a spec.** When agents keep reaching for a capability that isn't there, that is product feedback — build the surface they expect.
+
+> If agents write the code, your observability surface is the interface they debug through.
+
+## The catch
+
+This is a vendor describing its own product, a design bet rather than a measured result — and Bubna keeps a human in the loop: "you still need humans to go interpret what's going on." He also draws a hard line at the action layer: for anything "at the sandbox level" he's "skeptical of LM mediated permission" and wants "hard boundaries," because "obviously someone can exfiltrate stuff." More reach for an agent is a separate question from trusting its judgment.
+
+[Observability](/guide/observability/)
