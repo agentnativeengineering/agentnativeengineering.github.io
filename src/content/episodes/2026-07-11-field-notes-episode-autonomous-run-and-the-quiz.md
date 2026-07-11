@@ -4,6 +4,7 @@ date: 2026-07-11
 summary: "OpenAI's Sol 'autonomously' trained a model on a pipeline that already existed, and Geoffrey Litt's quiz rule names the real bottleneck: understanding."
 audio: "/audio/field-notes-episode-autonomous-run-and-the-quiz.mp3"
 seconds: 604
+youtube: "https://youtu.be/1Wv7CE7bC6o"
 covers:
   - "2026-07-11-quiz-gate-agent-written-code"
   - "2026-07-11-sol-post-trained-luna-on-a-prebuilt-pipeline"
