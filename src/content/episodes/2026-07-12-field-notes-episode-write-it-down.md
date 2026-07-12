@@ -4,6 +4,7 @@ date: 2026-07-12
 summary: "As GPT-5.6 Sol grows costlier and more reckless, two notes argue the leverage is externalizing what the model can't read: intent, and stable code."
 audio: "/audio/field-notes-episode-write-it-down.mp3"
 seconds: 602
+youtube: "https://youtu.be/6azYT_D_a0Q"
 covers:
   - "2026-07-11-compile-the-prompt-to-code-once"
   - "2026-07-11-intent-debt-externalize-the-why"
