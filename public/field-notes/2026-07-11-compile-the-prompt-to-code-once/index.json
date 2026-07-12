@@ -16,13 +16,25 @@
     "Frontier intelligence stays expensive and demand is near-infinite, so the durable cost win is architectural: turn a recurring inference bill into a one-time compilation cost.",
     "Compile the stable parts to code and reserve model calls for genuinely novel work; Notion's Workers run the generated code deterministically at a fraction of the token cost."
   ],
-  "sourceName": "Notion podcast — Litt & Schoening on pricing agent intelligence (+ Notion Workers, Compiled-AI)",
+  "sourceName": "Notion podcast — Litt & Schoening",
   "sourceUrl": "https://www.youtube.com/watch?v=oHmCqAQb7ho",
   "sources": [
-    "https://www.youtube.com/watch?v=oHmCqAQb7ho",
-    "https://www.notion.com/blog/introducing-developer-platform",
-    "https://arxiv.org/abs/2604.05150",
-    "https://simonwillison.net/2026/Jul/9/gpt-5-6/"
+    {
+      "title": "Notion podcast — pricing agent intelligence (Litt & Schoening)",
+      "url": "https://www.youtube.com/watch?v=oHmCqAQb7ho"
+    },
+    {
+      "title": "Notion — introducing the Developer Platform (Workers)",
+      "url": "https://www.notion.com/blog/introducing-developer-platform"
+    },
+    {
+      "title": "Compiled AI (arXiv)",
+      "url": "https://arxiv.org/abs/2604.05150"
+    },
+    {
+      "title": "Simon Willison — GPT-5.6 pricing",
+      "url": "https://simonwillison.net/2026/Jul/9/gpt-5-6/"
+    }
   ],
   "body": "\n## What happened\n\nOn 2026-07-09, OpenAI's new flagship, GPT-5.6 Sol, [listed at five and thirty dollars per million input and output tokens](https://simonwillison.net/2026/Jul/9/gpt-5-6/) — frontier intelligence stays expensive while demand climbs. In a [Notion podcast](https://www.youtube.com/watch?v=oHmCqAQb7ho), Geoffrey Litt and Notion's Max Schoening frame the answer as \"progressive compilation\": have the model write deterministic code once, then run that code cheaply instead of re-invoking the model for the same work. Notion later shipped the idea as [Workers](https://www.notion.com/blog/introducing-developer-platform) — a hosted runtime for LLM-written code that is \"deterministic and token-efficient.\"\n\n## Why it matters\n\nRe-running a model for work that never changes is paying inference prices for a cached answer. Treating code generation as a compilation layer over \"English as the program\" turns a recurring per-call bill into a one-time cost — the cheapest intelligence is the intelligence you don't re-run.\n\n## How it works\n\n1. **Intelligence designs; code executes.** Use the model once to produce a deterministic artifact, then run the artifact with no further model calls. A recent [compiled-AI paper](https://arxiv.org/abs/2604.05150) reports roughly fifty-seven times fewer tokens at a thousand transactions.\n2. **Compile the stable parts.** Recurring, well-specified steps become code; only genuinely novel work re-invokes the model.\n3. **Run it cheap and predictable.** Notion's Workers execute the generated code in a sandbox for \"a fraction of the token cost,\" the same way every time.\n\n> For work that doesn't change, the cheapest intelligence is the intelligence you never re-run.\n\n## The catch\n\n\"Progressive compilation\" and \"intelligence per second per dollar\" are the podcast's own framings rather than established terms — what's durable is the compile-once, run-many pattern, and it only pays off past a break-even (the compiled-AI paper puts it near seventeen transactions). It also assumes the task is stable enough to compile; anything that needs fresh judgment on every call still pays the model each time.\n\n[Autonomy, Cost & Control](/guide/autonomy-and-cost/)"
 }

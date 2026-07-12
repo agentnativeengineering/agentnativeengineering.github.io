@@ -7,8 +7,15 @@ takeaways:
   - "OpenAI's Sol post-training Luna is a genuine autonomy milestone, but the recipe already existed and the agent adapted it, so the honest claim is a bounded speedup, not open-ended self-improvement."
   - "Judge a self-improvement result by task provenance: OpenAI's own system card says Sol collapsed to brittle strategies on harder ML-engineering tasks and rates it below the High self-improvement threshold."
 tags: ["autonomy-and-cost", "autonomy", "self-improvement", "agents"]
-sourceName: "The Decoder — GPT-5.6 Sol autonomously post-trained Luna (+ OpenAI GPT-5.6 System Card)"
+sourceName: "The Decoder + OpenAI GPT-5.6 System Card"
 sourceUrl: "https://the-decoder.com/openais-gpt-5-6-sol-autonomously-post-trained-the-smaller-luna-model-with-a-fairly-underspecified-prompt/"
+sources:
+  - title: "The Decoder — GPT-5.6 Sol autonomously post-trained Luna"
+    url: "https://the-decoder.com/openais-gpt-5-6-sol-autonomously-post-trained-the-smaller-luna-model-with-a-fairly-underspecified-prompt/"
+  - title: "OpenAI GPT-5.6 System Card"
+    url: "https://deploymentsafety.openai.com/gpt-5-6/gpt-5-6.pdf"
+  - title: "Simon Willison — GPT-5.6"
+    url: "https://simonwillison.net/2026/Jul/9/gpt-5-6/"
 draft: false
 ---
 

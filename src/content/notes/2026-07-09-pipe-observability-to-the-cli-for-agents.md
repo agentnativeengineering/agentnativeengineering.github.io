@@ -7,8 +7,17 @@ takeaways:
   - "When agents write and change the code, humans stop reading it and observability becomes where you debug — so the agent needs that surface too."
   - "Design the platform for the agent as the primary user: colocate infra config with the code so changes stay legible, and add product surface the moment agents reach for a capability that isn't there."
 tags: ["observability", "agent-experience", "developer-tools", "cli"]
-sourceName: "Latent Space — The 100,000 Sandbox Problem (Akshat Bubna, Modal CTO)"
+sourceName: "Modal CTO Akshat Bubna — Latent Space"
 sourceUrl: "https://www.latent.space/p/modal2026"
+sources:
+  - title: "Latent Space — Why AI infra must evolve for Agent Experience"
+    url: "https://www.latent.space/p/modal2026"
+  - title: "The 100,000 Sandbox Problem (Latent Space)"
+    url: "https://www.youtube.com/watch?v=UwxxlTNPjWo"
+  - title: "Modal — best code-execution sandboxes for agents"
+    url: "https://modal.com/resources/best-code-execution-sandboxes-coding-agents"
+  - title: "The Self-Provisioning Runtime — swyx"
+    url: "https://www.swyx.io/self-provisioning-runtime"
 draft: false
 ---
 
