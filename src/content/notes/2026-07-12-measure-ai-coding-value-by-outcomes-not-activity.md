@@ -1,0 +1,36 @@
+---
+title: "AI inflates the coding metrics that are easy to count and buries the ones that matter"
+date: 2026-07-12
+summary: "Enterprises measuring AI's value by lines of code, PRs, or percent AI-written are counting exactly what AI inflates — SPACE, DORA, and the METR study all say measure delivered outcomes and team health instead."
+takeaways:
+  - "Measure AI's value in coding by delivered outcomes — delivery throughput, change-fail rate, incidents, defect rates — and team health, not by activity like lines of code, PRs, or percent AI-written."
+  - "AI reliably inflates activity while delivery and stability lag, so counting output makes AI look like a win even when shipping speed and quality haven't moved."
+  - "Set a baseline before rollout, track cost-per-outcome (dollars per merged PR or shipped feature), and watch the health signals output misses — cognitive and intent debt."
+tags: ["evaluation", "metrics", "roi", "ai-assisted-coding"]
+sourceName: "SPACE framework (Forsgren/Storey et al.) + DORA 2025 + METR study + DX + Glean's Arvind Jain (20VC)"
+sourceUrl: "https://www.microsoft.com/en-us/research/publication/the-space-of-developer-productivity-theres-more-to-it-than-you-think/"
+draft: false
+---
+
+## What happened
+
+Asked on a [2026-07-11 20VC interview](https://www.youtube.com/watch?v=jX-Uq8JJ_j8) how enterprises should measure AI's ROI, Glean's Arvind Jain called engineering productivity "one of the most difficult things to measure" — "the fuzziest of the jobs out there." Coding itself has changed — "we're writing way more lines of code now" — yet, he said, "most of the companies" report that "the actual shipping speed of products has not increased" even as coding speed rose. That's the trap the [SPACE framework](https://www.microsoft.com/en-us/research/publication/the-space-of-developer-productivity-theres-more-to-it-than-you-think/) named in 2021 — productivity "cannot be measured by a single metric or dimension," least of all raw activity. Five years on, SPACE's own authors [warn](https://newsletter.getdx.com/p/five-years-later-reflecting-on-space) that "activity metrics like lines of code and PRs are newly resurfacing, and people are forgetting that we knew this wasn't the greatest plan."
+
+## Why it matters
+
+AI moves the metrics that are easy to count and easy to fool. [DORA's 2025 research](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report) finds AI "amplifies what's already there" — individual activity and throughput can climb while delivery stability lags. [METR's randomized study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) is the trap in miniature: experienced developers were measurably slower with AI on mature codebases, yet believed they were faster. Count output and AI always looks like a win.
+
+## How it works
+
+1. **Anchor on outcomes over activity.** Track delivery throughput, change-fail rate, incidents, and defect rates — the DORA-style signals — plus the business outcome the work served.
+2. **Baseline before you roll out.** [DX's guidance](https://getdx.com/blog/ai-measurement-hub/): without a baseline "there's no measurement, only a growing bill," and overemphasizing "percentage of code written by AI" leads to misleading conclusions.
+3. **Measure cost-per-outcome.** With token spend now rivaling developer salaries, the honest number is dollars per merged PR or shipped feature rather than tokens burned.
+4. **Watch the health output misses.** Storey's [cognitive and intent debt](https://arxiv.org/abs/2603.22106) — eroding shared understanding and unrecorded rationale — are real costs no activity metric will show.
+
+> If a metric jumps the moment you switch on AI, it is probably measuring activity rather than value.
+
+## The catch
+
+None of this is AI-specific — SPACE and DORA predate the agent era, and METR's authors caution their 2025 slowdown may not hold as tools improve. The point isn't a fixed scorecard; it's that the easy metrics are exactly the ones AI inflates, so an enterprise measuring those will "prove" an ROI it may not actually have.
+
+[Evaluation](/guide/evaluation/)
