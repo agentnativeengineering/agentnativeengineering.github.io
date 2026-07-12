@@ -7,8 +7,13 @@ takeaways:
   - "When the model assembles its own context from loosely-connected systems it is slow and most tokens burn before the real work starts, which is why AI ROI stalls in the enterprise."
   - "Invest around the model: build the retrieval layer so the agent starts already provisioned, at lower token cost, rather than paying the model to rediscover context each time."
 tags: ["autonomy-and-cost", "context-engineering", "cost", "agents"]
-sourceName: "Glean's Arvind Jain (20VC) + Local AI Summit panel (Osmantic's Ahmed Osman)"
+sourceName: "Glean's Arvind Jain (20VC) + Local AI Summit panel"
 sourceUrl: "https://www.youtube.com/watch?v=jX-Uq8JJ_j8"
+sources:
+  - title: "Arvind Jain, Glean — 20VC"
+    url: "https://www.youtube.com/watch?v=jX-Uq8JJ_j8"
+  - title: "Local AI Summit panel — AI Engineer"
+    url: "https://www.youtube.com/watch?v=KB41dTlX1Uc"
 draft: false
 ---
 

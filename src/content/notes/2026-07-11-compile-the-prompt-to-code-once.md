@@ -7,8 +7,17 @@ takeaways:
   - "Frontier intelligence stays expensive and demand is near-infinite, so the durable cost win is architectural: turn a recurring inference bill into a one-time compilation cost."
   - "Compile the stable parts to code and reserve model calls for genuinely novel work; Notion's Workers run the generated code deterministically at a fraction of the token cost."
 tags: ["autonomy-and-cost", "cost", "inference", "agents"]
-sourceName: "Notion podcast — Litt & Schoening on pricing agent intelligence (+ Notion Workers, Compiled-AI)"
+sourceName: "Notion podcast — Litt & Schoening"
 sourceUrl: "https://www.youtube.com/watch?v=oHmCqAQb7ho"
+sources:
+  - title: "Notion podcast — pricing agent intelligence (Litt & Schoening)"
+    url: "https://www.youtube.com/watch?v=oHmCqAQb7ho"
+  - title: "Notion — introducing the Developer Platform (Workers)"
+    url: "https://www.notion.com/blog/introducing-developer-platform"
+  - title: "Compiled AI (arXiv)"
+    url: "https://arxiv.org/abs/2604.05150"
+  - title: "Simon Willison — GPT-5.6 pricing"
+    url: "https://simonwillison.net/2026/Jul/9/gpt-5-6/"
 draft: false
 ---
 

@@ -7,8 +7,15 @@ takeaways:
   - "In a software factory you aren't reviewing one diff, you're maintaining the system that writes every diff, so a one-off correction fixes nothing downstream."
   - "Push determinism to the edges with hooks and CI that block bad commits, keep the orchestration itself stochastic, and add evals so obsolete rules retire when the next model lands."
 tags: ["harness-engineering", "software-factories", "code-review", "agents"]
-sourceName: "AI Native Dev — Steve Yegge & Drew Nox fireside (You'll Never Write Code the Same Way Again)"
+sourceName: "Steve Yegge & Drew Nox — AI Native Dev fireside"
 sourceUrl: "https://www.youtube.com/watch?v=Rgwu9nF_Xok"
+sources:
+  - title: "AI Native Dev — Yegge & Nox fireside"
+    url: "https://www.youtube.com/watch?v=Rgwu9nF_Xok"
+  - title: "Welcome to Gas Town — Steve Yegge"
+    url: "https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04"
+  - title: "beads — git-backed work graph for agents"
+    url: "https://github.com/gastownhall/beads"
 draft: false
 ---
 

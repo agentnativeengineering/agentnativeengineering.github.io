@@ -7,8 +7,17 @@ takeaways:
   - "Cognitive debt is eroded understanding in people; intent debt is missing rationale in the artifacts, and an agent evolving code from what's written is blind to the constraints no one wrote down."
   - "Capture rationale in the specs, ADRs, comments, and agent-facing files, because as agents make more changes, unrecorded intent becomes the thing that breaks."
 tags: ["harness-engineering", "intent-debt", "documentation", "agents"]
-sourceName: "Margaret-Anne Storey — cognitive & intent debt (arXiv paper + Hangar DX interview)"
-sourceUrl: "https://arxiv.org/abs/2603.22106"
+sourceName: "Margaret-Anne Storey — arXiv & interview"
+sourceUrl: "https://www.youtube.com/watch?v=WkBPX-oDMnA"
+sources:
+  - title: "Understanding is the new bottleneck — Geoffrey Litt (talk)"
+    url: "https://www.youtube.com/watch?v=WkBPX-oDMnA"
+  - title: "From Technical Debt to Cognitive & Intent Debt — Storey (arXiv)"
+    url: "https://arxiv.org/abs/2603.22106"
+  - title: "The Hidden Cost of AI-Generated Code — Storey (interview)"
+    url: "https://www.youtube.com/watch?v=tIPbqipc88U"
+  - title: "Programming as Theory Building — Peter Naur (1985)"
+    url: "https://pages.cs.wisc.edu/~remzi/Naur.pdf"
 draft: false
 ---
 

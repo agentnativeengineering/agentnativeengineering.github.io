@@ -7,8 +7,13 @@ takeaways:
   - "As agents do more of the work, the institutional know-how that used to live in your team accrues inside the agent, so not running it means renting both the labor and the compounding intelligence."
   - "That learning sits in the context and markdown files agents read today and in fine-tuned weights tomorrow — portable, ownable state, but only on infrastructure you control."
 tags: ["memory-and-context", "ownership", "local-models", "agents"]
-sourceName: "Glean's Arvind Jain (20VC) + Local AI Summit panel (Osmantic's Ahmed Osman)"
+sourceName: "Glean's Arvind Jain (20VC) + Local AI Summit panel"
 sourceUrl: "https://www.youtube.com/watch?v=jX-Uq8JJ_j8"
+sources:
+  - title: "Arvind Jain, Glean — 20VC"
+    url: "https://www.youtube.com/watch?v=jX-Uq8JJ_j8"
+  - title: "Local AI Summit panel — AI Engineer"
+    url: "https://www.youtube.com/watch?v=KB41dTlX1Uc"
 draft: false
 ---
 
