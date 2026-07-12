@@ -1,0 +1,35 @@
+---
+title: "Most of your agent's tokens go to assembling context before it does any work"
+date: 2026-07-12
+summary: "Glean's Arvind Jain argues AI ROI is a throughput problem: enterprises wire agents to their systems crudely and let the model brute-force context assembly, burning most of the tokens before any real work happens."
+takeaways:
+  - "Engineer the context you feed an agent — retrieve and shape the right materials up front — instead of wiring tools crudely and letting the model brute-force assembly on every call."
+  - "When the model assembles its own context from loosely-connected systems it is slow and most tokens burn before the real work starts, which is why AI ROI stalls in the enterprise."
+  - "Invest around the model: build the retrieval layer so the agent starts already provisioned, at lower token cost, rather than paying the model to rediscover context each time."
+tags: ["autonomy-and-cost", "context-engineering", "cost", "agents"]
+sourceName: "Glean's Arvind Jain (20VC) + Local AI Summit panel (Osmantic's Ahmed Osman)"
+sourceUrl: "https://www.youtube.com/watch?v=jX-Uq8JJ_j8"
+draft: false
+---
+
+## What happened
+
+In a [2026-07-11 20VC interview](https://www.youtube.com/watch?v=jX-Uq8JJ_j8), Glean founder Arvind Jain said "AI ROI is really a throughput problem." Most enterprises, he argued, connect AI to their systems "in a rudimentary manner using MCP servers," then let the model "brute-force its way into trying to figure out and assemble the right raw materials" for each task — so "AI is super slow" and "most of the tokens are being burnt just trying to assemble the right context." On a [Local AI Summit panel](https://www.youtube.com/watch?v=KB41dTlX1Uc) the same day, Osmantic's Ahmed Osman echoed that context length itself "becomes inefficient" at scale.
+
+## Why it matters
+
+If the model spends most of a task rediscovering context, you pay full inference prices for retrieval — and you can't even tell whether the agent is good at the actual job. Jain's fix: "invest around it… provide the right context so it can work faster at a lower cost."
+
+## How it works
+
+1. **Un-engineered context is the tax.** Wiring tools crudely through MCP and letting the model assemble raw materials burns tokens before any real work happens.
+2. **Engineer the retrieval layer.** Assemble the right materials — fetched and shaped up front — so the agent starts the task already provisioned.
+3. **The cost of getting it wrong is real.** Glean's own triage agent handled ninety-five percent of production issues automatically but ran about a million dollars a month — more than the on-call team whose triage work it took over.
+
+> If most of your agent's tokens go to assembling context, you're paying inference prices for retrieval.
+
+## The catch
+
+This is an enterprise-AI founder describing the problem his own product solves, so weigh the pitch — but the mechanism is checkable: instrument where your tokens actually go. If most are spent gathering context rather than reasoning, the lever is the retrieval layer rather than a bigger model. A well-engineered context layer is itself real work to build and maintain.
+
+[Autonomy, Cost & Control](/guide/autonomy-and-cost/)

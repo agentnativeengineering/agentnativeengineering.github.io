@@ -1,0 +1,26 @@
+{
+  "type": "note",
+  "slug": "own-the-agent-own-the-learning",
+  "title": "Whoever runs the agent owns the learning it compounds",
+  "date": "2026-07-12",
+  "summary": "Glean's Arvind Jain and Osmantic's Ahmed Osman, on the same day, argued that the institutional learning an agent accumulates is an asset — held in markdown and context today, in weights tomorrow — that you either own or rent from the model provider.",
+  "domain": "memory-and-context",
+  "tags": [
+    "memory-and-context",
+    "ownership",
+    "local-models",
+    "agents"
+  ],
+  "takeaways": [
+    "Treat the learning your agents accumulate as owned state: decide where the agent runs and where its memory lives before that knowledge compounds somewhere you don't control.",
+    "As agents do more of the work, the institutional know-how that used to live in your team accrues inside the agent, so not running it means renting both the labor and the compounding intelligence.",
+    "That learning sits in the context and markdown files agents read today and in fine-tuned weights tomorrow — portable, ownable state, but only on infrastructure you control."
+  ],
+  "sourceName": "Glean's Arvind Jain (20VC) + Local AI Summit panel (Osmantic's Ahmed Osman)",
+  "sourceUrl": "https://www.youtube.com/watch?v=jX-Uq8JJ_j8",
+  "sources": [
+    "https://www.youtube.com/watch?v=jX-Uq8JJ_j8",
+    "https://www.youtube.com/watch?v=KB41dTlX1Uc"
+  ],
+  "body": "\n## What happened\n\nIn a [2026-07-11 20VC interview](https://www.youtube.com/watch?v=jX-Uq8JJ_j8), Glean founder Arvind Jain argued that as agents take over work, all that institutional learning \"is actually going to accumulate in that agent that is doing that work\" — and if you don't run the agent yourself, \"you're basically fully dependent on the AI companies.\" The same day, on a [Local AI Summit panel](https://www.youtube.com/watch?v=KB41dTlX1Uc), Osmantic's Ahmed Osman named the mechanism: today's agents just \"save to markdowns,\" and \"the next one will be updating the weights, and that needs to happen locally.\"\n\n## Why it matters\n\nThe work an agent does is visible; the *learning* it compounds is not. Every optimization your team once held in its head now accrues inside the agent — and if that agent and its memory run on someone else's infrastructure, you rent the compounding intelligence and can be cut off from it.\n\n## How it works\n\n1. **The learning is state.** It lives in the context, skills, and markdown files the agent reads today — and, Osman argues, in fine-tuned weights tomorrow.\n2. **Markdown is a ceiling.** [Osman](https://www.youtube.com/watch?v=KB41dTlX1Uc) notes context length makes markdown memory inefficient at scale; weight-level updates are the successor, and they need local hardware.\n3. **Ownership is a deployment choice.** [Jain](https://www.youtube.com/watch?v=jX-Uq8JJ_j8) frames it as control: run the agent where you own the memory, or accept operational dependence on the provider.\n4. **It's why open and local pull enterprises.** Jain says more than ninety percent of enterprise use cases can now be *handled* by many models, open source included — GLM five point two was the first his own team trusted for the majority of their workloads. The pull is cost, as companies blow annual AI budgets in a month, and he expects most enterprise workloads on open models within three years.\n\n> The learning an agent compounds is an asset — you either own the infrastructure it lives on or you rent it.\n\n## The catch\n\nBoth are interested parties — an enterprise-AI founder and an open-source advocate — rather than neutral findings, and \"own your weights\" is aspirational: local continual learning is early, and one owned agent can cost more than the team it replaces (Glean's triage agent ran about a million dollars a month). Ownership is a real lever, but it isn't free.\n\n[Memory & Context](/guide/memory-and-context/)"
+}
