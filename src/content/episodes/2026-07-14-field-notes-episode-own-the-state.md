@@ -4,6 +4,7 @@ date: 2026-07-14
 summary: "Three teams show the durable value in agentic systems is owned state — checked boundaries, organized memory, compounding learning — not a smarter model."
 audio: "/audio/field-notes-episode-own-the-state.mp3"
 seconds: 574
+youtube: "https://youtu.be/jkPhoZm02WM"
 covers:
   - "2026-07-12-own-the-agent-own-the-learning"
   - "2026-07-14-factory-agents-dream-consolidate-knowledge"
