@@ -1,0 +1,28 @@
+{
+  "type": "note",
+  "slug": "manage-agent-context-like-code",
+  "title": "Atlan built 300 agent skills, then found context has to be versioned like code",
+  "date": "2026-07-17",
+  "summary": "Atlan's Prukalpa Sankar describes a 'context layer' for production agents — and why business context, not model intelligence, is the bottleneck, and why it drifts unless it's versioned and owned like code.",
+  "domain": "memory-and-context",
+  "tags": [
+    "memory-and-context",
+    "context-engineering",
+    "skills",
+    "agents"
+  ],
+  "takeaways": [
+    "Treat your agents' context — skills, semantics, playbooks, norms — as versioned, dependency-managed artifacts with owners, not context hardcoded per agent, or it drifts and breaks downstream.",
+    "Model intelligence jumped roughly a thousandfold in a decade while situated business context barely moved, so context, not raw intelligence, is now the bottleneck to agents that work in production.",
+    "Atlan's skills fed each other — competitive intel into positioning into sales battle cards — and each update broke the next, which is why context needs lifecycle management: a 'GitHub for context.'"
+  ],
+  "sourceName": "WTF Is the Context Layer — Prukalpa Sankar, AI Engineer (2026)",
+  "sourceUrl": "https://www.youtube.com/watch?v=8G_1-3IO4ZQ",
+  "sources": [
+    {
+      "title": "WTF Is the Context Layer — Prukalpa Sankar, AI Engineer (2026)",
+      "url": "https://www.youtube.com/watch?v=8G_1-3IO4ZQ"
+    }
+  ],
+  "body": "## What happened\n\nIn a [2026-07-14 AI Engineer talk](https://www.youtube.com/watch?v=8G_1-3IO4ZQ), Atlan founder Prukalpa Sankar described building a \"context layer\" for production agents. After bootstrapping one agent per job, her team hit a wall: building an agent \"took like 5 minutes,\" but \"giving it the business context that it took to actually get it to be accurate took forever.\" They created about 300 skills and 40 agents in six months — and concluded that \"context kind of needs to be managed like code.\"\n\n## Why it matters\n\nIntelligence, she argues, has jumped roughly a thousandfold in a decade while situated business context has \"barely moved\" — still trapped in dashboards, Slack threads, and the head of an analyst who might leave next week. That gap is why, she notes, only about one in five AI use cases reach production. The blocker isn't the model; it's the knowledge, playbooks, and norms the model was never given.\n\n## How it works\n\n1. **Skills are dependencies that drift.** A competitive-intelligence skill fed a positioning skill fed a sales-battle-card skill; each evolved, and \"every time they learn and evolve, it breaks something downstream\" — skills \"quickly start getting outdated and start drifting.\"\n2. **Context sprawls without a shared layer.** Each agent kept its own memory and learned separately; when marketing changed positioning, the website's sales agent \"was still pitching the old version,\" with no shared source of truth.\n3. **So version it like code.** The \"GitHub for context\" she wants: lifecycle management, ownership (approver, maintainer, contributors), dependency tracking, and a quality and security posture per skill.\n\n> If your agents' context isn't versioned and owned, it drifts — and you won't know which agent is running on stale truth.\n\n## The catch\n\nThis is one company's in-progress architecture, and a founder framing the problem her product solves — the \"context layer\" is a proposed pattern rather than a settled standard. Her closing bet, that \"context is IP\" and the durable differentiator once everyone has the same models, is a thesis the market hasn't fully voted on yet.\n\n[Memory & Context](/guide/memory-and-context/)"
+}
