@@ -1,0 +1,94 @@
+{
+  "type": "brief",
+  "slug": "episode-what-part-is-still-yours",
+  "title": "Atlan Versioned Its Agent Context Like Code After Three Hundred Skills Drifted",
+  "date": "2026-07-17",
+  "summary": "Three talks draw one line: agents run the work, but the verdict, the current context, and the enforceable boundary stay yours to own.",
+  "audio": "/audio/episode-what-part-is-still-yours.mp3",
+  "youtube": null,
+  "seconds": 490,
+  "covers": [
+    "2026-07-17-mcp-deprecates-roots-sampling-logging",
+    "2026-07-17-manage-agent-context-like-code",
+    "2026-07-17-agent-cannot-inherit-the-consequences"
+  ],
+  "oneIdea": {
+    "title": "Making generation cheaper doesn't make review any cheaper.",
+    "body": "Addy Osmani's point is that agents got fast at producing work, but someone still has to understand a change well enough to defend it. The Wharton finding on cognitive surrender — people keeping a wrong answer and feeling surer — is why the reviewer's judgment can't be delegated. The durable job isn't a capability; it's owning the verdict."
+  },
+  "stats": [
+    {
+      "n": "96%",
+      "label": "engineers who don't fully trust AI-written code (Sonar survey)"
+    },
+    {
+      "n": "73%",
+      "label": "who kept the wrong answer when the AI was wrong — and felt surer"
+    },
+    {
+      "n": "1,000×",
+      "label": "jump in model intelligence in a decade; business context barely moved"
+    },
+    {
+      "n": "1 in 5",
+      "label": "AI use cases that actually reach production, Atlan reports"
+    }
+  ],
+  "brief": [
+    {
+      "kind": "story",
+      "title": "An agent can follow your runbook, but it can't inherit the consequences",
+      "take": true,
+      "domain": "harness-engineering",
+      "source": "Addy Osmani / AI Engineer",
+      "url": "https://www.youtube.com/watch?v=n97BCfyFIvw",
+      "body": "Osmani argues the durable engineering job is owning the verdict: agents run the inner loop, but deciding, verifying, and accepting risk stay with a human who can be answerable. His rule for agent-shipped code: explain it or don't ship it. Making generation cheaper never made review cheaper."
+    },
+    {
+      "kind": "story",
+      "title": "Atlan built 300 agent skills, then found context has to be versioned like code",
+      "take": false,
+      "domain": "memory-and-context",
+      "source": "Prukalpa Sankar / AI Engineer",
+      "url": "https://www.youtube.com/watch?v=8G_1-3IO4ZQ",
+      "body": "Atlan's skills fed each other and each update broke the next, so agents ran on stale truth. Model intelligence jumped roughly a thousandfold in a decade while business context barely moved. The fix is treating context like code: versioned, owned, with a maintainer."
+    },
+    {
+      "kind": "story",
+      "title": "MCP's next spec drops Roots, Sampling, and Logging",
+      "take": false,
+      "domain": "harness-engineering",
+      "source": "Model Context Protocol",
+      "url": "https://modelcontextprotocol.io/seps/2577-deprecate-roots-sampling-and-logging",
+      "body": "The 2026-07-28 spec deprecates three low-adoption features that each overlapped a more explicit alternative — advisory guidance the protocol couldn't actually enforce. The principle: a protocol stays trustworthy by carrying only what it alone can enforce. Nothing breaks today; the change is advisory."
+    },
+    {
+      "kind": "story",
+      "title": "Moonshot ships Kimi K3, a 2.8-trillion-parameter open model closing on the frontier",
+      "take": false,
+      "domain": "model-behavior",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/kimis-open-model-k3-nears-gpt-5-6-sol-and-fable-5-while-signaling-the-end-of-super-cheap-chinese-ai/",
+      "body": "Kimi K3 is the largest open-weight model yet out of China, nearing top closed models on its own benchmarks. It is markedly pricier than its predecessor, which Moonshot frames as the end of ultra-cheap Chinese AI; full weights are due July 27."
+    },
+    {
+      "kind": "story",
+      "title": "1Password lets Claude use your logins without ever seeing the passwords",
+      "take": false,
+      "domain": "agent-security",
+      "source": "The Verge",
+      "url": "https://www.theverge.com/tech/966442/1password-anthropic-claude-browser-integration",
+      "body": "A new browser integration injects logins and MFA codes to Anthropic's Claude through a channel the AI cannot read, with a single biometric approval per task. It targets one of the biggest blockers to letting agents act on real websites: handing over credentials safely."
+    },
+    {
+      "kind": "quote",
+      "title": "The agent can follow your runbook, but it can't inherit the consequences.",
+      "take": false,
+      "domain": "harness-engineering",
+      "source": "Addy Osmani / AI Engineer",
+      "url": "https://www.youtube.com/watch?v=n97BCfyFIvw",
+      "attribution": "— Addy Osmani, in an AI Engineer talk"
+    }
+  ],
+  "transcript": "[warm] Ninety-six percent of engineers don't fully trust the code AI writes. Half ship it anyway. [curious] So when an agent does the work... what's the part that's still yours?\n\n[warm] This is the Agentic Daily Brief.\n\nNow, um, the loudest thing overnight came out of China. Moonshot AI shipped Kimi K three — an open model with two-point-eight trillion parameters, the biggest open-weight model yet to come out of a Chinese lab. In its own benchmarks it's brushing right up against the top closed models, and even beating a few of them. [curious] The catch? It's noticeably pricier than the last one — Moonshot's basically saying the era of dirt-cheap Chinese AI is over. Full weights land on the twenty-seventh.\n\nOne more headline, and it matters if you've ever wanted an agent to actually do things for you — uh, book a flight, manage an account. OnePassword now lets Anthropic's Claude use your saved logins without ever seeing the passwords. It slips the login and the two-factor code through a channel the model can't read, and you approve each task with a fingerprint. Handing an agent your credentials safely has been one of the big blockers, and that's a real crack in it.\n\nHere's a number that sets up the whole show. A survey of a hundred and fifty-seven companies found half of them had already shipped an agent that passed every internal test... and then failed a real customer in production. Passed the exam, flunked the job. [pause] Which lands us right on a question Addy Osmani has been chewing on.\n\nSo picture the two-a.m. page. Your agent followed the runbook exactly, and something still broke. [curious] Who answers for it? Osmani, in a talk this week, gave a line I keep coming back to. \"The agent can follow your runbook,\" he said, \"but it can't inherit the consequences.\"\n\nThink about what that actually means. The agent can investigate, write the code, run the tests, file the report. What it can't do is accept the risk. It owns no blast radius. When the questions come — who understood the policy, who signed off — an agent isn't in the room.\n\nBut the trap he flags, [surprised] that one honestly stopped me. A Wharton study found that when the AI was wrong, seventy-three percent of people went with the wrong answer anyway — and felt more sure doing it. He calls it cognitive surrender. Borrowed confidence. You stop forming your own view because the machine sounds certain.\n\nHis rule is blunt. Explain it, or don't ship it. Not that a person types every line — [thoughtful] that ship has sailed — but that someone understands the change well enough to defend it. Because making generation cheaper doesn't make review any cheaper. The agent got faster; the person still has to own the verdict, right?\n\nOkay. So if the durable job is owning the call, what does the agent actually need from you to be any good? [curious] Turns out, not more intelligence — or rather, not the kind everyone keeps chasing.\n\nPrukalpa Sankar, who founded a data company called Atlan, gave a talk that reframed this for me. Her team could stand up a new agent in about five minutes. But giving it the business context to be accurate? That, she said, took forever. Over six months they built around three hundred of these skills — little packets of know-how — feeding forty agents.\n\nThen the skills started rotting. [surprised] One agent's competitive research fed another's positioning, which fed the sales pitch. Every time one learned something new, it quietly broke the one downstream. Marketing changed the story, and the website's sales agent? Still pitching last quarter's version. Nobody knew which agent was running on stale truth.\n\nHer point cuts deep. Model intelligence has jumped something like a thousandfold in a decade. The messy business context — the playbooks, the norms, the stuff in the head of an analyst who might quit next week — has barely budged. [slow] That gap is why only about one in five AI projects ever reaches production. The blocker was never the model. I mean — it's the knowledge you never wrote down. So she treats context like code: versioned, owned, with a maintainer, so you always know what broke and who fixes it.\n\nOne more story before we get out. Let's talk about the wiring — the plumbing that plugs agents into your tools and data. There's a standard for it called MCP, and this week its next spec did something you rarely see. It removed things.\n\nThree features, gone. And the reason is the interesting part. Take one of them: it let a server ask the client to please stay inside certain folders. Sounds like a guardrail, right? [surprised] But the client didn't have to listen. It was a polite suggestion dressed up as a boundary. So the authors pulled it — along with two others that just overlapped tools already doing the job better.\n\n[thoughtful] The principle underneath is worth stealing. A protocol should only carry what it can actually enforce. Guidance that looks like a rule, but isn't one, is worse than no rule — because people trust it. Nothing breaks today; the change is advisory. But it's a rare bit of discipline. Shrinking on purpose, so the wiring only promises what it can keep.\n\nBefore you go, one small thing worth trying this week. Pick one agent you lean on. Ask yourself the Osmani question: if it shipped something wrong tomorrow, could you explain the change well enough to defend it? If the answer's no, you don't have an agent problem. You have an ownership gap. Close that one first.\n\nOne talk for the drive home, if you want it — Zhengyao Jiang of Weco has a good one. His autonomous research agent, Aiden, actually topped a real OpenAI hiring challenge, out-scoring the best humans. But his takeaway isn't \"the agents win.\" It's that as machines get good at execution, the human skill that gets more valuable is designing the evaluation — deciding what \"good\" even means. Humans move up the stack, he says, not out of it.\n\nSo, one thing I'd love back from you. If you run an agent in production — what's your \"explain it or don't ship it\" line? Where do you draw it? I read every reply.\n\nWe opened asking what part of the work is still yours when the agent does it. [warm] Three answers today, really. The verdict you can be answerable for. The context only you can keep current. And the boundary you can actually enforce. The agent runs straight through all of it — [slow] but it can't stand behind any of it. That part's still yours.\n\nThat's today's Agentic Daily Brief. [pause] Brought to you by Agent Native Engineering — open knowledge for building and running AI agents. The full write-ups, with their sources, are at agent native engineering dot com. [warm] See you next time."
+}
