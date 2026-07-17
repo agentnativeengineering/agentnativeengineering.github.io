@@ -1,0 +1,28 @@
+{
+  "type": "note",
+  "slug": "agent-cannot-inherit-the-consequences",
+  "title": "An agent can follow your runbook, but it can't inherit the consequences",
+  "date": "2026-07-17",
+  "summary": "Addy Osmani argues the durable engineering job is owning the verdict — agents run the inner loop, but deciding, verifying, and accepting risk stay with a human who can be answerable.",
+  "domain": "harness-engineering",
+  "tags": [
+    "harness-engineering",
+    "accountability",
+    "code-review",
+    "agents"
+  ],
+  "takeaways": [
+    "Split the loop: let agents run the inner loop — investigate, implement, test, report — but keep the outer loop, decide and verify and approve and own, with a human who can be answerable.",
+    "Every engineering edge decays about one model release at a time — speed, recall, verification, even taste — so the durable role isn't a capability, it's owning the verdict.",
+    "Make the rule 'explain it or don't ship it': someone has to understand the work well enough to defend it, because the agent can accept no risk and owns no blast radius."
+  ],
+  "sourceName": "The engineer of the future — Addy Osmani, AI Engineer (2026)",
+  "sourceUrl": "https://www.youtube.com/watch?v=n97BCfyFIvw",
+  "sources": [
+    {
+      "title": "The engineer of the future — Addy Osmani, AI Engineer (2026)",
+      "url": "https://www.youtube.com/watch?v=n97BCfyFIvw"
+    }
+  ],
+  "body": "## What happened\n\nIn a [2026-07-14 AI Engineer talk](https://www.youtube.com/watch?v=n97BCfyFIvw), Addy Osmani argued that the engineer of the future is \"the person who is able to choose what is worth doing\" and owns the verdict — the production decision to ship, block, redirect, or accept risk. His boundary: agents run the inner loop (investigate, implement, test, report); the outer loop — \"deciding, verifying, approving, owning\" — stays human. \"The boundary is not human looks at AI output. The boundary is evidence and responsibility.\"\n\n## Why it matters\n\n\"Making generation cheaper does not automatically make review cheaper.\" He cites a 2026 Sonar survey: about 96% of engineers don't fully trust AI code, yet only about half always verify before committing — \"distrust without bandwidth.\" As AI-assisted code becomes normal code, answerability stops being philosophical and becomes an engineering requirement.\n\n## How it works\n\n1. **Execution isn't responsibility.** \"The agent can follow your runbook, but it can't inherit the consequences.\" When something fails, the questions are: who understood the policy, who accepted the risk, and who owns the blast radius?\n2. **Your edges decay; your signature doesn't.** Speed, recall, and verification have already moved into harnesses and evals, and even taste \"resets as models learn.\" The half-life of an edge is about one model release; the half-life of your signature — the name on the work — is far longer.\n3. **Explain it or don't ship it.** Not that a human types every line, but that someone understands the change well enough to defend it — an owners-file discipline for agent-shipped code.\n\n> Agents execute; only a human can be answerable — and as capabilities decay, that ownership is the durable job.\n\n## The catch\n\nOsmani's own warnings cut against easy answers: he names \"cognitive surrender\" (citing a Wharton study where, when AI was wrong, 73% still picked the wrong answer and felt more sure) and \"orchestration tax\" — your cognitive bandwidth doesn't parallelize, so more agents isn't more of you. \"Own the verdict\" only holds if you resist borrowed confidence; the failure mode isn't using AI, it's deferring to it before forming a view.\n\n[Harness Engineering](/guide/harness-engineering/)"
+}

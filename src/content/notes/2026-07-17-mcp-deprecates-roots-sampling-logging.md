@@ -1,0 +1,42 @@
+---
+title: "MCP's next spec drops Roots, Sampling, and Logging — the protocol was doing too much"
+date: 2026-07-17
+summary: "The Model Context Protocol's 2026-07-28 spec deprecates Roots, Sampling, and protocol-level Logging — each a low-adoption feature that overlapped a more explicit, better-established alternative."
+takeaways:
+  - "Put working-directory context in explicit tool parameters, model invocation in the host, and observability in stderr or OpenTelemetry — not in the MCP protocol, which is deprecating all three."
+  - "MCP's next spec deprecates Roots, Sampling, and Logging because each was low-adoption and overlapped a more explicit alternative, so the protocol carried surface area it couldn't enforce."
+  - "Roots were only advisory; Sampling blurred who owns model choice; Logging duplicated mature observability — move each to where it can actually be controlled."
+tags: ["harness-engineering", "mcp", "protocol", "agents"]
+sourceName: "MCP SEP-2577 (deprecate Roots, Sampling, Logging) + official MCP blog + aaif.io walkthrough"
+sourceUrl: "https://modelcontextprotocol.io/seps/2577-deprecate-roots-sampling-and-logging"
+sources:
+  - title: "SEP-2577: Deprecate Roots, Sampling, and Logging (MCP)"
+    url: "https://modelcontextprotocol.io/seps/2577-deprecate-roots-sampling-and-logging"
+  - title: "The 2026-07-28 MCP Specification Release Candidate (official blog)"
+    url: "https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/"
+  - title: "Introducing MCP 7-28: what goes away, what might break (aaif.io)"
+    url: "https://aaif.io/blog/introducing-mcp-7-28-for-ai-application-developers-what-goes-away-and-what-might-break/"
+draft: false
+---
+
+## What happened
+
+The Model Context Protocol's [next specification, finalizing on 2026-07-28](https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/), [deprecates three core features](https://modelcontextprotocol.io/seps/2577-deprecate-roots-sampling-and-logging) — Roots, Sampling, and protocol-level Logging. A [companion walkthrough dated 2026-07-16](https://aaif.io/blog/introducing-mcp-7-28-for-ai-application-developers-what-goes-away-and-what-might-break/) frames it as "less about new features than simplifying and hardening the protocol for production use." Deprecation is advisory — nothing breaks on the wire yet — but it signals where these responsibilities should live instead.
+
+## Why it matters
+
+Each deprecated feature overlapped a more explicit, better-established alternative, so the protocol was carrying surface area it couldn't actually enforce. The [SEP's own rule](https://modelcontextprotocol.io/seps/2577-deprecate-roots-sampling-and-logging): features that see "low adoption, overlap with existing alternatives, or impose disproportionate implementation burden relative to their value are candidates for removal."
+
+## How it works
+
+1. **Roots → tool parameters.** Roots let a client suggest file boundaries, but servers weren't required to respect them — informational guidance rather than access control. Real boundaries belong in explicit tool parameters, resource URIs, config, or environment.
+2. **Sampling → the host.** Sampling let a server request an LLM completion from the client, blurring who owns model choice. Servers that need an LLM should "integrate directly with LLM provider APIs," keeping control of model, parameters, and streaming.
+3. **Logging → stderr / OpenTelemetry.** Protocol-level logging duplicated "mature, widely adopted" observability; move it out of the protocol channel.
+
+> A protocol stays trustworthy by carrying only what it alone can enforce.
+
+## The catch
+
+This is a deprecation rather than a removal — the features "continue to be fully functional" within a year of the release, and it's advisory: no wire-level change, no capability-negotiation change, nothing breaks today. The nickname "MCP 7-28" is the commentary's shorthand; the official artifact is just the 2026-07-28 spec, and it's worth verifying against the final release when it ships.
+
+[Harness Engineering](/guide/harness-engineering/)
