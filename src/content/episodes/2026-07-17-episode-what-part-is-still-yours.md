@@ -4,6 +4,7 @@ date: 2026-07-17
 summary: "Three talks draw one line: agents run the work, but the verdict, the current context, and the enforceable boundary stay yours to own."
 audio: "/audio/episode-what-part-is-still-yours.mp3"
 seconds: 490
+youtube: "https://youtu.be/xxdnzHbuduI"
 covers:
   - "2026-07-17-mcp-deprecates-roots-sampling-logging"
   - "2026-07-17-manage-agent-context-like-code"
