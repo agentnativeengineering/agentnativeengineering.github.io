@@ -1,0 +1,74 @@
+{
+  "type": "brief",
+  "slug": "field-notes-episode-blank-canvas-computer-use",
+  "title": "Every Computer-Use Agent Scored Zero on a Blank Canvas in Cua's KiCad Test",
+  "date": "2026-07-20",
+  "summary": "Seven frontier models scored zero building from scratch in Cua's verifiable KiCad benchmark; the best edited its way to just 6 of 25.",
+  "audio": "/audio/field-notes-episode-blank-canvas-computer-use.mp3",
+  "youtube": "https://youtu.be/wJX6N1KFNis",
+  "seconds": 509,
+  "covers": [
+    "2026-07-18-computer-use-agents-scored-zero-on-blank-canvas"
+  ],
+  "oneIdea": {
+    "title": "The best computer-use agent finished six of twenty-five real tasks — and none of the seven could build from a blank page; every single win was editing something that already existed.",
+    "body": "Cua ran seven frontier models on real electrical-engineering tasks in KiCad, graded by an objective pass/fail checker. The leaderboard was flat and low: no model cleared a third of full reward. The tell was where the wins came from — editing existing designs only. On blank-canvas tasks, every model scored zero, which a curated demo would never reveal."
+  },
+  "stats": [
+    {
+      "n": "6/25",
+      "label": "Tasks the top model (GPT-5.5) finished on Cua's verifiable KiCad benchmark"
+    },
+    {
+      "n": "0",
+      "label": "Blank-canvas tasks completed — across all seven frontier models"
+    },
+    {
+      "n": "7",
+      "label": "Frontier models tested; none cleared a third of full reward"
+    },
+    {
+      "n": "62→80%",
+      "label": "Cua driver pass rate after trying the accessibility tree before pixels"
+    }
+  ],
+  "brief": [
+    {
+      "kind": "story",
+      "title": "Computer-use agents scored zero on every blank-canvas task",
+      "take": true,
+      "domain": "evaluation",
+      "source": "Cua",
+      "url": "https://github.com/trycua/cua/blob/main/blog/computer-use-2-ai-engineer-worlds-fair.md",
+      "body": "On Cua's verifiable KiCad benchmark, the best model finished just 6 of 25 tasks and all seven frontier models scored zero when asked to build from an empty file. Every win came from editing an existing design — a ceiling that curated demos hide until your users find it."
+    },
+    {
+      "kind": "story",
+      "title": "Chinese open model Kimi K3 rattles Wall Street",
+      "take": false,
+      "domain": "evaluation",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/07/18/kimi-threat-or-menace/",
+      "body": "Moonshot AI released open-weights Kimi K3, which independent tests rank near the top Western frontier models. The free download helped drag the Nasdaq down more than 1% and pushed chip stocks toward bear territory as investors questioned US pricing power."
+    },
+    {
+      "kind": "story",
+      "title": "Google delays Gemini 3.5 Pro, wiping ~$200B off Alphabet",
+      "take": false,
+      "domain": "evaluation",
+      "source": "CNBC",
+      "url": "https://www.cnbc.com/2026/07/16/alphabet-stock-gemini-3-5-pro-ai.html",
+      "body": "Google pushed back its flagship Gemini 3.5 Pro after its coding and reasoning fell short of internal targets even after extra training. Alphabet shares fell about 4%, erasing roughly $200 billion in market value."
+    },
+    {
+      "kind": "quote",
+      "title": "Blank-canvas tasks scored zero across all seven models.",
+      "take": false,
+      "domain": "evaluation",
+      "source": "Cua",
+      "url": "https://github.com/trycua/cua/blob/main/blog/computer-use-2-ai-engineer-worlds-fair.md",
+      "attribution": "— Cua Bench, Computer-Use 2.0 results"
+    }
+  ],
+  "transcript": "[curious] Seven of the best AI models. [pause] One real engineering task. Told to start from a blank page, every single one scored zero. So what was the demo actually measuring?\n\n[warm] This is the Agentic Daily Brief.\n\nLet's start with the news, because Wall Street had a rough few days. Moonshot AI — a Chinese lab — released an open model called Kimi K-three, and independent tests put it right up near the best Western frontier models. [surprised] And it's free to download. That combination helped drag US tech stocks lower. The Nasdaq slid more than one percent, and the chip sector tipped into bear-market territory. The fear underneath it all? [pause] That pricey American AI can't keep charging a premium when a capable model costs, well, nothing.\n\nA few more, fast. Google pushed back the public launch of its flagship Gemini three-point-five Pro — the coding just wasn't hitting the company's own targets, or rather, it wasn't clearing Google's own bar — and that stumble wiped roughly two hundred billion dollars off Alphabet. Anthropic is in early talks to rent about ten billion dollars of computing power from Meta, just to keep serving Claude. And AI music startup Suno got breached — leaked code suggests it trained on millions of songs pulled straight from YouTube and other sites, which is, uh, exactly the kind of thing the record labels suing them would love to see.\n\n[warm] Okay. Away from the trading floor, into a circuit-board editor. Because the most honest test I ran into this week had nothing to do with which model is smartest. It was about what these agents can actually do once you sit them down at a keyboard.\n\nSo, the setup. A team called Cua built a benchmark — Cua Bench — and the word that matters is verifiable. Every task gets graded by an objective checker. Pass or fail. Not another model nodding along, saying \"yeah, that looks about right.\" [curious] That distinction is bigger than it sounds. When a model grades a model, the score is soft — you can look good without being good. A hard checker doesn't care how confident you sound.\n\nThen they pointed seven frontier models at real work — electrical-engineering tasks inside KiCad, which is an open-source tool for designing circuit boards. Not demo puzzles. Actual jobs a working engineer sits down and does.\n\n[pause] The results were rough. The best model — GPT five-point-five — finished six of twenty-five tasks. [slow] Six. The other six models clustered right behind it, and not one of the seven got even a third of the way to a full score. Just a flat, disappointing line straight across the leaderboard. No real winner. Everybody stuck.\n\nBut the number that actually stopped me was this. [pause] Every single win came from editing a design that already existed. Ask any of the seven to build a circuit from an empty file, and all of them scored zero.\n\n[surprised] Zero. [pause] Not \"struggled.\" Not \"got halfway.\" Nothing.\n\n[curious] That's a very particular kind of failure, right? These agents can click around an app you've already set up. They can nudge things, adjust, tweak what's in front of them. But the blank page — the part where you have to decide what to even make, I mean, dream the thing up from nothing — that's where they fell straight off a cliff.\n\nFor anyone eyeing one of these to handle real desktop work — filing, booking, laying out a document from scratch — that's the line you need to feel. It'll happily polish a draft you hand it. Ask it to originate the thing, and right now, you're on your own.\n\n[curious] Here's the more important question, though. It isn't which model topped the chart. It's what a slick demo was quietly hiding all along. Because if your only test is a curated screen-recording, the agent looks like it's totally got this. You never see the ceiling. [slow] Your users find it for you, in production, on a Tuesday.\n\n[thoughtful] Cua's own fix for this is genuinely clever, and it's worth understanding. Instead of the agent staring at raw pixels and guessing where to click, their driver reaches first for the accessibility tree — think of it as the operating system's own labeled map of every button and menu on the screen. Clean, structured, reliable. It only drops down to clicking raw pixels when that map comes up short, and it only yanks a window to the front as a last resort, so it never steals the screen out from under you. They say that reordering pushed the pass rate from around sixty percent up to eighty — while burning roughly a third fewer tokens. [surprised] Better results and cheaper, just from reading a tidy list of labels instead of decoding a full screenshot every step.\n\n[thoughtful] The honest caveat — those last two numbers come from Cua's own talk about Cua's own tool. So, uh, hold them as vendor figures until somebody independent reproduces the run. But the durable lesson doesn't lean on those numbers at all. [thoughtful] My read is that the fancy driver is the smaller story here. The bigger one is the benchmark itself. A test you can't fake with a good demo, run on the real app your agent drives, with the build-from-nothing case scored separately from the edit-what's-there case. Do that, and you find your ceiling before your customers do.\n\n[curious] That idea — that a good evaluator gives you a clean yes or no — showed up in another talk worth watching this week. Annabell Schäfer, from Langfuse, argues that most teams grade their agents on mush. Vague scores like \"is this correct,\" \"is this helpful.\" Her fix: swap the mush for high-signal binary criteria. Is the answer actually grounded in the source? Is the brand name right? Which known failure mode just happened? On one classification task, that kind of sharp, quantifiable check helped lift accuracy about fifteen points — and the biggest single jump came the moment they pinned down one clear failure mode. [warm] And crucially — build those checks with people who actually know the domain. Sharp questions with real answers beat fuzzy scores every time.\n\n[warm] So, before you close the laptop, one thing worth trying this week. Take a single task your agent does all the time. Write the dumbest checker you can for it — one that returns just pass or fail, no opinions, no vibes. Then run it twice. Once editing something that already exists, and once starting from a blank file. I'd bet the gap between those two scores tells you more about your agent than any leaderboard ever will.\n\n[thoughtful] Which brings us right back to where we started. Seven of the best models going, one real task, and a blank page that beat every last one of them. The demo measured whether they could tidy up work you'd already begun. [pause] The empty file measured whether they could actually do the work — and on that, the number was zero.\n\n[warm] That's today's Agentic Daily Brief. [pause] Brought to you by Agent Native Engineering — open knowledge for building and running AI agents. The full write-ups, with their sources, are at agent native engineering dot com. [warm] See you next time."
+}
