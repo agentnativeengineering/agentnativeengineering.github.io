@@ -1,0 +1,37 @@
+---
+title: "OpenAI lets a model write code to drive its own tool calls in a locked-down sandbox"
+date: 2026-07-21
+summary: "OpenAI's Programmatic Tool Calling lets a model emit JavaScript that orchestrates many tool calls at once, run in an isolated V8 runtime with no network, filesystem, or subprocess access."
+takeaways:
+  - "For a stage with predictable control flow, let the model write code that batches and filters tool calls instead of round-tripping each one through your loop — but run that code where it can reach nothing on its own."
+  - "The default agent loop returns one tool call at a time and pays context on every round trip; code-orchestrated calls collapse the loop when a stage needs no fresh model judgment between steps."
+  - "The generated JavaScript runs in a fresh, isolated V8 with no Node, network, filesystem, subprocess, console, or persisted state — external effects happen only through the tools you enable."
+tags: ["architecture-and-orchestration", "tool-use", "agents", "openai"]
+sourceName: "Programmatic Tool Calling — OpenAI API docs (2026)"
+sourceUrl: "https://developers.openai.com/api/docs/guides/tools-programmatic-tool-calling"
+sources:
+  - title: "Programmatic Tool Calling — OpenAI API docs (2026)"
+    url: "https://developers.openai.com/api/docs/guides/tools-programmatic-tool-calling"
+draft: false
+---
+## What happened
+
+OpenAI added [Programmatic Tool Calling](https://developers.openai.com/api/docs/guides/tools-programmatic-tool-calling) to its API: instead of returning one tool call at a time, the model can emit JavaScript that orchestrates tool calls — running them "in parallel," using "loops and conditions," and processing "large tool outputs before returning a result." That code runs in "a fresh, isolated V8 runtime."
+
+## Why it matters
+
+The standard agent loop round-trips through your code on every tool call, paying context and latency each hop — wasteful when a stage has "predictable control flow" and needs no model judgment between calls. Letting the model write the orchestration collapses that loop. The discipline that makes it safe is keeping the generated code powerless.
+
+## How it works
+
+1. **The model writes the orchestration.** Generated JavaScript calls tools in parallel, loops, branches, and returns "a smaller structured result" rather than dumping every raw tool output back into context.
+2. **The runtime is caged.** The V8 runtime excludes Node.js, package installation, network access, a general-purpose filesystem, subprocess execution, console, and persistent state — programs reach the outside "only through tools enabled in the request."
+3. **You set who can call what.** The `allowed_callers` parameter marks each tool `direct`, `programmatic`, or both, so code-orchestrated access is opt-in per tool.
+
+> Give the model a faster loop, but make the tools the only door out of it.
+
+## The catch
+
+This helps only when a stage is genuinely mechanical — predictable control flow, no judgment needed mid-sequence; for exploratory work, the per-call loop is still where the model's reasoning belongs. And the isolation is OpenAI's to enforce: you are trusting their V8 sandbox and your own `allowed_callers` wiring, so a tool you mark `programmatic` is only as safe as what that tool can already do.
+
+[Architecture & Orchestration](/guide/architecture-and-orchestration/)
