@@ -4,6 +4,7 @@ date: 2026-07-21
 summary: "Three moves in agent containment: OpenAI's caged code runtime, memory-planted injections that persist, and xAI open-sourcing its whole harness."
 audio: "/audio/field-notes-episode-agent-containment.mp3"
 seconds: 537
+youtube: "https://youtu.be/YqU1mDWirWU"
 covers:
   - "2026-07-21-memory-payloads-persist-across-sessions"
   - "2026-07-21-xai-open-sourced-grok-build-harness"
