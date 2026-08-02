@@ -1,0 +1,53 @@
+---
+title: "MCP deleted the session, so the model now carries the handle to your server's state"
+date: 2026-08-02
+summary: "The Model Context Protocol's 2026-07-28 spec removed protocol sessions outright — GitHub deleted its Redis session layer, and servers needing cross-call state now mint handles the model has to pass back on every call."
+takeaways:
+  - "Before you delete a session store, name the new home of every piece of state it was holding."
+  - "Statelessness buys plain round-robin scaling, but the only pointer to your server-side state now rides in the model's context, where a dropped handle fails the very next call."
+  - "Version and capabilities ride in each request's _meta, and cross-call state becomes a server-minted handle passed as an ordinary tool argument."
+tags: ["durable-execution", "mcp", "state", "protocols"]
+sourceName: "MCP 2026-07-28 specification (official blog + spec + SEP-2575/2567) + GitHub MCP Server changelog"
+sourceUrl: "https://blog.modelcontextprotocol.io/posts/2026-07-28/"
+sources:
+  - title: "The 2026-07-28 Specification (official MCP blog)"
+    url: "https://blog.modelcontextprotocol.io/posts/2026-07-28/"
+  - title: "GitHub MCP Server supports the next MCP specification (GitHub Changelog, 2026-07-23)"
+    url: "https://github.blog/changelog/2026-07-23-github-mcp-server-supports-the-next-mcp-specification/"
+  - title: "MCP 2026-07-28 specification — Key Changes (changelog)"
+    url: "https://modelcontextprotocol.io/specification/2026-07-28/changelog"
+  - title: "MCP 2026-07-28 Base Protocol (statelessness)"
+    url: "https://modelcontextprotocol.io/specification/2026-07-28/basic/index"
+  - title: "SEP-2575: Make MCP Stateless"
+    url: "https://modelcontextprotocol.io/seps/2575-stateless-mcp"
+  - title: "SEP-2567: Sessionless MCP"
+    url: "https://modelcontextprotocol.io/seps/2567-sessionless-mcp"
+  - title: "MCP Tasks extension overview"
+    url: "https://modelcontextprotocol.io/extensions/tasks/overview"
+  - title: "MCP Tasks extension draft specification (ext-tasks)"
+    url: "https://raw.githubusercontent.com/modelcontextprotocol/ext-tasks/main/specification/draft/tasks.md"
+  - title: "Discussion #3120: stateless MCP and client-carried conversation identifiers"
+    url: "https://github.com/modelcontextprotocol/modelcontextprotocol/discussions/3120"
+draft: false
+---
+## What happened
+
+The [2026-07-28 Model Context Protocol specification](https://blog.modelcontextprotocol.io/posts/2026-07-28/) retired "the `initialize`/`initialized` exchange along with the `Mcp-Session-Id` header," its lead maintainers wrote on July 28. Version and capabilities now travel in every request's `_meta`, so "any request can now land on any server instance behind a plain round-robin load balancer without needing shared storage." GitHub shipped early and [deleted its Redis session layer](https://github.blog/changelog/2026-07-23-github-mcp-server-supports-the-next-mcp-specification/): "Database writes on `initialize` are gone, and database reads are gone from every call…"
+
+## Why it matters
+
+The session had become an infrastructure problem — [SEP-2575](https://modelcontextprotocol.io/seps/2575-stateless-mcp), the proposal behind the change, describes operators "forced to implement complex and fragile solutions like sticky sessions." But dropping the session does not delete the state; anything spanning requests must now ["be referenced by an explicit identifier the client passes on each request"](https://modelcontextprotocol.io/specification/2026-07-28/basic/index). The re-engineering job is deciding where it lives instead.
+
+## How it works
+
+1. **Cross-call state becomes a tool argument.** Servers ["use explicit, server-minted handles passed as ordinary tool arguments"](https://modelcontextprotocol.io/specification/2026-07-28/changelog) — the server still owns the state; the model threads the name for it.
+2. **Long-running work becomes a task you poll.** The opt-in [Tasks extension](https://modelcontextprotocol.io/extensions/tasks/overview) returns "a durable handle instead of blocking," and asks clients to "store task IDs durably so polling can resume after a client crash or restart."
+3. **Nothing gets replayed for you.** Stream resumability is gone: "a broken response stream loses the in-flight request; clients MUST re-issue it as a new request with a new request ID."
+
+> Delete the session store and the state does not disappear; it moves into an argument the model has to hand back on every call.
+
+## The catch
+
+Affinity returns at the routing layer: the [experimental Tasks draft](https://raw.githubusercontent.com/modelcontextprotocol/ext-tasks/main/specification/draft/tasks.md), which predates the release, has clients set `Mcp-Name` to the task ID so intermediaries can "route subsequent requests for the same task to the server instance holding its state." And the handle only round-trips if the model threads it — [SEP-2567](https://modelcontextprotocol.io/seps/2567-sessionless-mcp) argues models already carry opaque identifiers reliably, while [an operator of a multi-tenant remote MCP server](https://github.com/modelcontextprotocol/modelcontextprotocol/discussions/3120) counters that "for a required context a miss is a hard failure on the very next call." Sessions get "a clean break" with no deprecation window, so migrate deliberately or pin to the older version.
+
+[Durable Execution](/guide/durable-execution/)
