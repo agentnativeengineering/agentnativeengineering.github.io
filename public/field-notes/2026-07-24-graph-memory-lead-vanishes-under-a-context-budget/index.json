@@ -1,0 +1,44 @@
+{
+  "type": "note",
+  "slug": "graph-memory-lead-vanishes-under-a-context-budget",
+  "title": "Cap what agent memory retrieves and the knowledge graph drops from first to last",
+  "date": "2026-07-24",
+  "summary": "The PAIM scientific-memory benchmark found Graphiti's convincing win over plain chunk retrieval reversed once retrieval budget was controlled.",
+  "domain": "memory-and-context",
+  "tags": [
+    "memory-and-context",
+    "evaluation",
+    "retrieval",
+    "graphrag"
+  ],
+  "takeaways": [
+    "Score every agent memory system at a fixed retrieval budget before you believe its leaderboard win.",
+    "Graph memory's reported gains can come from pulling far more text into the window — tokens you pay for, latency you wait on, and context the task no longer gets.",
+    "Control the budget and re-score; on one benchmark the graph output went from first at 8.04 to last at 5.27, behind a plain chunk baseline's 7.25."
+  ],
+  "sourceName": "arXiv — Beyond Memory Leaderboards: Evaluating Scientific Memory as Budgeted Context Restoration (Sheverev, Finkelstein, Nikolenko)",
+  "sourceUrl": "https://arxiv.org/abs/2607.16848",
+  "sources": [
+    {
+      "name": "Beyond Memory Leaderboards (arXiv abstract), 18 Jul 2026",
+      "url": "https://arxiv.org/abs/2607.16848",
+      "role": "primary"
+    },
+    {
+      "name": "Beyond Memory Leaderboards full text (arXiv HTML v1) — Table 4 budget sweep, 18 Jul 2026",
+      "url": "https://arxiv.org/html/2607.16848v1",
+      "role": "primary"
+    },
+    {
+      "name": "When Do Multimodal and Graph-Augmented RAG Help? (arXiv abstract), 18 Jul 2026",
+      "url": "https://arxiv.org/abs/2607.16604",
+      "role": "primary"
+    },
+    {
+      "name": "Ground Truth First: tenure crossover in memory-architecture rankings (arXiv abstract), 24 Jul 2026",
+      "url": "https://arxiv.org/abs/2607.21962",
+      "role": "counterpoint"
+    }
+  ],
+  "body": "## What happened\n\nA scientific-memory benchmark posted on 18 July 2026 evaluated eight memory systems over full papers: [on PAIM Graphiti wins convincingly but uses 2.6M characters of retrieved context per query, and after controlling for retrieval budget the lead disappears](https://arxiv.org/abs/2607.16848). At the fair-comparison anchor the graph's KG-only output scored 5.27 — [last of the six systems that could be budgeted](https://arxiv.org/html/2607.16848v1), two points behind the plain chunk retrieval it had beaten 8.04 to 7.22. A [controlled four-way ablation published the same day](https://arxiv.org/abs/2607.16604) landed in the same place: \"knowledge-graph augmentation provides no reliable accuracy improvement across generators or question types in this corpus.\"\n\n## Why it matters\n\nIf you pick agent memory on benchmark scores, you may be buying a context subsidy and calling it an architecture. Retrieved volumes across these systems [\"differ by more than two orders of magnitude, so any comparison that does not control for them is comparing budgets as much as architectures\"](https://arxiv.org/html/2607.16848v1).\n\n## How it works\n\n1. **Native scores are unbudgeted.** Each system retrieves as much as it likes, so the gap between them confounds structure with sheer volume.\n2. **Fix characters-per-query, then re-score.** Even under the cap the graph pulled ~59K characters per query against the baseline's ~31K, and still lost.\n3. **Spend the budget on retrieval quality before structure.** On the second corpus a sparse-dense hybrid was \"the single most significant intervention\" — at 50K the [hybrid variants of Simple RAG, Mem0, and Theoria tied within 0.03 points](https://arxiv.org/abs/2607.16848).\n\n> Judge a memory system by what it recalls per token of context it spends.\n\n## The catch\n\nTheoria is the authors' own system, so the load-bearing number is the chunk baseline they did not build. The finding is also scoped to single-shot retrieval over a fixed corpus. A separate instrument posted [24 July 2026](https://arxiv.org/abs/2607.21962) found rankings invert with tenure: by nine weeks a provenance-typed graph reached 90.4% recall while the budgeted curated map fell to 78.4% — though that paper's best backend is its own author's layered system at 93.2%. Graphs may still earn their build cost in memory that accumulates for months.\n\n[Memory & Context](/guide/memory-and-context/)"
+}
