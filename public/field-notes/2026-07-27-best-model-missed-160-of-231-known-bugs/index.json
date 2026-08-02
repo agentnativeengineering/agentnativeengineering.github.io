@@ -1,0 +1,48 @@
+{
+  "type": "note",
+  "slug": "best-model-missed-160-of-231-known-bugs",
+  "title": "The best vulnerability-finding model missed 160 of 231 known bugs at 96.3% precision",
+  "date": "2026-07-27",
+  "summary": "Vercel's DeepsecBench scores 25 model configurations on finding real vulnerabilities in a real codebase, and the leader reports 71 of the 231 known findings.",
+  "domain": "evaluation",
+  "tags": [
+    "evaluation",
+    "security",
+    "benchmarks",
+    "vulnerability-detection"
+  ],
+  "takeaways": [
+    "Treat an agent's security scan as a queue of findings to triage and grade it on what it missed — the best configuration on DeepsecBench reported 71 of 231 known vulnerabilities.",
+    "The leader printed only three false positives, so at the top of the board the risk has moved from noise you can see to the 69% you never hear about.",
+    "The benchmark's method is the transferable part: recall against a human-judged golden set, weighted twice as heavily as precision, with the median of three runs published."
+  ],
+  "sourceName": "Vercel Engineering (Malte Ubl, Eric Dodds)",
+  "sourceUrl": "https://vercel.com/blog/deepsecbench-evaluating-model-performance-in-finding-cybersecurity-vulnerabilities",
+  "sources": [
+    {
+      "title": "DeepsecBench: evaluating model performance in finding cybersecurity vulnerabilities",
+      "url": "https://vercel.com/blog/deepsecbench-evaluating-model-performance-in-finding-cybersecurity-vulnerabilities",
+      "outlet": "Vercel Engineering Blog",
+      "date": "2026-07-27"
+    },
+    {
+      "title": "DeepsecBench leaderboard (25 model configurations)",
+      "url": "https://vercel.com/ai-gateway/leaderboards/deepsecbench",
+      "outlet": "Vercel",
+      "date": "2026-07-27"
+    },
+    {
+      "title": "DREA: Decoupled Reasoning and Exploration Agents for Repository-Level Vulnerability Detection",
+      "url": "https://arxiv.org/abs/2607.13439",
+      "outlet": "arXiv",
+      "date": "2026-07-15"
+    },
+    {
+      "title": "RECEIPT: Deterministic, Reward-Hacking-Resistant Verification for White-Box Agentic XSS Discovery",
+      "url": "https://arxiv.org/abs/2607.18575",
+      "outlet": "arXiv",
+      "date": "2026-07-20"
+    }
+  ],
+  "body": "## What happened\n\nOn 27 July, Malte Ubl and Eric Dodds released [DeepsecBench](https://vercel.com/blog/deepsecbench-evaluating-model-performance-in-finding-cybersecurity-vulnerabilities), a benchmark for how well models find security vulnerabilities in application code. It runs on an open-source codebase pinned [\"at a commit state just before a large number of vulnerabilities were fixed\"](https://vercel.com/blog/deepsecbench-evaluating-model-performance-in-finding-cybersecurity-vulnerabilities) — 50 entry-point files and \"a golden set of 231 human-judged findings.\" The top configuration, GPT-5.6 Sol at xhigh, [reports 71 of 231: 30.7% recall at 96.3% precision, three false positives, $55.98 and 3h 39m](https://vercel.com/ai-gateway/leaderboards/deepsecbench). Claude Opus 5 at max is second with 65 of 231 at $127.93, and nothing on the 25-row board clears 31% recall.\n\n## Why it matters\n\nWhat the leading configurations print is now mostly real; the risk sits in the seven bugs in ten that are never mentioned. Silence from a scanner that is usually right reads like a clean bill of health, and nothing in the output separates \"this file is fine\" from \"I never got there.\"\n\n## How it works\n\n1. **Grade against a human golden set.** A fixed denominator of 231 human-judged findings, which the model cannot shrink by staying quiet.\n2. **Weight recall over precision.** Score = 100 × 5PR/(4P+R), [\"weighting recall (R) twice as much as precision (P), because missed vulnerabilities will go unfixed, while false positives don't make your codebase less secure.\"](https://vercel.com/blog/deepsecbench-evaluating-model-performance-in-finding-cybersecurity-vulnerabilities)\n3. **Run it more than once.** The published number is [\"the median of the three runs.\"](https://vercel.com/blog/deepsecbench-evaluating-model-performance-in-finding-cybersecurity-vulnerabilities)\n\n> A finding you can trust tells you nothing about the file the scan never mentioned.\n\n## The catch\n\nIt is a vendor benchmark, [\"based on the deepsec cyber harness\"](https://vercel.com/ai-gateway/leaderboards/deepsecbench) Vercel builds, and its construction is secret, so nobody outside can reproduce it: [\"We don't disclose the repository, the commit, the files, or the findings, so there is nothing for models to train against.\"](https://vercel.com/blog/deepsecbench-evaluating-model-performance-in-finding-cybersecurity-vulnerabilities) The board is incomplete too: [\"Anthropic's most capable model, Fable 5, is absent because it declines security work, including defensive tasks.\"](https://vercel.com/blog/deepsecbench-evaluating-model-performance-in-finding-cybersecurity-vulnerabilities) The hits need care as well — a 15 July study on a Python repository benchmark found [26-55% of true positives \"are correct predictions supported by flawed rationales\"](https://arxiv.org/abs/2607.13439), and the 20 July [RECEIPT](https://arxiv.org/abs/2607.18575) work on agentic XSS discovery replays every candidate deterministically because \"a coding agent's claims cannot be trusted on their own.\"\n\n[Evaluation](/guide/evaluation/)\n"
+}
