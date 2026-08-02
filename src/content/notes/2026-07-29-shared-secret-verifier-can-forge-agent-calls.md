@@ -1,0 +1,43 @@
+---
+title: "Every service that can check your agent's shared secret can also forge its calls"
+date: 2026-07-29
+summary: "Revision 03 of draft-richer-oauth-httpsig, from Justin Richer, Aaron Parecki and three co-authors, rules out binding an OAuth access token to a shared secret, because any resource server holding the symmetric key can produce requests indistinguishable from the agent's."
+takeaways:
+  - "Give your agent a private key it alone holds, and stop handing the same secret to every service it calls."
+  - "Where one symmetric key reaches every verifier, each of them can forge the agent's requests, so an audit log proves only that someone holding the key acted."
+  - "Publish the agent's public key as a JWKS in its client metadata so it can rotate keys without coordinating with the authorization server."
+tags: ["access-and-identity", "oauth", "non-human-identity", "proof-of-possession"]
+sourceName: "IETF"
+sourceUrl: "https://www.ietf.org/archive/id/draft-richer-oauth-httpsig-03.html"
+sources:
+  - title: "OAuth Proof of Possession Tokens with HTTP Message Signatures, revision 03"
+    url: "https://www.ietf.org/archive/id/draft-richer-oauth-httpsig-03.html"
+  - title: "Solving the missing trust anchor in dynamic client registration with CIMD"
+    url: "https://aaronparecki.com/2026/07/29/19/solving-missing-trust-anchor-in-dynamic-client-registration-with-cimd"
+  - title: "AI Agent Authentication and Authorization, draft-klrc-aiagent-auth-03"
+    url: "https://www.ietf.org/archive/id/draft-klrc-aiagent-auth-03.html"
+  - title: "OAuth Client Authentication with SPIFFE, draft-ietf-oauth-spiffe-client-auth-02"
+    url: "https://www.ietf.org/archive/id/draft-ietf-oauth-spiffe-client-auth-02.html"
+draft: false
+---
+## What happened
+
+On 2026-07-28 Justin Richer, Aaron Parecki and three co-authors published [revision 03 of an individual IETF draft that binds OAuth access tokens to keys the client holds](https://www.ietf.org/archive/id/draft-richer-oauth-httpsig-03.html). Its security considerations rule the shared secret out: ["An access token cannot be bound to a shared secret,"](https://www.ietf.org/archive/id/draft-richer-oauth-httpsig-03.html) because binding one ["would allow every RS that accepts it to produce requests indistinguishable from the client's."](https://www.ietf.org/archive/id/draft-richer-oauth-httpsig-03.html) The normative fix is one line: ["The key MUST be an asymmetric key, and the registered JWK MUST be its public key."](https://www.ietf.org/archive/id/draft-richer-oauth-httpsig-03.html)
+
+## Why it matters
+
+The argument bites wherever one symmetric key reaches every party that verifies a call — the shape you get whenever one static API key is handed to every service an agent touches. Any holder can mint a request in the agent's name, so the audit trail proves only that someone with the key acted. A separate individual draft calls static API keys [an antipattern for agent identity](https://www.ietf.org/archive/id/draft-klrc-aiagent-auth-03.html), for being long-lived, hard to rotate, and cryptographically unbound.
+
+## How it works
+
+1. **The agent holds a private key.** Nothing it authenticates to ever receives material that could sign in its place.
+2. **The signature covers the request.** It must span at least the method, target URI and presented token, and verifying it against the bound public key ties one call to one agent.
+3. **The public half is published.** A client listing a JWKS in its metadata ["can rotate keys without coordinating with the authorization server,"](https://aaronparecki.com/2026/07/29/19/solving-missing-trust-anchor-in-dynamic-client-registration-with-cimd) [Parecki wrote the next day](https://aaronparecki.com/2026/07/29/19/solving-missing-trust-anchor-in-dynamic-client-registration-with-cimd) — which he argues makes `private_key_jwt` ["practical for any client with a web presence."](https://aaronparecki.com/2026/07/29/19/solving-missing-trust-anchor-in-dynamic-client-registration-with-cimd)
+
+> A key that every verifier also holds can authenticate a call but cannot attribute it.
+
+## The catch
+
+The httpsig document is an individual submission the OAuth working group has not adopted, so its MUST carries five authors' weight and no IETF consensus. Asymmetric keys also move the bootstrap problem without deleting it: an adopted working-group draft notes that client secrets and private key JWT ["both require an out of band distribution of secret material"](https://www.ietf.org/archive/id/draft-ietf-oauth-spiffe-client-auth-02.html), which SPIFFE-attested identity escapes only where your platform already attests workloads. Rotation lags too — the authorization server picks up a new JWKS ["when the cache expires."](https://aaronparecki.com/2026/07/29/19/solving-missing-trust-anchor-in-dynamic-client-registration-with-cimd)
+
+[Access & Identity](/guide/access-and-identity/)
