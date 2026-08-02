@@ -1,0 +1,49 @@
+---
+title: "An access token that carries both the agent and the human it acts for"
+date: 2026-07-30
+summary: "An IETF individual draft from engineers at Defakto Security, AWS, Zscaler, Ping Identity, OpenAI and Okta puts the agent in an access token's client_id and the person it acts for in sub, and the WIMSE chairs say a call for adoption is coming."
+takeaways:
+  - "When an agent acts for a person, carry both identities on the call — the agent's own and that person's — so a resource server can authorize and an auditor can attribute."
+  - "A shared service account collapses both into one principal, which leaves you unable to scope an agent, attribute what it did, or revoke narrowly."
+  - "The draft defines no new protocol; it maps the problem onto OAuth access-token claims, cross-domain identity chaining, and transaction tokens bound to a single transaction."
+tags: ["access-and-identity", "ietf", "oauth", "delegation"]
+sourceName: "IETF"
+sourceUrl: "https://datatracker.ietf.org/doc/draft-klrc-aiagent-auth/"
+sources:
+  - title: "draft-klrc-aiagent-auth-03: AI Agent Authentication and Authorization (datatracker)"
+    url: "https://datatracker.ietf.org/doc/draft-klrc-aiagent-auth/"
+  - title: "draft-klrc-aiagent-auth-03 full text"
+    url: "https://www.ietf.org/archive/id/draft-klrc-aiagent-auth-03.html"
+  - title: "IETF 126 WIMSE WG minutes (Vienna)"
+    url: "https://datatracker.ietf.org/meeting/126/materials/minutes-126-wimse-202607201200-00"
+  - title: "WIMSE @ IETF 126: Meeting summary and follow-ups (Pieter Kasselman, WIMSE chair)"
+    url: "https://mailarchive.ietf.org/arch/msg/wimse/eR7Cesswrsvzl6e5DqmxMfzeAgM/"
+  - title: "Review of draft-klrc-aiagent-auth-03 (Kunal Ghosh, Samsung Research America)"
+    url: "https://mailarchive.ietf.org/arch/msg/wimse/cJ5Zg2I9p5i2f9cRw4TCcneBT1g/"
+  - title: "Re: Review of draft-klrc-aiagent-auth-03 (Christian Munoz, Keel API)"
+    url: "https://mailarchive.ietf.org/arch/msg/wimse/oYmsuxagy-UmNyVKowAvoOKYenQ/"
+  - title: "draft-ietf-oauth-transaction-tokens (OAuth WG, rev -11)"
+    url: "https://datatracker.ietf.org/doc/draft-ietf-oauth-transaction-tokens/"
+draft: false
+---
+## What happened
+
+On 2026-07-20 at IETF 126 in Vienna, the WIMSE working group [heard](https://datatracker.ietf.org/meeting/126/materials/minutes-126-wimse-202607201200-00) [draft-klrc-aiagent-auth-03](https://datatracker.ietf.org/doc/draft-klrc-aiagent-auth/), "AI Agent Authentication and Authorization" — posted 2026-07-06 by authors at Defakto Security, AWS, Zscaler, Ping Identity, OpenAI, and Okta. It treats an agent as a workload and, [rather than defining new protocols, describes how existing and widely deployed standards can be applied or extended](https://www.ietf.org/archive/id/draft-klrc-aiagent-auth-03.html). On 2026-07-30 the chairs told the list a [call for adoption is coming](https://mailarchive.ietf.org/arch/msg/wimse/eR7Cesswrsvzl6e5DqmxMfzeAgM/).
+
+## Why it matters
+
+Run an agent on a shared service account or a long-lived key and every call arrives as one principal. The draft's premise is that when an agent acts for someone, that context ["is preserved and used as input to authorization decisions and recorded in audit trails"](https://www.ietf.org/archive/id/draft-klrc-aiagent-auth-03.html#section-4). Without that you cannot scope one agent, attribute an action, or revoke narrowly.
+
+## How it works
+
+1. **Two identities in one token.** The agent goes in the `client_id` claim and the person it acts for in `sub`, and resource servers [must use both, along with the token's other claims, to decide access](https://www.ietf.org/archive/id/draft-klrc-aiagent-auth-03.html#section-10.3).
+2. **Cross-domain hops should chain.** Across authorization servers the agent [exchanges its token for a JWT authorization grant, then presents that grant to get an access token for the target resource](https://www.ietf.org/archive/id/draft-klrc-aiagent-auth-03.html#section-10.6).
+3. **Narrow inside the call chain.** The draft has services trade that token for a [transaction token bound to one transaction, which cannot be reused with another](https://www.ietf.org/archive/id/draft-klrc-aiagent-auth-03.html#section-10.5) — a [spec](https://datatracker.ietf.org/doc/draft-ietf-oauth-transaction-tokens/) that reached its eleventh revision on 2026-07-30.
+
+> An agent's credential should say both who it is and whose authority it is borrowing.
+
+## The catch
+
+None of this credential machinery catches an agent whose behavior has been subverted. Reviewing the draft on 2026-07-17, Kunal Ghosh of Samsung Research America wrote that expiry [works poorly for "a compromised agent - one that is correctly attested and holds an unexpired credential, but whose behavior has been subverted"](https://mailarchive.ietf.org/arch/msg/wimse/cJ5Zg2I9p5i2f9cRw4TCcneBT1g/). Two days later Christian Munoz of Keel API, who has posted a companion draft on the audit-evidence side, replied that authentication never tells you whether ["the specific thing the agent is trying to do right now is actually authorized"](https://mailarchive.ietf.org/arch/msg/wimse/oYmsuxagy-UmNyVKowAvoOKYenQ/). The room was not unanimous either, and this is still an individual submission: the call for adoption has been announced but not yet issued.
+
+[Access & Identity](/guide/access-and-identity/)
