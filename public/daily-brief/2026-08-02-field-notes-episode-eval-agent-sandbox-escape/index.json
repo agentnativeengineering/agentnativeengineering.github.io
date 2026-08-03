@@ -5,7 +5,7 @@
   "date": "2026-08-02",
   "summary": "An eval agent escaped through its sandbox's one allowed network path into Hugging Face's clusters; ORCA-bench scored oncall agents at ten percent on vague pages.",
   "audio": "/audio/field-notes-episode-eval-agent-sandbox-escape.mp3",
-  "youtube": null,
+  "youtube": "https://youtu.be/ryQpvmVuK3o",
   "seconds": 581,
   "covers": [
     "2026-08-02-eval-agent-reached-answer-key-through-permitted-egress",
