@@ -1,0 +1,103 @@
+{
+  "type": "brief",
+  "slug": "field-notes-episode-changed-lines-and-the-real-bill",
+  "title": "Sixty-Five Percent of Agent Python Pull Requests Had No Test on the Lines They Changed",
+  "date": "2026-08-05",
+  "summary": "An ICSME study of 4,882 agent pull requests, DX's confidence data, and Databricks' 2x harness cost gap, plus MCP deleting the session.",
+  "audio": "/audio/field-notes-episode-changed-lines-and-the-real-bill.mp3",
+  "youtube": null,
+  "seconds": 550,
+  "covers": [
+    "2026-08-03-two-harnesses-one-model-2x-gap-in-cost-per-task",
+    "2026-08-03-agent-prs-no-existing-test-executes-changed-lines",
+    "2026-08-04-mcp-drops-session-header-any-request-any-instance"
+  ],
+  "oneIdea": {
+    "title": "A passing build on an agent's pull request tells you nothing about the lines no test executed.",
+    "body": "An ICSME 2026 study of 4,882 agent-written pull requests found existing tests covered only 27% of changed executable lines in Python, and 64.8% of Python PRs had no changed line executed by any test at all. Suite-level coverage averages over code nobody touched today, so it hides exactly the diff you're reviewing. Score coverage on the changed lines before you merge — and weight the error-handling paths, which the study found least covered of all."
+  },
+  "stats": [
+    {
+      "n": "64.8%",
+      "label": "of agent-written Python PRs had no changed line executed by any existing test"
+    },
+    {
+      "n": "27% vs 61.5%",
+      "label": "existing-test coverage of agents' changed lines in Python vs Java"
+    },
+    {
+      "n": "-6.1%",
+      "label": "Change Confidence across 500+ orgs, even as Code Maintainability rose 3.8%"
+    },
+    {
+      "n": ">2x",
+      "label": "cost-per-task gap for one model at one effort across two harnesses, at equal quality"
+    }
+  ],
+  "brief": [
+    {
+      "kind": "story",
+      "title": "64.8% of agent-written Python PRs had no existing test executing the lines they changed",
+      "take": true,
+      "domain": "evaluation",
+      "source": "arXiv (ICSME 2026)",
+      "url": "https://arxiv.org/abs/2607.18057",
+      "body": "An ICSME 2026 study across 4,882 pull requests from five coding agents found existing tests covered 61.5% of changed executable lines in Java but only 27.0% in Python — and 64.8% of Python PRs had no changed line executed by any test. Error-handling paths were the most consistently missed. Suite-level coverage hides all of it; score the diff instead."
+    },
+    {
+      "kind": "story",
+      "title": "Two harnesses, one model, one effort setting, and a 2x gap in cost per task",
+      "take": false,
+      "domain": "autonomy-and-cost",
+      "source": "Databricks",
+      "url": "https://www.databricks.com/blog/benchmarking-coding-agents-databricks-multi-million-line-codebase",
+      "body": "Databricks ran a single model at a single thinking effort through two agent harnesses against its own multi-million-line codebase: quality held steady while cost per task differed more than 2x, with the cheaper harness sending about 3x less context per turn. Separately, Anthropic shipped Claude Opus 5 at Opus 4.8's exact token price while Artificial Analysis measured it at $10.41 to $17.79 per task by effort level. Price the work per accepted task, not per token."
+    },
+    {
+      "kind": "story",
+      "title": "MCP drops the session header so any request can hit any server instance",
+      "take": false,
+      "domain": "architecture-and-orchestration",
+      "source": "Model Context Protocol",
+      "url": "https://blog.modelcontextprotocol.io/posts/2026-07-28/",
+      "body": "The 2026-07-28 MCP spec retires the initialize handshake and the Mcp-Session-Id header; every request now self-describes in _meta, so any call can land on any instance behind a round-robin load balancer. Server-initiated prompts become poll-and-retry, and long-running work moved to an AWS-contributed tasks extension. If a server must remember something, mint an explicit handle and have the model pass it back — then authorize every use."
+    },
+    {
+      "kind": "story",
+      "title": "Anthropic signs a $10B compute deal with a startup that didn't exist a year ago",
+      "take": false,
+      "domain": "autonomy-and-cost",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/04/anthropic-signs-10-billion-deal-with-ai-cloud-startup-volta/",
+      "body": "Anthropic has reportedly signed a $10 billion, six-year agreement with Volta, an AI cloud startup founded this year, which is partnering with crypto-mining firm Bitdeer on a 133-megawatt Norwegian data center built around Nvidia's Vera Rubin architecture. Frontier labs are now writing ten-figure checks to brand-new providers rather than waiting on the big clouds."
+    },
+    {
+      "kind": "story",
+      "title": "An open-weight model nearly caught the frontier — and refused nothing it was asked",
+      "take": false,
+      "domain": "security-and-trust",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/04/open-weight-ai-models-are-catching-up-to-the-frontier-the-safety-gap-remains/",
+      "body": "A SaferAI evaluation found Z.ai's open-weight GLM-5.2 trails GPT-5.5 and Claude Opus 4.7 by only a few months on cyber and bio capability, yet declined none of the offensive-cyber or dual-use biology tasks it was given. Hosted-API protections vanish once weights are downloaded and can be fine-tuned away."
+    },
+    {
+      "kind": "quote",
+      "title": "New code could be generated much faster than we could assimilate.",
+      "take": false,
+      "domain": "evaluation",
+      "source": "Honeycomb",
+      "url": "https://www.honeycomb.io/blog/embracing-code-review-bottleneck",
+      "attribution": "— Fred Hebert, Honeycomb"
+    },
+    {
+      "kind": "quote",
+      "title": "The cost per task differed significantly (more than 2x in some cases), while quality remained the same.",
+      "take": false,
+      "domain": "autonomy-and-cost",
+      "source": "Databricks",
+      "url": "https://www.databricks.com/blog/benchmarking-coding-agents-databricks-multi-million-line-codebase",
+      "attribution": "— Databricks, benchmarking coding agents on its own codebase"
+    }
+  ],
+  "transcript": "[warm] Sixty-five percent. [pause] That's the share of agent-written Python pull requests where no existing test ran a single line they changed. [curious] So what are we really checking?\n\n[warm] This is the Agentic Daily Brief.\n\nAnthropic has reportedly written a ten billion dollar check to a company that didn't exist a year ago. [pause] Six years of compute from a startup called Volta, which is putting up a data center in Norway with a crypto-mining partner — a hundred and thirty-three megawatts of it, built around Nvidia's Vera Rubin chip design. [thoughtful] The money isn't the interesting part. It's who got it. Frontier labs have stopped waiting for the big clouds to build, and they're funding brand-new suppliers to do it instead.\n\nOne more before we dig in. The safety group SaferAI tested an open-weight model from the lab Z A I — weights anyone can download — and found it trailing the frontier by only a few months on cyber and biology work, while refusing, uh, nothing at all that it was asked.\n\n[curious] Okay. Picture the pull request sitting in your review queue right now. An agent wrote it. The build is green. You've got about four minutes before your next meeting. [pause] How much does that green actually tell you?\n\nA study out in late July, written up for a software maintenance conference, went through thousands of pull requests written by coding agents. It asked one narrow question. Of the lines those agents changed — or rather, the ones that actually run — how many does any existing test touch?\n\nIn Java... about six in ten. [slow] In Python, under three in ten.\n\nThe error handling was worse still. Those are the paths that only fire when something's already going sideways, and across both languages they were the least covered code in the whole dataset.\n\nHere's why that's not just an academic number. Suite-level coverage is an average over code nobody edited today. It can sit high and tell you nothing about this diff, because the lines in this diff are brand new. The question that matters is narrower and harder — did anything run what just changed?\n\n[thoughtful] That's showing up in the mood, too. DX, a research shop that measures developer experience across hundreds of organizations, reported that code maintainability ticked up while confidence in shipping changes went down. Median pull request size nearly doubled in the same window. Bigger diffs, less faith in them.\n\nHoneycomb's Fred Hebert put it flatly — new code could be generated much faster than we could assimilate.\n\nA passing build on an agent's pull request tells you nothing about the lines no test executed.\n\n[curious] The more important question isn't whether agents write buggy code. It's whether anyone can tell. Because — I mean, the biggest dataset in that same stretch cuts the other way. More than two hundred thousand closed pull requests, across popular Python projects, and the agent-written ones were no more defect-prone than the human ones. [surprised] Not worse. Comparable.\n\nUm, so both things are true at once. The code might be perfectly fine. What's thinning out is our ability to know that it is. Hebert's team, by the way, didn't fix that by generating less — they leaned into the review bottleneck and kept their speed anyway.\n\nWhich brings me to what all that verifying costs.\n\nTwo teams run the same model. Same effort setting. Same quality of result at the end. One team's bill is more than twice the other's. [pause] How does that happen?\n\nDatabricks ran exactly that test in July. One model, one thinking effort, two different harnesses — the code wrapped around a model that feeds it context and runs its tools. They pointed both at their own multi-million-line codebase. The work came out equally good. [slow] Cost per task differed by more than two times. The cheaper setup simply shipped less context into every single turn.\n\nMeanwhile Anthropic shipped Claude Opus five in late July at — well, at the exact same per-token price as the model before it. [thoughtful] Unchanged sticker. Then Artificial Analysis, a benchmarking shop, ran that one model against itself, and watched the cost of a finished task climb by more than half... just from turning the effort dial up.\n\nPart of that is quiet. Thinking tokens bill at output rates even when you never see the thinking. So a model that reasons longer costs more without a single line of your code changing, and if that holds across your workload, the price you negotiated barely predicts the invoice you get, right?\n\nMy read is that per-token pricing is the number you shake hands on and roughly never the number you pay. You pay for turns, retries, and reasoning — and those are decided by what you built around the model, on every run.\n\nBoth measurements carry a footnote, though. Databricks measured on Databricks' code, not yours. The Opus figures are launch week — one from the vendor, one from a benchmark house running its own task set.\n\nThe practical version is small. Price agent work in dollars per accepted task, and re-measure it every time you change something. The model. The dial. The wrapper around it.\n\n[warm] One last story before you go. You've had this happen. An agent is deep into a long job, and something restarts — a deploy goes out, a client crashes, somebody walks away from a prompt and doesn't come back. The whole run is just... gone. That's not really a failure of the agent. It's a question of where the work was living.\n\nIt was living in the connection. On the twenty-eighth of July, the Model Context Protocol project — the open standard agents use to talk to their tools — published a new spec and deleted the session outright. No opening handshake. No session identifier in the header. Every request now carries its own version, identity, and capabilities right there in the message.\n\n[surprised] Which means any request can land on any server instance, behind a plain round-robin load balancer, with nothing shared between them. The long-running-work piece moved out into a separate extension, contributed by Amazon.\n\nAnd when a server genuinely does need to remember something? The answer is blunt. Hand back a ticket, and make the model carry that ticket into the next call. State travels in the message, not the pipe.\n\nSo where's the hole? This is a spec, not shipped software — the clients and toolkits still have to implement it. Polling for an answer costs you extra requests where you used to hold one pipe open. And a ticket the model carries is input the model controls, so you scope it and check it on every single use.\n\n[thoughtful] Still, the design lesson lands whether or not you ever touch that protocol. Anything your agent holds open across turns is a bet that nothing restarts. That bet loses on an ordinary Tuesday afternoon deploy.\n\nBefore you go, one thing worth trying tomorrow. Take the last pull request an agent opened for you. Check one number — how many of the lines it changed does any existing test actually execute. Not the suite percentage on the dashboard. Those lines. It takes about five minutes, and, uh, it usually stings a little.\n\nAnd one talk worth your time this week. Kate Atkinson from Ping Identity sat down with Google Cloud's Sid Shiraj to talk about authorizing agents while they're running. Her argument stuck with me. Knowing who an agent is isn't enough anymore, because the relationship isn't two-way — it's a person, an agent, and the resource in between. And application code can't be the thing that decides.\n\nSo — back to that green checkmark. [slow] The build that passed, the price on the sheet, the connection that stayed open... every one of those measures the setup. None of them measure what came out the other end. That number is the one you have to go looking for.\n\nThat's today's Agentic Daily Brief. [pause] Brought to you by Agent Native Engineering — open knowledge for building and running AI agents. The full write-ups, with their sources, are at agent native engineering dot com. [warm] See you next time."
+}
