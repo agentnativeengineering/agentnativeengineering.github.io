@@ -4,6 +4,7 @@ date: 2026-08-05
 summary: "An ICSME study of 4,882 agent pull requests, DX's confidence data, and Databricks' 2x harness cost gap, plus MCP deleting the session."
 audio: "/audio/field-notes-episode-changed-lines-and-the-real-bill.mp3"
 seconds: 550
+youtube: "https://youtu.be/gkVql-Lnweg"
 covers:
   - "2026-08-03-two-harnesses-one-model-2x-gap-in-cost-per-task"
   - "2026-08-03-agent-prs-no-existing-test-executes-changed-lines"
