@@ -1,0 +1,94 @@
+{
+  "type": "brief",
+  "slug": "field-notes-episode-deepsecbench-seventy-one-of-two-thirty-one",
+  "title": "The Top Model on Vercel's Security Benchmark Missed a Hundred and Sixty Bugs",
+  "date": "2026-08-08",
+  "summary": "Vercel's DeepsecBench, a graph-memory reversal under a fixed budget, and MiniMax's reward-hacking checks: three evals hiding what they never measured.",
+  "audio": "/audio/field-notes-episode-deepsecbench-seventy-one-of-two-thirty-one.mp3",
+  "youtube": "https://youtu.be/QCZf-zdL3po",
+  "seconds": 577,
+  "covers": [
+    "2026-07-24-graph-memory-lead-vanishes-under-a-context-budget",
+    "2026-07-27-best-model-missed-160-of-231-known-bugs",
+    "2026-08-08-minimax-checks-intermediate-submissions-to-catch-reward-hacking"
+  ],
+  "oneIdea": {
+    "title": "A finding you can trust tells you nothing about the file the scan never opened.",
+    "body": "On Vercel's DeepsecBench, the leading configuration reported 71 of 231 human-judged vulnerabilities with only three false positives — near-perfect precision, and 160 bugs never mentioned. Nothing in the output distinguishes 'this file is clean' from 'I never got there.' As precision climbs, the risk moves from noise you can see to silence you can't."
+  },
+  "stats": [
+    {
+      "n": "71 / 231",
+      "label": "Findings the best DeepsecBench configuration reported out of the human-judged golden set"
+    },
+    {
+      "n": "96.3%",
+      "label": "Precision of that leader — three false positives in the whole run"
+    },
+    {
+      "n": "2.6M chars",
+      "label": "Retrieved context per query behind Graphiti's unbudgeted win on the PAIM benchmark"
+    },
+    {
+      "n": "8.04 → 5.27",
+      "label": "Graph memory's score once retrieval budget was fixed: first place to last"
+    }
+  ],
+  "brief": [
+    {
+      "kind": "story",
+      "title": "The best vulnerability-finding model reported 71 of 231 known bugs at 96.3% precision",
+      "take": true,
+      "domain": "evaluation",
+      "source": "Vercel",
+      "url": "https://vercel.com/blog/deepsecbench-evaluating-model-performance-in-finding-cybersecurity-vulnerabilities",
+      "body": "Vercel pinned a real open-source codebase just before a batch of vulnerabilities were fixed, giving a fixed denominator of 231 human-judged findings. The top configuration of 25 tested reported 71 of them with three false positives, and nothing on the board cleared 31% recall. At that precision, the risk moves from noise you can see to the seven bugs in ten you never hear about."
+    },
+    {
+      "kind": "story",
+      "title": "Cap what agent memory retrieves and the knowledge graph drops from first to last",
+      "take": false,
+      "domain": "memory-and-context",
+      "source": "arXiv",
+      "url": "https://arxiv.org/abs/2607.16848",
+      "body": "On a scientific-memory benchmark over full papers, Graphiti won convincingly — while pulling 2.6M characters of retrieved context per query. Once retrieval budget was controlled, its score fell from 8.04 to 5.27, last of six, behind a plain chunk baseline at 7.25. Score memory systems at a fixed budget before you believe a leaderboard."
+    },
+    {
+      "kind": "story",
+      "title": "MiniMax checks an agent's intermediate submissions to catch reward hacking",
+      "take": false,
+      "domain": "evaluation",
+      "source": "MiniMax (AI Engineer panel)",
+      "url": "https://www.youtube.com/watch?v=AVMr9PMINyo",
+      "body": "MiniMax's RL research lead Olive Song said the hard part of post-training their open-weight M3 model was designing the environments, data and reward — plus validation checks that inspect the model's intermediate submissions, not only its final answer. A reward that reads just the end state is the one an agent learns to game. LatchBio's long-horizon tasks show the cost: about three people for a week each to author, with no model solving them yet."
+    },
+    {
+      "kind": "story",
+      "title": "OpenAI hits pause on Astra after deciding it may be too good at hacking",
+      "take": false,
+      "domain": "evaluation",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/07/openai-says-it-slowed-astra-model-development-over-security-concerns/",
+      "body": "OpenAI suspended parts of development on Astra after internal evaluations found its agentic coding and cybersecurity skills advanced enough that it cannot rule out the 'critical' cyber tier of its own Preparedness Framework. Its response is isolated test environments, encrypted weights, chain-of-thought monitoring that halts risky activity, and capability testing with government agencies."
+    },
+    {
+      "kind": "story",
+      "title": "Anthropic cuts Fable 5's bogus biology blocks by about 85 percent",
+      "take": false,
+      "domain": "evaluation",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/anthropic-loosens-fable-5s-biology-restrictions-but-keeps-the-guardrails-on-for-virology-and-toxicology/",
+      "body": "Anthropic retuned the biology safety classifier on Fable 5, cutting false-positive refusals by roughly 85 percent after an earlier configuration blocked nearly all biology questions. Hard guardrails stay on virology, toxicology and molecular design, with access programs planned for vetted researchers."
+    },
+    {
+      "kind": "quote",
+      "title": "A finding you can trust tells you nothing about the file the scan never mentioned.",
+      "take": false,
+      "domain": "evaluation",
+      "source": "Vercel",
+      "url": "https://vercel.com/blog/deepsecbench-evaluating-model-performance-in-finding-cybersecurity-vulnerabilities",
+      "attribution": "— Agent Native Engineering, on Vercel's DeepsecBench leaderboard"
+    }
+  ],
+  "transcript": "[warm] The best model on a new security benchmark found seventy-one bugs. It missed a hundred and sixty. [pause] [curious] So how do you tell a clean report... from one that stopped looking?\n\n[warm] This is the Agentic Daily Brief.\n\nOpenAI hit the brakes on one of its own models. The company said it suspended parts of development on Astra, its next major model, after internal evaluations came back hot — the thing's agentic coding and cybersecurity skills were strong enough that OpenAI can't rule out the critical tier of its own safety framework. That's the level where a model could find and weaponize brand-new exploits against hardened real-world systems, working from nothing but a high-level goal. It's the first time the company has flagged one of its own models that way. So Astra lives in isolated test environments now, weights encrypted, with monitoring that reads the model's reasoning and can halt a risky run while it's still going. They're also testing capabilities alongside government agencies.\n\nAnthropic moved the opposite direction this week. It retuned the biology filter on Fable five and cut bogus refusals by, uh, roughly eighty-five percent — an earlier setting had been blocking nearly every biology question that walked in the door. Hard blocks stay put on virology and toxicology.\n\n[thoughtful] Two very different calls, same machinery underneath. Somebody ran an evaluation, and the evaluation decided what happens next. Which is worth sitting with, because evaluations are a lot softer than they look.\n\n[curious] Start with the one that's been rattling around my head all week. You point a model at your own codebase and say: find the security holes. It hands you a list. [pause] The list is the easy part. What do you do about the silence — all the files it never mentioned?\n\nVercel went and measured exactly that. Malte Ubl and Eric Dodds took a real open-source codebase and pinned it to a moment just before a big batch of vulnerabilities got patched. Real bugs, still sitting in there. And — this is the move that makes the whole thing work — the count is fixed in advance. Two hundred and thirty-one findings, judged by people. A model cannot shrink that number by keeping quiet.\n\nUh, twenty-five setups ran against it. [pause] [slow] The winner reported seventy-one. [pause] Seventy-one, out of two hundred and thirty-one that were provably there — call it seven bugs in ten that never came up at all. Nothing on that entire board cleared a third.\n\nThe leader's false positives? [surprised] Three. In the whole run. So nearly everything it said was true... and most of what was true, it never said.\n\n[slow] A finding you can trust tells you nothing about the file the scan never opened.\n\n[thoughtful] The more important question isn't which model sits on top of that leaderboard. It's what your team does at nine in the morning when the report comes back with three tidy items and a lot of white space. Silence from a tool that's usually right reads exactly like a clean bill of health.\n\n[curious] Vercel clearly saw that coming, because of how they score it. A miss counts double against you, and their reasoning is blunt — a vulnerability nobody finds goes unfixed, while a false alarm doesn't make your codebase any less secure. They also run each configuration more than once and publish the middle result, which, honestly, more benchmarks should do.\n\nWhere this breaks: it's a vendor benchmark, running on scanning tools Vercel builds itself. And they won't disclose the repository, the commit, or the findings. That's deliberate — nothing can train against a secret. It also means nobody outside can reproduce a single row.\n\nAnthropic's Fable five isn't even on the board, by the way. It declines security work. All of it, defensive tasks included. And even the hits deserve a squint: a separate study last month found a real chunk of the correct answers were correct for flawed reasons. Right answer, wrong rationale.\n\n[pause] Okay. So. Same trap, different corner of the stack.\n\nYou're picking a memory system for your agent — the piece that lets it remember things across sessions. There's a leaderboard. A knowledge-graph system called Graphiti is winning, and not narrowly.\n\nThen somebody checked the receipts. A benchmark posted in July ran eight memory systems over full research papers, and noticed Graphiti was hauling in two point six million characters of retrieved text per query. [pause] Per query. So they capped the retrieval budget — meaning how much text each system is allowed to pull in — and scored everybody again.\n\n[surprised] Graphiti dropped from first... to last. Behind plain chunk retrieval. The boring one. Cut the text into pieces, grab the closest pieces, done. And even under the cap, the graph was still pulling about twice the text of that baseline, and still lost.\n\nThe authors put it plainly — any comparison that doesn't control for retrieved volume is comparing budgets as much as architectures. I mean, that's the whole thing, right? You thought you bought a structure. You bought a bigger pile of text, and you pay for that pile on every call, in money and in the wait.\n\nTheir own bet is unproven, though. One of those systems belongs to the authors, so the number carrying the weight here is the plain baseline they didn't build. A separate paper also found the ranking flips with tenure — give a graph a couple of months of accumulated memory and it pulls back ahead.\n\nMy read is that graphs may well earn their build cost over the long haul, but on a single question at a fair budget, the dumb baseline held. What moved the needle most in that study wasn't structure at all — it was spending the budget on better retrieval.\n\n[curious] Which leaves the obvious question, and it's the last one today. If the test is doing the deciding... who's grading the test? Because the eval you wrote in an afternoon is now the thing that decides what ships.\n\nOlive Song is, uh, the reinforcement-learning research lead at MiniMax. On a panel, she said the hard part of the final training stretch on M three — their openly released model — wasn't the model at all. It was building the environments, the data, and the reward — plus validation checks that inspect the model's intermediate submissions. Not just the final answer. The work along the way.\n\n[thoughtful] Sit with why you'd bother. A reward that only reads the end state is the reward an agent learns to game — scoring well without ever doing the job. Grade the finish line alone and you're basically inviting it. Grade the working, and the shortcut gets expensive.\n\nSame lesson from a different angle. Alex Shaw at the Laude Institute maps agent work straight onto machine learning: your environments are the training data, the reward is the loss, and overfitting — well, overfitting is just reward hacking wearing a lab coat. If that mapping holds, the environment is the artifact you're actually engineering. The agent only shows you how well you did it.\n\n[pause] Cost of doing it properly? LatchBio, who build long-horizon science tasks, say one task runs about three people a week to author. [slow] And no model solves them yet.\n\nOne caveat before we land. Song's comment came in a panel, not a published methodology — a practitioner describing an internal process. Hold it that loosely.\n\n[warm] Before you go, one small thing worth doing tomorrow. Take the eval or the scan you trust most — the green check you actually rely on — and write down its denominator. How many real problems are in the thing you're testing? If nobody on the team can answer that, your pass rate is a fraction with no bottom half, and you've been reading it as a grade.\n\n[thoughtful] A file that's clean and a file nothing ever opened produce the exact same output. Nothing. [pause] The only thing that separates them is a number somebody counted by hand, before the model ever ran.\n\nThat's today's Agentic Daily Brief. [pause] Brought to you by Agent Native Engineering — open knowledge for building and running AI agents. The full write-ups, with their sources, are at agent native engineering dot com. [warm] See you next time."
+}
