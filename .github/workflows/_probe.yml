@@ -1,6 +1,0 @@
-name: _probe
-on:
-  workflow_dispatch:
-jobs:
-  probe:
-    uses: agentnativeengineering/engineering-standards/.github/workflows/reusable-check.yml@main
