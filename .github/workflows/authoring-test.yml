@@ -17,3 +17,4 @@ jobs:
       model: ${{ inputs.model }}
     secrets:
       ANTHROPIC_TOKEN: ${{ secrets.ANTHROPIC_TOKEN }}
+      PUSH_SSH_KEY: ${{ secrets.PUSH_SSH_KEY }}
