@@ -11,7 +11,7 @@ on:
         default: claude-opus-4-8
 jobs:
   author:
-    uses: agentnativeengineering/engineering-standards/.github/workflows/reusable-author.yml@feat/authoring-pipeline
+    uses: agentnativeengineering/engineering-standards/.github/workflows/reusable-author.yml@main
     with:
       runs-on: self-hosted
       model: ${{ inputs.model }}
