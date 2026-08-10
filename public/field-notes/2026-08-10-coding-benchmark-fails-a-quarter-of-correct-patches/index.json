@@ -1,0 +1,32 @@
+{
+  "type": "note",
+  "slug": "coding-benchmark-fails-a-quarter-of-correct-patches",
+  "title": "A coding benchmark that fails a quarter of correct patches isn't measuring your model",
+  "date": "2026-08-10",
+  "summary": "Two AI Engineer talks land on the same failure: coding benchmarks break at construction, with graders that measured about 8.5% false passes and roughly 24% false failures.",
+  "domain": "evaluation",
+  "tags": [
+    "evaluation",
+    "benchmarks",
+    "verifiers",
+    "contamination"
+  ],
+  "takeaways": [
+    "Check your verifier in both directions before trusting any score: a grader that fails roughly a quarter of correct answers is measuring itself, not the model.",
+    "Read the actual prompts in a benchmark you rely on; audited coding tasks averaged around 481 words and some leaked the test file path or full interface.",
+    "Assume contamination by default and keep a private holdout set, because public benchmark prompts and answers turn up verbatim in model output."
+  ],
+  "sourceName": "AI Engineer",
+  "sourceUrl": "https://www.youtube.com/watch?v=-npY6XjM8CQ",
+  "sources": [
+    {
+      "title": "Nick Heiner (Surge AI): When Will The Benchmaxxing Plague End?",
+      "url": "https://www.youtube.com/watch?v=-npY6XjM8CQ"
+    },
+    {
+      "title": "Ali Khial (G2i): Benchmarks — The Good, the Bad, and the Ugly",
+      "url": "https://www.youtube.com/watch?v=jWq-aZIU0kM"
+    }
+  ],
+  "body": "## What happened\n\nIn a talk published 2026-08-02, [Nick Heiner of Surge AI](https://www.youtube.com/watch?v=-npY6XjM8CQ) argued that \"benchmaxxing\" — labs training too hard on benchmarks in a way that deviates from what people actually care about — persists because of incentives and poor methodology, not because benchmarks are useless. Most of his anti-patterns are construction failures, especially brittle verifiers (the code that decides whether an attempt passed): hard-coded string matches on phone-number formats that can't separate a weak model from a strong one, and IFEval prompts scored by checks that ignore whether the requested task was done at all — one response passes by substituting a Cyrillic character. Two days earlier, [Ali Khial of G2i](https://www.youtube.com/watch?v=jWq-aZIU0kM) put numbers on the same failure from his audit of coding benchmarks: citing DeepSWE comparison data, about 8.5% of SWE-Bench Pro tasks accepted wrong implementations and roughly 24% rejected correct ones, often because tests demanded unspecified variable names or probed unexported functions.\n\n## Why it matters\n\nA grader wrong in both directions injects more error than the gaps it is being used to measure. If roughly a quarter of correct patches are failed, a few points between two models sits inside the grader's own noise — and that is the number teams use to pick a model or gate a release.\n\n## How it works\n\n1. **Align the verifier two ways.** Heiner's prescription is verifiers aligned with the prompt in both directions, plus thorough QC — not just a check that rejects bad output.\n2. **Read the prompts.** Khial found SWE-Bench Pro instructions averaging roughly 481 words, some leaking the test file path or a full interface — specs his engineers said no one would ever write.\n3. **Keep a private holdout.** Both call for it; Heiner says contamination is the default, citing Opus reproducing SWE-bench Verified prompts and answers verbatim while model cards omit the disclosure.\n\n> Before you trust a score, check the verifier both ways: does it fail wrong answers, and does it pass correct ones?\n\n## The catch\n\nBoth talks come from inside the industry they audit — Heiner points to Surge's own Hemingway Bench — so read the prescriptions as interested advice. The 8.5%/24% figures come from one comparison on one benchmark, not a general law; rerun the check on your own eval. And Heiner's cost estimate explains why this keeps happening: 1,000 expert-authored agentic coding tasks pencils out near $15M, which he says is out of budget for most projects — an argument for paying for expert authorship on a small set rather than generating a big one.\n\n[Evaluation](/guide/evaluation/)"
+}
