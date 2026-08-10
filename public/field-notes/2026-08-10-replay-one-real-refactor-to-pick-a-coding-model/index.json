@@ -1,0 +1,32 @@
+{
+  "type": "note",
+  "slug": "replay-one-real-refactor-to-pick-a-coding-model",
+  "title": "Replay one real refactor from your repo to pick a coding model",
+  "date": "2026-08-10",
+  "summary": "Two production teams picked their coding models by replaying a real task from their own repo across model generations instead of trusting public leaderboards.",
+  "domain": "model-selection",
+  "tags": [
+    "model-selection",
+    "coding-agents",
+    "benchmarks",
+    "refactoring"
+  ],
+  "takeaways": [
+    "Pick your coding model by replaying one task you already shipped from your own repo across model generations and harnesses; a leaderboard scores someone else's codebase, not yours.",
+    "Grade the replay on iterations to correct, wall clock, and cost, and read task-length curves at 80-99% success rather than 50%, because handing a plan off only pays when completion is near-certain.",
+    "Speed alone is not completion: a zero-shot run that finished in about ten minutes emitted roughly 2,000 lines of scaffolding with none of the actual model deployments."
+  ],
+  "sourceName": "Denys Linkov, Wisedocs",
+  "sourceUrl": "https://www.youtube.com/watch?v=7vn4WpqNpck",
+  "sources": [
+    {
+      "title": "Benchmarking Coding Agents on New vs Legacy Codebases — Denys Linkov, Wisedocs",
+      "url": "https://www.youtube.com/watch?v=7vn4WpqNpck"
+    },
+    {
+      "title": "Multiplayer agentic engineering — Arjun Singh, Superconductor",
+      "url": "https://www.youtube.com/watch?v=OL7kfezynJM"
+    }
+  ],
+  "body": "## What happened\n\nIn a talk published 2026-08-08, [Denys Linkov of Wisedocs](https://www.youtube.com/watch?v=7vn4WpqNpck) described consolidating 10+ legacy repos into a monorepo for an AI pipeline that processes medical-claim PDFs of 10,000+ pages, then re-ran one real task from that project — a Temporal workflow refactor — across model generations. With o3 it took roughly three hours of back-and-forth in Cursor and produced 10 major mistakes; Sonnet 4.6 needed one extra iteration; Opus 4.8 essentially one-shot it, cutting the work to about a fifth of the time. Asking GPT 5.5 to zero-shot the whole refactor finished in about 10 minutes and produced ~2,000 lines of scaffolding without the actual model deployments.\n\n## Why it matters\n\nA public leaderboard scores someone else's codebase. [Arjun Singh of Superconductor](https://www.youtube.com/watch?v=OL7kfezynJM), in a talk published 2026-08-09, gets there from the other side: SWE-bench is Python and their product is Ruby on Rails, so they benchmark agents on pull requests from their own repo, ranking quality against cost and time — data that pushed them to default to Codex over more expensive Anthropic runs.\n\n## How it works\n\n1. **Pick a task you already shipped.** One with a known-good outcome you can grade against.\n2. **Replay it per model and harness.** [Linkov's](https://www.youtube.com/watch?v=7vn4WpqNpck) newer runs had sub-agents, plan mode, shell commands and verification steps; the harness moved the number alongside the model.\n3. **Read the curves at the success rate you would actually hand off at.** He argues METR-style task-length graphs — how long a task an agent completes at a given success rate — should be read at 80–99% success rather than 50%, because a plan-and-hand-off workflow only pays when completion is near-certain.\n\n> The ten-minute zero-shot run emitted about 2,000 lines of scaffolding and none of the actual model deployments.\n\n## The catch\n\nReplaying work you already solved gives you hindsight the first run didn't have, and one task is one data point. [Singh's](https://www.youtube.com/watch?v=OL7kfezynJM) rule is to stay model- and harness-agnostic because the best option changes weekly, so this is a recurring chore; roughly 99.9% of their PRs are agent-generated and all still human-reviewed. [Linkov](https://www.youtube.com/watch?v=7vn4WpqNpck) adds a caveat of his own: the refactor lifted commit velocity and shipping speed, but AI-generated code becomes unreadable legacy code without guardrails.\n\n[Model Selection](/guide/model-selection/)"
+}
