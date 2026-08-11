@@ -1,0 +1,36 @@
+{
+  "type": "note",
+  "slug": "ramp-agent-rescheduled-itself-to-check-its-ci-fix",
+  "title": "Ramp's agent rescheduled itself a day later to check its CI fix on real data",
+  "date": "2026-08-11",
+  "summary": "Ramp, Amazon AGI Lab, and Boundary describe the same shift from three seats: coding-agent leverage comes from the shared verification loop a team builds, not from better individual prompting.",
+  "domain": "harness-engineering",
+  "tags": [
+    "harness-engineering",
+    "coding-agents",
+    "verification",
+    "agent-traces"
+  ],
+  "takeaways": [
+    "Put your leverage in the verification loop around the agent - adversarial review rounds, CI checks, and a scheduled re-run against real production data - not in a better prompt.",
+    "Tune the harness from individual agent traces and transcripts, looking for errors and wasted tool calls; aggregate benchmark scores will not tell you which part of your setup is broken.",
+    "Babysitting agents, blaming the model, and a flood of duplicate agent-filed issues are signals that the shared team setup is wrong, not that the model is dumb."
+  ],
+  "sourceName": "Ramp Engineering",
+  "sourceUrl": "https://www.youtube.com/watch?v=i4odXOmgMLw",
+  "sources": [
+    {
+      "title": "Ramp: how engineers work with AI agents at every step",
+      "url": "https://www.youtube.com/watch?v=i4odXOmgMLw"
+    },
+    {
+      "title": "Aditya Khandelwal, Amazon AGI Lab: agents, codebases, and teams",
+      "url": "https://www.youtube.com/watch?v=aeTb5BdmTTc"
+    },
+    {
+      "title": "Vaibhav Gupta, Boundary: fighting slop with slop",
+      "url": "https://www.youtube.com/watch?v=AMiyLItEtLA"
+    }
+  ],
+  "body": "## What happened\n\nIn a [talk published 2026-08-06](https://www.youtube.com/watch?v=i4odXOmgMLw), Ramp's engineering leaders described running coding agents across their whole software lifecycle, inside a large Python monolith. One run [cut CI (continuous integration) time from an 18-minute P50 to 6 minutes](https://www.youtube.com/watch?v=i4odXOmgMLw): the agent kept profiling, landed a change, then \"waited a day and used a routine to schedule itself to run a day later to get that real production data,\" and repeated that for days. Ramp orchestrates sub-agents with work-tree isolation and adds \"rounds of adversarial verification\" when a task needs them.\n\n## Why it matters\n\nRamp says it tunes this by [studying individual agent traces rather than aggregate benchmarks](https://www.youtube.com/watch?v=i4odXOmgMLw). [Aditya Khandelwal of Amazon AGI Lab](https://www.youtube.com/watch?v=aeTb5BdmTTc), leading a 10-person team, names what happens when a team skips that work: babysitting agents, blaming the model for being \"dumb\", silently burning context and money, and a steady stream of slop. The fixes that mattered were shared ones, like how the codebase is organized.\n\n## How it works\n\n1. **Shape the repo for progressive disclosure.** [Khandelwal's team](https://www.youtube.com/watch?v=aeTb5BdmTTc) kept a thin index file, roughly 100-line skill files, and runbook pointers in code comments, so agents page in detail only when they need it.\n2. **Move review into machine checks.** [Boundary ships its BAML language with no code reviews](https://www.youtube.com/watch?v=AMiyLItEtLA), backed by CLI checks that flag leaky dependencies in CI; Ramp instead adds adversarial verification rounds.\n3. **Tune from traces, not scores.** [Boundary inspects agent transcripts](https://www.youtube.com/watch?v=AMiyLItEtLA) for errors and wasted tool calls, and A/B tests features on tool-call count.\n\n> What you tune is the loop around the agent, and the signal for tuning it is one agent's trace, not a benchmark score.\n\n## The catch\n\nThese are conference talks, not controlled studies, and Ramp's CI number is one run on one codebase. The harness also makes its own work: [Khandelwal's team hit 400-500 issues](https://www.youtube.com/watch?v=aeTb5BdmTTc), with agents filing duplicate issues and merge hell, fixed by feeding feedback back into shared skills and exempting prototype code from strict standards. Boundary's no-review rule rests on a strict definition, slop is any code you do not read, and on a human actually reading every design doc.\n\n[Harness Engineering](/guide/harness-engineering/)"
+}
