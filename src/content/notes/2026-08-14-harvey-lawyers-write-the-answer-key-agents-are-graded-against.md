@@ -1,0 +1,43 @@
+---
+title: "Harvey's lawyers write the answer key its legal agents are graded against"
+date: 2026-08-14
+summary: "Barred from training on privileged client data, Harvey has staff lawyers guide coding models to build the benchmarks and RL environments its agents are scored on — the same manufactured-ground-truth pattern Mercor, Prime Intellect, and Taste Labs describe for tasks with no checkable answer."
+takeaways:
+  - "When a task has no checkable answer, building the answer key - the environment plus its verifier - is the engineering work, and the same artifact doubles as your eval."
+  - "Domain experts guiding coding models can produce realistic training and eval data when the real production data is legally off-limits."
+  - "Verifier accuracy is itself something you test: roll out trajectories, score them against the rubric, and confirm the scores match human ranking."
+tags: ["evaluation", "rl-environments", "synthetic-data", "verifiers"]
+sourceName: "AI Engineer"
+sourceUrl: "https://www.youtube.com/watch?v=MGouk8W51v0"
+sources:
+  - title: "Gabe Pereyra (Harvey): How Harvey built a research lab on a budget"
+    url: "https://www.youtube.com/watch?v=MGouk8W51v0"
+  - title: "Brendan Foody (Mercor): RL environments explained"
+    url: "https://www.youtube.com/watch?v=a00xIn5kwhM"
+  - title: "Will Brown (Prime Intellect): Reinforcement learning without verifiable rewards"
+    url: "https://www.youtube.com/watch?v=AQv3qRCG6Gw"
+  - title: "Thais Castello Branco (Taste Labs): Ending AI slop"
+    url: "https://www.youtube.com/watch?v=lCBf9slCanI"
+draft: false
+---
+## What happened
+
+In a talk published 2026-08-11, Gabe Pereyra, co-founder and president of Harvey, [described how the legal-AI company trains and evaluates its agents without touching the data those agents run on](https://www.youtube.com/watch?v=MGouk8W51v0). Law-firm data is privileged, so Harvey can't put it in any model, its own included. Instead, staff lawyers guide coding models to generate synthetic data — Legal Agent Bench, a contract-negotiation set, and a diligence RL environment whose largest data rooms reach 80 million tokens and are graded by over 1,000 LLM-as-judge unit tests.
+
+## Why it matters
+
+Most real agent work has no checkable answer. [Will Brown of Prime Intellect frames it plainly: RLVR — reinforcement learning with verifiable rewards — works on math, code, and tool state, and for research reports, bookings, or refunds the signal has to be manufactured](https://www.youtube.com/watch?v=AQv3qRCG6Gw). That manufactured signal isn't only training data; it is your eval. Skip it and you can't tell whether last week's change helped.
+
+## How it works
+
+1. **Decompose the goal into things you can check.** [Taste Labs breaks "brand adherence" into colors, typography, motion, and texture, then grades a net-new page against those components](https://www.youtube.com/watch?v=lCBf9slCanI).
+2. **Build the world, then the tasks.** [Mercor's Brendan Foody splits an environment into worlds (the docs, emails, and sheets of a realistic project), apps (clones the agent drives via MCP, CLI, or computer use), and tasks (a prompt plus a verifier)](https://www.youtube.com/watch?v=a00xIn5kwhM).
+3. **Test the verifier itself.** [Foody rolls out model trajectories, scores them against the rubric, and checks that the scores match human ranking](https://www.youtube.com/watch?v=a00xIn5kwhM).
+
+> If the task has no answer key, writing the answer key is the engineering work.
+
+## The catch
+
+Pereyra's own open questions are the honest ones: [synthetic data doesn't match the distribution of real production usage, and models still handle very long context poorly](https://www.youtube.com/watch?v=MGouk8W51v0). And the headline gain — [roughly 1,800 tasks and about $500k of compute lifting corporate-law scores from 4.7% to 26.6%](https://www.youtube.com/watch?v=a00xIn5kwhM) — comes from Mercor's own worked example, an environment authored by big-law attorneys; treat it as a vendor number until your own benchmark reproduces it.
+
+[Evaluation](/guide/evaluation/)
