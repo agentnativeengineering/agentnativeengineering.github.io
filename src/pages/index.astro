@@ -7,6 +7,9 @@ import Player from '../components/Player.astro';
 import DomainCard from '../components/DomainCard.astro';
 import CopyGuideButton from '../components/CopyGuideButton.astro';
 
+// Featured Daily Brief plays its YouTube "Audio Edition" (no local mp3 anymore).
+const ytId = (u?: string) => u?.match(/(?:youtu\.be\/|[?&]v=)([\w-]{11})/)?.[1] ?? '';
+
 const domains = (await getCollection('guide', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order,
 );
@@ -76,7 +79,19 @@ const ticker = notesAll.slice(0, 4).map((n) => n.data.title);
           <h2 class="brief-title">{featured.data.title}</h2>
           {featured.data.summary && <p class="brief-dek">{featured.data.summary}</p>}
           <div style="margin-top:auto;padding-top:26px">
-            <Player src={featured.data.audio} seconds={featured.data.seconds} />
+            {featured.data.youtube ? (
+              <div class="yt-embed">
+                <iframe
+                  src={`https://www.youtube-nocookie.com/embed/${ytId(featured.data.youtube)}`}
+                  title={featured.data.title}
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                ></iframe>
+              </div>
+            ) : featured.data.audio ? (
+              <Player src={featured.data.audio} seconds={featured.data.seconds} />
+            ) : null}
           </div>
           <div class="brief-links">
             <a class="brief-btn solid" href={`/daily-brief/${featured.id}/`}>Open full edition</a>

@@ -59,7 +59,7 @@ const episodes = defineCollection({
     date: z.coerce.date(),
     summary: z.string().optional(),
     // Site-relative mp3 path, e.g. /audio/<slug>.mp3
-    audio: z.string(),
+    audio: z.string().optional(),
     // The episode's YouTube "Audio Edition" watch URL (youtu.be/…), present once uploaded.
     youtube: z.string().url().optional(),
     // Duration in seconds (from the audio master), rendered as mm:ss.

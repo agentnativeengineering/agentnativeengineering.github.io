@@ -6,6 +6,10 @@ import ForAgents from '../../components/ForAgents.astro';
 import Player from '../../components/Player.astro';
 import { accentOf, type Phase } from '../../data/phase';
 
+// The "Audio Edition" now lives on YouTube (uploaded by content-studio); the site
+// embeds it instead of shipping the mp3. Pull the 11-char id from a youtu.be/watch URL.
+const ytId = (u?: string) => u?.match(/(?:youtu\.be\/|[?&]v=)([\w-]{11})/)?.[1] ?? '';
+
 export async function getStaticPaths() {
   const episodes = (await getCollection('episodes', ({ data }) => !data.draft)).sort(
     (a, b) => (b.data.date.valueOf() - a.data.date.valueOf()) || b.id.localeCompare(a.id),
@@ -89,7 +93,19 @@ const nextNo = () => String(++sec).padStart(2, '0');
     </div>
 
     <section class="card card-dark" style="margin-top:30px;padding:24px 30px">
-      <Player src={ep.data.audio} seconds={ep.data.seconds} />
+      {ep.data.youtube ? (
+        <div class="yt-embed">
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${ytId(ep.data.youtube)}`}
+            title={ep.data.title}
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+        </div>
+      ) : ep.data.audio ? (
+        <Player src={ep.data.audio} seconds={ep.data.seconds} />
+      ) : null}
       <div class="listen-row">
         <span class="listen-label">LISTEN ▸</span>
         <a class="brief-btn ghost" href="/daily-brief/">Spotify</a>
@@ -189,7 +205,11 @@ const nextNo = () => String(++sec).padStart(2, '0');
     )}
 
     <ForAgents description="— every story structured, every claim sourced. Feed the edition to your own agent.">
-      <a class="fa-btn solid" href={ep.data.audio}>Download .mp3</a>
+      {ep.data.youtube ? (
+        <a class="fa-btn solid" href={ep.data.youtube} target="_blank" rel="noopener">Watch on YouTube</a>
+      ) : ep.data.audio ? (
+        <a class="fa-btn solid" href={ep.data.audio}>Download .mp3</a>
+      ) : null}
       <a class="fa-btn faint" href="/rss.xml">RSS</a>
     </ForAgents>
   </div>
