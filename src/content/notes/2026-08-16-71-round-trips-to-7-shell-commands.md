@@ -1,0 +1,42 @@
+---
+title: "71 model round trips collapse to 7 shell commands for the same browser task"
+date: 2026-08-16
+summary: "A conference talk puts numbers on the browser-agent interface choice: same success rate through a shell CLI or an MCP server, but 7 turns instead of 71 and far fewer tokens."
+takeaways:
+  - "Drive the browser from a shell CLI your agent can script: success rates come out about the same as an MCP server, but the task runs in 7 turns instead of 71 because a scripted path stops calling the model on every click."
+  - "Verify each move through a different channel than you acted on — click through the DOM, confirm through the accessibility tree, a screenshot, or the network log — so a silently ignored action does not read as success."
+  - "Treat web-agent reliability as a harness problem: Browserbase and Yutori both argue the model capability is already there and the long tail of sites will never hand you an API."
+tags: ["harness-engineering", "browser-agents", "mcp", "cli-tools"]
+sourceName: "AI Engineer"
+sourceUrl: "https://www.youtube.com/watch?v=26RtyAm9y_Q"
+sources:
+  - title: "Corey Gallon (Rexmore) on driving browsers with a CLI and a sense-act-verify loop"
+    url: "https://www.youtube.com/watch?v=26RtyAm9y_Q"
+  - title: "Paul Klein IV (Browserbase) on harness engineering for web agents"
+    url: "https://www.youtube.com/watch?v=GqoNrUz8hEU"
+  - title: "Dhruv Batra (Yutori) on why the long tail of the web will not expose APIs"
+    url: "https://www.youtube.com/watch?v=Ki980nV0__0"
+draft: false
+---
+## What happened
+
+In a talk published 2026-08-14, Corey Gallon of Rexmore [argued that the interface you hand a browser agent, not the model, sets its cost](https://www.youtube.com/watch?v=26RtyAm9y_Q). He cites an Arize AI study where the same task succeeded roughly 83% of the time whether the agent drove the browser through a shell CLI or an MCP server (Model Context Protocol, the standard tool-call interface). The MCP run took 71 model round trips and 8 minutes; the CLI took seven turns and under a minute. Anthropic has reported token costs up to 75x lower for the CLI.
+
+## Why it matters
+
+A tool call bills a model turn per click, so a hundred-step form job pays for a hundred inferences and inherits a hundred chances to drift. A CLI sequence is a program: explore it once with the model in the loop, then replay it without one. [Paul Klein IV of Browserbase](https://www.youtube.com/watch?v=GqoNrUz8hEU) makes the same point from the other side — unreliable web agents are an engineering problem now rather than a model problem, a capabilities overhang that better harnesses unlock.
+
+## How it works
+
+1. **Sense.** Read the page through several channels — DOM, accessibility tree, screenshot, network, console — as separate digital senses.
+2. **Act.** Make one move at a time through the Chrome DevTools Protocol, the protocol the F12 panel speaks.
+3. **Verify.** Confirm the result through a different channel than the one you acted on, so a silently ignored click cannot read as success.
+4. **Write it down.** Once a path works, commit it as code or an agent skill so the next run skips the exploring.
+
+> Explore until something works, then write the path down as code.
+
+## The catch
+
+83% is one failure in six, from one study — the verify step is what keeps those failures visible. [Dhruv Batra of Yutori](https://www.youtube.com/watch?v=Ki980nV0__0) adds why this stays relevant: across roughly 200 million sites, the long tail will never publish an API. The talk's headline demos are automated CAPTCHA solving, and Gallon opens on OpenAI threatening to ban his account over the prep work — treat that as the boundary, and run the interface choice and the verify loop only on sites you are authorized to automate.
+
+[Harness Engineering](/guide/harness-engineering/)

@@ -1,0 +1,36 @@
+{
+  "type": "note",
+  "slug": "grade-your-agent-on-its-worst-run",
+  "title": "Grade your agent on its worst run, and keep the evals in code",
+  "date": "2026-08-16",
+  "summary": "Three production teams converge on the same eval sequencing: grade the worst-case behaviour, keep the checks in code that survives a model swap, and save scaled raters for after the architecture stops changing.",
+  "domain": "evaluation",
+  "tags": [
+    "evaluation",
+    "evals-as-code",
+    "guardrail-metrics",
+    "llm-judge"
+  ],
+  "takeaways": [
+    "Grade your agent on its floor - the worst thing it can do to a user - and keep those checks as code you run like unit tests, because handcrafted eval sets get abandoned at the next model or harness swap.",
+    "Sequence the investment: a critique agent with a remediation loop and intuition-based review while the architecture churns, scaled rubric raters and human-versus-LLM disagreement monitoring only once it stabilizes.",
+    "Give every stage of a multi-agent pipeline its own guardrail metric - Uber Eats scores its routing agent as a classifier on recall and its photo-editing agent on pass@K against a QA gate."
+  ],
+  "sourceName": "AI Engineer",
+  "sourceUrl": "https://www.youtube.com/watch?v=jHMiYtjoJfA",
+  "sources": [
+    {
+      "title": "Ben Hylak (Raindrop): Designing Agents - The Floor Is the Frontier",
+      "url": "https://www.youtube.com/watch?v=jHMiYtjoJfA"
+    },
+    {
+      "title": "YouTube Ads: How Evals and Prompts Shape Agent Behavior",
+      "url": "https://www.youtube.com/watch?v=xyL2Ltkh-SA"
+    },
+    {
+      "title": "Uber Eats: Building Closed-Loop Evals for a Multimodal Agent at Scale",
+      "url": "https://www.youtube.com/watch?v=31GUkCBD-Uc"
+    }
+  ],
+  "body": "## What happened\n\nIn a talk published 2026-08-12, [Ben Hylak, CTO and co-founder of Raindrop](https://www.youtube.com/watch?v=jHMiYtjoJfA), argued that agent teams over-invest in the ceiling — benchmark scores — when what breaks user trust is the floor: the agent deleting data, recommending a competitor, or sending an AI-slop email to a customer. Most eval advice is stuck in the chatbot era, he says, because big handcrafted eval datasets break the moment you swap a model or a harness, and few teams delay a model upgrade two weeks to rewrite them. His alternative: evals as code, run locally like unit or end-to-end tests — Sentry's Vitest evals, or what OpenAI calls macro evals.\n\n## Why it matters\n\nA golden set you rewrite on every model swap is one you quietly stop running. Two other production teams fill in the rest of the picture: YouTube Ads on what to run while the architecture is still changing, Uber Eats on grading every stage once it isn't.\n\n## How it works\n\n1. **Foundation before evals.** The [YouTube Ads image and video models team](https://www.youtube.com/watch?v=xyL2Ltkh-SA) first optimizes a focused set of LLM-friendly tools, then adds an independent critique agent with a remediation loop.\n2. **Vibe while it churns.** Same team: intuition-based review early, since scaling to raters too soon just produces noisy swings while the architecture is still changing radically.\n3. **A guardrail metric per stage.** [Uber Eats' computer vision team](https://www.youtube.com/watch?v=31GUkCBD-Uc) grades its routing agent like a classifier on a confusion matrix with recall as the guardrail, and loops its photo-editing agent against a multi-dimensional QA gate measured with pass@K.\n4. **Scaled raters later.** YouTube Ads then adds rubrics with examples, rater explanations instead of bare pass/fail, and sampling to watch human-versus-LLM disagreement.\n\n> The eval worth writing is the one that survives your next model swap and grades the worst thing your agent did.\n\n## The catch\n\nHylak is explicit that method depends on scale: a free-tier sample experiment works at millions of users, not at five. He also insists every production issue needs two facts — when it started and what share of users it hits. Uber's auto-tuning rewrites agent config with no human in the loop, paired with rollback. All three are self-reported conference talks.\n\n[Evaluation](/guide/evaluation/)"
+}

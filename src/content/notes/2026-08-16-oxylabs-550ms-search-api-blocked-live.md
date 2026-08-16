@@ -1,0 +1,41 @@
+---
+title: "Oxylabs' 550ms search API for agents got hard-blocked live on a client call"
+date: 2026-08-16
+summary: "A web-data team's rebuild story shows that the live-context path an agent depends on is a service you keep rebuilding against changing sites and anti-bot detection, not an integration you finish."
+takeaways:
+  - "Budget for continuous rebuilds of whatever feeds your agent live web context: target sites, layouts and anti-bot detection change under you, so the integration is never finished."
+  - "Load tests and observability can lie about capacity; scaling an unblocker from 10,000 to 60,000 requests per second, Oxylabs found production traffic was the honest test."
+  - "Rented context only returns what the vendor already collected, and Bright Data's own informal test found plain search plus SERP results covered about as many fields at similar cost."
+tags: ["memory-and-context", "retrieval", "web-data", "latency"]
+sourceName: "Oxylabs"
+sourceUrl: "https://www.youtube.com/watch?v=1UmZHb_E_SM"
+sources:
+  - title: "Oxylabs on web data infrastructure for AI (conference talk)"
+    url: "https://www.youtube.com/watch?v=1UmZHb_E_SM"
+  - title: "Bright Data on context-as-a-service and its 100-company coverage test"
+    url: "https://www.youtube.com/watch?v=Ot4OPrPH4xY"
+  - title: "Anthropic: what AI models actually know"
+    url: "https://www.youtube.com/watch?v=Ua_5vH_n8j4"
+draft: false
+---
+## What happened
+
+In a talk published 2026-08-14, Oxylabs product manager Patricija Žemaitytė [walked through three build stories from the web-data infrastructure that feeds AI systems live information](https://www.youtube.com/watch?v=1UmZHb_E_SM). One client needed sub-second SERP (search engine results page) delivery, so the team dropped its 4-second general-purpose scraper for a stripped-down search API returning only organic results, top stories and news. It hit roughly 650ms P90 in under two weeks, then got hard-blocked live on a client call. After a browser-based rebuild it averages about 550ms, while daily volume grew from 400 million to nearly 6 billion requests.
+
+## Why it matters
+
+Retrieval is where your agent gets everything its weights do not have. An explainer on what models know describes that knowledge as ["broad, deep, frozen, and imperfect all at once"](https://www.youtube.com/watch?v=Ua_5vH_n8j4), least trustworthy on time-sensitive, niche, local and less-represented-language topics. Those edges are exactly what live retrieval covers, against sites that keep changing layout and detection.
+
+## How it works
+
+1. **Cut scope to buy latency.** The fast path returned only the result types that client used, not the general scraper's full output.
+2. **Assume the block.** Anti-bot detection broke the API in front of the customer; the fix was a browser-based rebuild and second-by-second tuning.
+3. **Let production be the load test.** Pushing the unblocker from 10,000 to 60,000 requests per second, the bottleneck was not servers but load-test realism and observability that became part of the load.
+
+> Clients buy the ability to adapt rather than a first iteration.
+
+## The catch
+
+Both talks come from vendors and the numbers are self-reported. Bright Data's Omer Primor offered a counterweight: in an [informal test he explicitly called not a benchmark](https://www.youtube.com/watch?v=Ot4OPrPH4xY), enriching 100 companies across 25 fields, plain search and SERP results covered about as many fields as vertical context-as-a-service vendors at similar cost, since a curated vendor can only return what it already collected. His do-it-yourself scraping route broke even near 15,000 entities once about a week of setup was priced in. Either way, the honest line item is ongoing maintenance.
+
+[Memory & Context](/guide/memory-and-context/)
