@@ -107,12 +107,20 @@ notes each episode `covers`. mp3s live in `public/audio/`.
 
 ## 6. Notes — authoring rules (kept)
 
-- **2-minute read** (~200–480 words; hard-fail past 550 — enforced by `scripts/validate-content.mjs`).
+- **2-minute read.** House target ~180–320 words (per the live 4am agent format); the validator's
+  hard ceiling is 550 words (warns past 480) and floors a warning under 200 — enforced by
+  `scripts/validate-content.mjs`.
 - **Recency:** a Note's headline example MUST be within the last **1–2 weeks**; older landmark
   cases are named anchors only. Guide domains are evergreen and exempt.
 - Each Note opens with a `takeaways:` block (≤3 bullets, first sentence bold) — it becomes the
   "THE TAKEAWAY" callout. Voice: plain, engineer-to-engineer, no hype, no "X, not Y" kicker.
-- See `AGENTS.md` for the full authoring contract.
+- **Body structure (as of 2026-08-30), three sections in this exact order:** `## The Takeaway`
+  (one sentence, the shareable lesson — distinct from the frontmatter `takeaways:` block above) →
+  `## The details` (3-5 complete, specific, named-numbers bullets, dated lead in the first) →
+  `## Why it matters` (opens on a direct stakes claim, names who's affected, closes on a concrete
+  consequence; also carries the honest-caveat requirement). Body ends with the domain link alone
+  on the final line.
+- **Load and follow `AGENTS.md`** for the full authoring contract.
 
 ## 7. Working rules
 
