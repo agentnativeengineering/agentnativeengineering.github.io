@@ -1,0 +1,36 @@
+{
+  "type": "note",
+  "slug": "tuned-rubric-judge-cleared-notes-hiding-serious-errors",
+  "title": "A tuned rubric judge cleared notes where 1 in 5 still hid a serious error",
+  "date": "2026-08-30",
+  "summary": "Across production clinical AI notes, a detailed faithfulness rubric plus deterministic checks passed notes where 1 in 5 clean passes still hid a harm-level error — the standard belongs in expert corrections, not in a frozen rubric.",
+  "domain": "evaluation",
+  "tags": [
+    "evaluation",
+    "llm-as-judge",
+    "healthcare-ai",
+    "error-analysis"
+  ],
+  "takeaways": [
+    "In a high-stakes domain, the errors your judge rubric clears are the ones that hurt the user; keep the quality standard in expert corrections retrieved into the judge's context per output, not frozen in the rubric.",
+    "A strong LLM-as-judge with a faithfulness rubric, worked examples and deterministic text checks still let through notes where 1 in 5 clean passes hid a serious error, because verification is only cheap for the spot-the-difference part.",
+    "Two other production teams converge on buying expert judgment: physician-authored rubrics and clinician-calibrated judges at Abridge, and error analysis on real logs by the expert you sell to at Allos AI."
+  ],
+  "sourceName": "Composo",
+  "sourceUrl": "https://www.youtube.com/watch?v=yqF6XhzbWBk",
+  "sources": [
+    {
+      "title": "Sebastian Fox (Composo): Inside 847 production clinical AI notes",
+      "url": "https://www.youtube.com/watch?v=yqF6XhzbWBk"
+    },
+    {
+      "title": "Abridge: from ambient documentation to clinical intelligence",
+      "url": "https://www.youtube.com/watch?v=u6q-byPWUuo"
+    },
+    {
+      "title": "Allos AI: parallels in applied vertical AI",
+      "url": "https://www.youtube.com/watch?v=Yphdry8ttAQ"
+    }
+  ],
+  "body": "## What happened\n\nIn a talk published 2026-08-22, Sebastian Fox — a medical doctor now at Composo, which builds evaluation systems for high-stakes domains — [walked through the failures](https://www.youtube.com/watch?v=yqF6XhzbWBk) his team found in notes from three of the leading production ambient scribes (systems that draft a clinical note from the doctor-patient conversation). Citing the largest real-world study of such notes, he reports roughly 1 in 20 carried an error serious enough to cause significant harm: \"that's not theoretical in testing, that's in production on real patients.\" Nearly 1 in 5 had an important omission, and for most of these systems \"there's no adverse event reporting at all.\"\n\n## Why it matters\n\nMost failures happen with a perfect transcript: the model adds, changes, or omits something, and the hard part is judging which difference matters. Fox reports that a strong LLM-as-judge setup — faithfulness rubric, worked examples, optimized prompts, deterministic text checks — [cleared notes where 1 in 5 clean passes still hid a serious error](https://www.youtube.com/watch?v=yqF6XhzbWBk). Two talks the same week agree the judge needs the expert: [Abridge](https://www.youtube.com/watch?v=u6q-byPWUuo), at about 300 US health systems and 100M conversations a year, scores clinician-calibrated judges against physician-authored rubrics, and [Allos AI's Ayush Bhardwaj](https://www.youtube.com/watch?v=Yphdry8ttAQ) says a generic judge jargons its way through a domain it cannot verify.\n\n## How it works\n\n1. **Discover.** [Cluster real production outputs](https://www.youtube.com/watch?v=yqF6XhzbWBk) to find the failure modes you actually have, rather than guessing them on a whiteboard.\n2. **Capture.** Record expert clinicians' free-form corrections and their reasoning, not a pass/fail label.\n3. **Calibrate.** Retrieve the most relevant past judgments and guidelines into the judge's context per output, so the standard lives in examples instead of a frozen rubric.\n\n> The dangerous failures are the ones that look completely fine on the page.\n\n## The catch\n\nThis loop is Fox's proposal, from a vendor that sells evaluation tooling, and his caught-versus-missed error map comes from notes his team generated last week, not an audit of deployed records. It also assumes continuous expert time: someone qualified keeps correcting outputs and explaining why, indefinitely. Price that before you copy it.\n\n[Evaluation](/guide/evaluation/)"
+}

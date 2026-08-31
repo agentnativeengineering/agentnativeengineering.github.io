@@ -1,0 +1,36 @@
+{
+  "type": "note",
+  "slug": "hippocratic-ai-runs-30-specialist-models-beside-the-one-talking",
+  "title": "Hippocratic AI runs 30 specialist models beside the one doing the talking",
+  "date": "2026-08-30",
+  "summary": "Across 200M+ clinical phone calls, Hippocratic AI puts risk detection in 30 specialist models and async verifiers running alongside the conversational model — the same architectural call Hinge Health makes with deterministic code above the model on every turn.",
+  "domain": "reliability",
+  "tags": [
+    "reliability",
+    "guardrails",
+    "multi-agent",
+    "healthcare"
+  ],
+  "takeaways": [
+    "Put every safety check in code or models that run beside the conversational agent on every turn — a system prompt can be overridden by one injected message, so it is not a boundary.",
+    "Let each supervisor short-circuit first on whether it needs to act, so you can run dozens of them inside a real-time latency budget.",
+    "Reserve deterministic code, not the model, for irreversible actions: emergency escalation, high-stakes routing, identity verification."
+  ],
+  "sourceName": "AI Engineer",
+  "sourceUrl": "https://www.youtube.com/watch?v=AN65uc645mE",
+  "sources": [
+    {
+      "title": "Hippocratic AI on 200M patient interactions and the Polaris stack",
+      "url": "https://www.youtube.com/watch?v=AN65uc645mE"
+    },
+    {
+      "title": "Hinge Health on guardrails for member-facing health AI",
+      "url": "https://www.youtube.com/watch?v=YXEqC05WEI0"
+    },
+    {
+      "title": "CoupleWork AI on risk cues a general model misses",
+      "url": "https://www.youtube.com/watch?v=yoONZwV2smc"
+    }
+  ],
+  "body": "## What happened\n\nIn a talk published 2026-08-19, Vivek Muppalla, who runs engineering at Hippocratic AI, [described the stack](https://www.youtube.com/watch?v=AN65uc645mE) behind more than 200 million clinical phone calls across 60+ health systems, reporting no significant safety incidents and an 8.5/10 patient satisfaction rating. The reasoning layer is not one model: one main conversational model carries the dialogue while 30 specialists — labs, medications, scheduling — see the same turn, each short-circuiting first on whether it has anything to say, with asynchronous verifiers checking tool calls.\n\n## Why it matters\n\nRisk detection is not a job you can hand to the model that is also trying to be agreeable. Rashi Agrawal, who leads AI/ML at Hinge Health, [makes the same call](https://www.youtube.com/watch?v=YXEqC05WEI0): deterministic code runs above the model on every turn and owns the irreversible decisions — 911/988 escalation, high-stakes intent routing, identity verification — because a system prompt is one prompt injection from being overridden and is not a security boundary. She cites a Mount Sinai test that found a consumer health AI under-triaged life-threatening emergencies half the time. Therapist Clay Cockrell [adds the detection gap](https://www.youtube.com/watch?v=yoONZwV2smc) — a general assistant can't tell \"we fight a lot\" from \"I'm afraid of what happens when I disagree with him\" — which is why his team screens messages in a background pass instead of trusting the chat model to notice.\n\n> The model talking to the user should not be the only thing deciding whether the conversation is safe.\n\n## The catch\n\nSupervision beside the model costs latency and money. Hippocratic buys the budget back with 4-bit quantization, speculative decoding, and KV cache compression at a 96% hit rate, then spends it on the extra models. Agrawal's warning is subtler: safety is a continuous evaluation layer on live traffic, not a pre-launch gate, and the bottleneck is people to read the signals. Both talks' headline numbers are self-reported.\n\n[Reliability](/guide/reliability/)"
+}
