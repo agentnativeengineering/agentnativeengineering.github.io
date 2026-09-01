@@ -1,0 +1,38 @@
+---
+title: "Token counts are lines of code all over again"
+date: 2026-09-01
+summary: "Ironclad's VP of AI engineering says grading AI coding by token spend repeats the old lines-of-code mistake, and defines \"trusted throughput\" as complexity-weighted merged PRs gated by tests, security checks, and human review."
+takeaways:
+  - "Stop grading AI coding agents by tokens spent or PRs opened; measure how much code actually clears review, tests, and production checks."
+  - "Ironclad weighs merged PRs by an LLM-assigned complexity score and only counts them once they pass test coverage, security checks, and canarying."
+  - "Tessl's Patrick Debois proposes tracking human touches needed to reach a correct result and how often a single fix gets reused, not lines shipped."
+tags: ["autonomy-and-cost", "token-spend", "code-review", "metrics"]
+sourceName: "AI Engineer"
+sourceUrl: "https://www.youtube.com/watch?v=dSg0pu8d6qg"
+sources:
+  - title: "Mingsheng Hong (Ironclad) — From Tokenmaxxing to Trusted Throughput"
+    url: "https://www.youtube.com/watch?v=dSg0pu8d6qg"
+  - title: "Patrick Debois (Tessl) — Coding Agents Don't Scale Themselves"
+    url: "https://www.youtube.com/watch?v=zCJtYuqwm7E"
+draft: false
+---
+## What happened
+In a talk published 2026-08-29, Mingsheng Hong, VP of engineering for AI at [Ironclad](https://www.youtube.com/watch?v=dSg0pu8d6qg), said teams past initial AI-coding adoption are still tracking the wrong number: token spend, treated like a leaderboard. He compares it to the old lines-of-code mistake — a fine signal for spotting adoption gaps, a bad target to optimize toward. Ironclad's own metric evolved from open PRs, to merged PRs, to merged pull requests (PRs) weighted by an LLM-assigned complexity ("t-shirt size") score — counted only once it clears test coverage, security checks, and canarying, plus human code and design review. He calls this "trusted throughput."
+
+## Why it matters
+AI makes code generation abundant, so the bottleneck moves to review and continuous integration (CI) capacity, not writing code. Rewarding raw token or PR volume pushes toward bigger, faster-generated PRs that clog review while risk hides in rollback counts nobody is watching. It's an [Autonomy, Cost & Control](/guide/autonomy-and-cost/) problem: unmeasured throughput becomes unbounded spend and unbounded blast radius at once.
+
+## How it works
+1. **Weight, don't count.** Score each merged PR by an LLM-assigned complexity tier instead of counting raw PRs or tokens.
+2. **Gate on objective checks.** Only count work that clears test coverage, security checks, and canary rollout.
+3. **Keep humans in the loop.** Require code and design review before a PR counts toward throughput.
+4. **Watch the exhaust.** Track customer-facing signals, like rollbacks and support tickets, as the real quality backstop.
+
+Independently, [Patrick Debois at Tessl](https://www.youtube.com/watch?v=zCJtYuqwm7E) lands on the same idea from the org-design side: in a talk published 2026-08-22, he proposes tracking human touches needed to reach a correct result (it should fall over time) and a reuse multiplier for fixes applied once and propagated everywhere — outcome metrics, not activity counts.
+
+> Token counts are lines of code all over again: a fine gauge, a terrible target.
+
+## The catch
+Neither offers a clean formula — Hong calls "trusted throughput" a qualitative blend, and Debois's metrics are proposed, not reported production numbers. Hong warns that shifting the bottleneck to review only helps if you also invest in killing flaky tests and cutting CI wall-clock time, and flags the anti-pattern of batching work into oversized PRs just to dodge slow CI — exactly what a complexity-weighted metric still has to catch.
+
+[Autonomy, Cost & Control](/guide/autonomy-and-cost/)
