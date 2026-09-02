@@ -1,0 +1,32 @@
+{
+  "type": "note",
+  "slug": "cant-ab-test-on-patients-build-a-fake-one",
+  "title": "When you can't A/B test on patients, you build a fake one to test on",
+  "date": "2026-09-02",
+  "summary": "When you can't A/B test or roll back on real patients, you replace the live experiment with a simulated one — a hazard-enumerated LLM patient and LLM judge validated against clinicians.",
+  "domain": "evaluation",
+  "tags": [
+    "evaluation",
+    "healthcare-ai",
+    "synthetic-data",
+    "llm-judge"
+  ],
+  "takeaways": [
+    "When rollback isn't an option because a bad call already reached a real patient, replace live A/B testing with hazard-enumerated simulation graded by an LLM judge that's itself validated against expert clinicians.",
+    "Ufonia's Dora agent, live across 20 UK hospitals for roughly 200,000 clinical calls, is tested against an LLM-played patient and judged by an LLM (Gemini 2.5 Pro) that matched or beat 10 expert clinicians on a labeled corpus.",
+    "Anterior hits the same real-patient-data constraint from the other side, generating synthetic records from decision-tree policies so eval labels are correct by construction instead of scraped from protected health data."
+  ],
+  "sourceName": "Ufonia (AI Engineer)",
+  "sourceUrl": "https://www.youtube.com/watch?v=McknwOzbmyg",
+  "sources": [
+    {
+      "title": "Shipping AI to a Million Patients Without an A/B Test — Jared Joselowitz, Ufonia",
+      "url": "https://www.youtube.com/watch?v=McknwOzbmyg"
+    },
+    {
+      "title": "Don't be data poor — Anuj Iravane, Anterior",
+      "url": "https://www.youtube.com/watch?v=XAsb7MIAzm8"
+    }
+  ],
+  "body": "## What happened\nIn a talk published 2026-08-19, [Ufonia](https://www.youtube.com/watch?v=McknwOzbmyg) engineer Jared Joselowitz described how the company ships Dora, a voice AI agent that phones patients for post-op follow-ups, without the usual \"ship to 5%, roll back if it breaks\" playbook. Dora has completed roughly 200,000 clinical calls across 20 UK hospitals, with contracts to reach a million patients in two years. Because giving clinical advice makes Dora a regulated medical device, Ufonia can't randomize patients into a worse variant or undo a call — a red dashboard means a patient was already harmed.\n\n## Why it matters\nCanary releases, A/B tests, and roll-back-on-regression all assume you can catch and reverse a bad outcome before it costs anything. In healthcare, or any domain where an agent's action is irreversible or its data is protected, that assumption breaks — evaluation has to happen entirely before deployment.\n\n## How it works\n1. **Enumerate hazards first.** Ufonia lists concrete failure modes — a missed red flag, a hallucinated answer, ignored patient distress — before writing a test.\n2. **Simulate the patient.** A framework called Matrix runs an LLM \"PatBot\" as a scenario-conditioned patient against Dora; in a study, real patients often rated the simulated patient more realistic than a real one.\n3. **Judge the transcript.** An LLM \"BehJudge\" (Gemini 2.5 Pro) grades each call pass/fail with reasons, hitting F1 0.96 on a 240-example clinician-labeled corpus — matching or beating 10 expert clinicians.\n4. **Optimize, then stage rollout.** Automated prompt optimization (GEPA) tunes Dora against a clinician-weighted cost matrix that punishes missed red flags harder than false alarms; autonomy expands only as user testing, supervised evaluation, and monitored deployment each pass.\n\n[Anterior](https://www.youtube.com/watch?v=XAsb7MIAzm8) hits the same wall from the data side: their eval sets need real patient charts, which are protected health information that can't be retained or reused. Their fix is sampling a label and reasoning trace from policies written as symbolic decision trees, so each label is correct by construction — about 90% of Anterior's eval data is now synthetic, and clinicians in blind review told real from fake only about 60% of the time.\n\n> \"You don't ship the model, you ship the evidence.\"\n\n## The catch\nBoth approaches live or die on the simulator being honest: a PatBot or decision tree that misses a real-world edge case teaches the judge nothing. Ufonia traces every prompt and judge verdict back to a specific hazard, so a regression is traceable, not just visible.\n\n[Evaluation](/guide/evaluation/)"
+}

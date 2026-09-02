@@ -1,0 +1,34 @@
+---
+title: "At AWS, agents write the code; a Lean proof checks it matches spec"
+date: 2026-09-02
+summary: "AWS engineer Varun Pant argues that once coding agents outpace human review, only formal proof — not sampled tests — can guarantee code matches a spec, pointing to Cedar's ~100 million nightly differential tests against a Lean specification as a production-scale example."
+takeaways:
+  - "When agents generate more code than anyone can review, a sampled test suite only proves correctness for the inputs someone thought of — a proof over all inputs is the stronger guarantee, and it starts with a spec a human validates."
+  - "AWS checks its Cedar authorization language against its production Rust implementation via roughly 100 million randomized differential tests every night, backed by a Lean formal specification."
+  - "The split of labor: humans write and validate the spec, agents implement it, and a verification tool (Lean, Verus, or large-scale differential testing) proves the two match."
+tags: ["harness-engineering", "formal-verification", "lean", "spec-driven-development"]
+sourceName: "AI Engineer"
+sourceUrl: "https://www.youtube.com/watch?v=lRa9sPaMyy4"
+sources:
+  - title: "Varun Pant (AWS) — Formal Verification for Engineers"
+    url: "https://www.youtube.com/watch?v=lRa9sPaMyy4"
+draft: false
+---
+## What happened
+In a talk published 2026-08-28, AWS engineer Varun Pant argued that coding agents now generate code faster than tests, LLM judges, or human reviewers can check it — and a sampled test suite only covers the inputs someone thought to write. His proposed fix: prove code correct for *every* input instead, using the proof assistant Lean, whose core checker (the "kernel") is small enough to audit and has three independent implementations (C++, Rust, Lean itself), so a bug in one can't silently let a bad proof through. His concrete example: Cedar, the authorization language behind AWS Verified Permissions, is checked against its production Rust implementation with roughly 100 million randomized differential tests every night, on top of a Lean specification proving the semantics match ([talk](https://www.youtube.com/watch?v=lRa9sPaMyy4)).
+
+## Why it matters
+As agents ship hundreds of pull requests a week, review capacity — not code generation — becomes the bottleneck. Sampled tests and LLM-judge review both only check inputs someone anticipated; a real correctness guarantee needs a different contract between human intent and agent-written code.
+
+## How it works
+1. **Humans write and validate the spec.** Directly in Lean, or in natural language an AI auto-formalizes, then a human checks the spec actually means "correct."
+2. **Agents implement against the spec.** The coding agent writes the implementation, same as any PR.
+3. **A verification tool proves the two match.** Lean's proof checker, the SMT-solver-backed tool Verus, or large-scale differential testing (Cedar's ~100 million nightly runs) confirms spec and implementation agree.
+4. **Trust concentrates in a small, checked kernel.** A small, multiply-implemented proof checker means one buggy kernel can't quietly pass a wrong proof.
+
+> Humans own the spec; machines own the code and the proof that it matches.
+
+## The catch
+This is early and expensive. Converting the zlib C compression library into proved Lean took roughly 32,000 lines of proof for one library, and Strata — AWS's project to generalize this by lowering any language into a shared Lean intermediate representation — is still in progress, not shipped. Differential testing at Cedar's scale approximates correctness rather than proving it outright, and writing a spec precise enough to prove against is real engineering work you can't skip.
+
+[\Harness Engineering](/guide/harness-engineering/)
