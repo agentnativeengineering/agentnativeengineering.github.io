@@ -1,0 +1,34 @@
+---
+title: "Maersk's shipping agents run on a process memory 20x bigger than the runtime"
+date: 2026-09-04
+summary: "Maersk runs 200+ concurrent production agents on global shipping exceptions by rewriting screenshot-based \"tribal\" SOPs into an executable process corpus and refining it with roughly 100,000 corrections over nine months."
+takeaways:
+  - "The refining loop around an agent - the process memory, feedback capture, and guardrails - is what makes production automation reliable, not the agent loop itself."
+  - "Legacy SOPs written as screenshots of what a person clicks aren't executable; an agent needs preconditions, identifiers, backend calls, validation, recovery, and evidence spelled out instead."
+  - "Maersk got production accuracy from about 100,000 small corrections over nine months, not from one upfront design, evaluated by replaying real traces with writes disabled."
+tags: ["architecture-and-orchestration", "production agents", "SOPs", "guardrails"]
+sourceName: "Dmitry Buykin, Maersk"
+sourceUrl: "https://www.youtube.com/watch?v=dQ-_i1tZiws"
+sources:
+  - title: "Tribal Dungeons of Global Shipping: AI Agents at Global Scale — Dmitry Buykin, Maersk"
+    url: "https://www.youtube.com/watch?v=dQ-_i1tZiws"
+draft: false
+---
+## What happened
+In a talk published 2026-08-29, Maersk engineer Dmitry Buykin described running agents on the "long tail" of global shipping exceptions — shipments where a legacy backend, a country-specific rule, or an incomplete system breaks the happy path. His team runs [over 200 concurrent agent instances](https://www.youtube.com/watch?v=dQ-_i1tZiws) in production, latencies from a few minutes up to ten, bounded by the legacy systems the agents call. The hard part wasn't the agent loop — it was that operational knowledge lived in "tribal" standard operating procedures (SOPs): screenshots of what a person clicks, not what an agent needs (preconditions, identifiers, backend calls, validation, recovery, evidence).
+
+## Why it matters
+Most agent demos skip straight to the loop. Buykin's point: the loop is the easy part. The system that actually ships is the refining loop around it — process memory, feedback capture, guardrails — built from real failures over time, not one upfront design.
+
+## How it works
+1. **Build an SOP corpus.** Rewrite screenshot-based tribal SOPs into an executable [process memory](https://www.youtube.com/watch?v=dQ-_i1tZiws) — preconditions, decisions, identifiers, calls, validation, recovery — roughly 20x larger than the runtime and varied per country.
+2. **Run the loop, capture feedback.** Execution runtime plus feedback capture around it; accuracy came from about 100,000 small corrections over nine months, evaluated by replaying real traces with writes disabled.
+3. **Triage by failure type.** Cluster failure traces into heat maps so experts and engineers review the same evidence, then match guardrail to failure: classifier eval for wrong workflow, write gates for wrong writes, human review for wrong assumptions.
+4. **Compound successful sequences.** Merge proven step sequences into larger reusable composite tools that roll out across hundreds of countries, skipping MCP for hand-tuned function calling to control response size and quality.
+
+> The agent loop is not the system — the refining loop around the agent is the system.
+
+## The catch
+This isn't a fast build: nine months and 100,000 corrections to get there, and it works only because experts keep owning "what" the process is while the agent owns "how" to execute it — take away that expert loop and the corpus stops improving.
+
+[Architecture & Orchestration](/guide/architecture-and-orchestration/)

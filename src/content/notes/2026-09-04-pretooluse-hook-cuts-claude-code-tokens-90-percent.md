@@ -1,0 +1,35 @@
+---
+title: "A PreToolUse hook cut one engineer's Claude Code token bill by 90%"
+date: 2026-09-04
+summary: "A Spotify engineer used a PreToolUse hook to reroute I/O-heavy Claude Code work to a cheap sub-agent and cut token usage by roughly 90%, while GitHub's Copilot team shows naive per-call output compression can backfire and cost more overall."
+takeaways:
+  - "Don't shrink every model response; intercept I/O-heavy work at the tool-call boundary and route it to a cheap worker model before the expensive model ever sees it."
+  - "Enforce routing at the harness layer with hooks and skills, not by asking the model to self-route in a prompt; an instructions-only version only 'sort of worked.'"
+  - "Measure token cost per completed task, not per tool call: GitHub found that compressing individual outputs too aggressively makes agents rerun commands and spend more overall."
+tags: ["harness-engineering", "token-cost", "hooks", "model-routing"]
+sourceName: "Spotify Engineering"
+sourceUrl: "https://engineering.atspotify.com/2026/9/portal-by-spotify-cut-my-claude-code-token-usage-by-90/"
+sources:
+  - title: "Portal by Spotify cut my Claude Code token usage by 90%"
+    url: "https://engineering.atspotify.com/2026/9/portal-by-spotify-cut-my-claude-code-token-usage-by-90/"
+  - title: "GitHub: How we make AI coding more cost efficient without sacrificing task quality"
+    url: "https://github.blog/ai-and-ml/github-copilot/how-we-make-ai-coding-more-cost-efficient-without-sacrificing-task-quality/"
+draft: false
+---
+## What happened
+In a [post dated 2026-09-03](https://engineering.atspotify.com/2026/9/portal-by-spotify-cut-my-claude-code-token-usage-by-90/), Spotify's Dimitri Mazmanov, a principal product manager, describes cutting his Claude Code token usage roughly 90% by keeping the frontier model out of pure I/O work. He built two small worker agents on a cheaper model (Gemini 2.5 Flash): bulk-reader, which reads several large files and answers with structured bullets, and code-writer, which generates boilerplate matching existing patterns. A Claude Code plugin called shunt enforces the routing with a PreToolUse hook — a Claude Code hook that runs before a tool call and can block or redirect it — blocking large file reads above a configurable line count and rerouting them to bulk-reader, with skill files teaching Claude when to call each worker. On a Java monorepo this cut token use on bulk reads by about 90%.
+
+## Why it matters
+Frontier-model tokens, not the seat license, are the real cost of agentic coding, and most of that spend goes to I/O work like reading files and writing boilerplate that never needed frontier-level reasoning. Fixing that is a harness-engineering problem: enforce routing where the agent calls tools, not with prompt instructions the model may ignore.
+
+## How it works
+1. **Intercept, don't ask.** A PreToolUse hook blocks large reads at the tool-call boundary instead of trusting the model to self-route; an earlier version that relied only on CLAUDE.md instructions "sort of worked."
+2. **Route by shape, not content.** Bulk reads and boilerplate go to the cheap worker; edits and debugging stay with Claude, because the worker can't return reliable line numbers or reason through a subtle bug.
+3. **Decouple the decision from the worker.** The plugin owns the routing policy, the mode owns the worker's behavior, so changing models later is a config edit, not an infrastructure change.
+
+> "Most of what an AI coding agent does for me isn't thinking. It's I/O."
+
+## The catch
+The routing isn't free: each delegation adds 10-30 seconds of latency, and it only works because low-stakes I/O tolerates an imperfect worker. [GitHub's Copilot team](https://github.blog/ai-and-ml/github-copilot/how-we-make-ai-coding-more-cost-efficient-without-sacrificing-task-quality/) found the naive version of this idea backfires: compressing individual tool outputs too aggressively strips context the model needs, so it reruns commands to recover it and total task tokens rise even though each response looked smaller. Their fix was to benchmark cost per completed task, not per tool call, before shipping any compression change. Cutting agent token spend is ongoing harness work, not a setting you flip once.
+
+[\Harness Engineering](/guide/harness-engineering/)

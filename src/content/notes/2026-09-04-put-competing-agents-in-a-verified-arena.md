@@ -1,0 +1,33 @@
+---
+title: "Put competing agents in a verified arena, watch them beat any solo model"
+date: 2026-09-04
+summary: "Stanford's James Zou describes Einstein Arena, a Together AI platform where competing agents with deterministic verifiers broke a DeepMind sphere-packing record and found GPU kernel speedups now in production."
+takeaways:
+  - "Don't script how agents work step by step; build a verified arena where they compete and collaborate, and they find solutions no single model reaches alone."
+  - "Agents in Together AI's Einstein Arena pushed the 11-dimensional kissing number from DeepMind's 593 to 604 using a deterministic verifier, not a fixed workflow."
+  - "The same arena design, restaffed for GPU kernel tuning, produced over 2x speedups on kernels like paged attention now running in production at Together AI."
+tags: ["evaluation", "agent-arenas", "multi-agent", "verifiers"]
+sourceName: "James Zou, Together AI"
+sourceUrl: "https://www.youtube.com/watch?v=mMNkdYnIVC4"
+sources:
+  - title: "Einstein Arena: Harnessing Collective Agent Intelligence for Open Science"
+    url: "https://www.youtube.com/watch?v=mMNkdYnIVC4"
+draft: false
+---
+## What happened
+In a talk published 2026-08-25, Stanford's [James Zou](https://www.youtube.com/watch?v=mMNkdYnIVC4) described Einstein Arena, an agent-native platform he built with Together AI where any AI agent can join and pick from curated open science problems — entry requires solving a puzzle that proves you're an AI, not a human, keeping the arena agent-native — each shipped with a deterministic verifier: code that checks a submitted solution automatically, no human judgment needed. Agents post to a shared forum and watch a live leaderboard of downloadable solutions. Within weeks, agents found best-known solutions to 11 problems, including pushing the 11-dimensional kissing number (the max spheres that can touch one central sphere without overlapping, tied to error-correcting codes) from DeepMind's 593 to 604 — a result Zou says no single frontier model reached alone.
+
+## Why it matters
+Most agent work today designs workflows that tell an agent how to work, step by step. Zou's arena instead specifies where agents work — incentives, verifier, guardrails — and lets competition and collaboration do the rest. That is a different lever for [Evaluation](/guide/evaluation/): instead of grading one model's output against a fixed rubric, many agents attack the same verifiable problem and the best result wins.
+
+## How it works
+1. **Curate verifiable problems.** Pick open science questions with a deterministic checker and an existing research community.
+2. **Open the arena, gate out humans.** Any agent can join; a proof-of-AI puzzle keeps it agent-native.
+3. **Reuse the shape.** Restaffed with agents in profiling/memory/precision personas, the same arena retargeted GPU kernel tuning and produced over 2x speedups on kernels like paged attention (a memory technique for LLM inference), now running in production at Together AI.
+
+> The environment should specify where the agent works, not how — and let creativity emerge from there.
+
+## The catch
+Zou also built DS Gym, a data science benchmark, after finding 20-50% of existing benchmark tasks could be solved by shortcuts that never touch the data — proof a deterministic verifier can still be gamed if it checks the wrong thing. Frontier models score under 50% on DS Gym; the arena's headline result is not proof this generalizes past problems with clean, hard-to-game checkers.
+
+[Evaluation](/guide/evaluation/)
