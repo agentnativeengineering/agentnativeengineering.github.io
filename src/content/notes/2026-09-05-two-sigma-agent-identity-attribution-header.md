@@ -1,0 +1,34 @@
+---
+title: "When an agent runs as you, a hidden header decides who did what"
+date: 2026-09-05
+summary: "Two Sigma runs employees' cloud coding agents under their own full identity instead of a separate machine account, then uses a propagated trace-ID header and a VPC-bound cached web index to solve the attribution and exfiltration risks that choice creates."
+takeaways:
+  - "Running an agent under a separate machine identity breaks down in practice from permission drift and dual licensing, so Two Sigma runs it as the human instead and proves who acted with a trace-ID header propagated through every tool call."
+  - "Block agents' native web search and fetch tools; route them through a cached, VPC-bound index instead of open internet egress to cut exfiltration and prompt-injection risk."
+  - "Full attribution is not automatic: without a header threaded through every MCP client, skill, and tool call, you cannot tell a human-taken action from an agent-taken one."
+tags: ["access-and-identity", "identity", "attribution", "prompt-injection"]
+sourceName: "Two Sigma (YouTube)"
+sourceUrl: "https://www.youtube.com/watch?v=wCIYViPd4SU"
+sources:
+  - title: "Tethered: Our Agents Are Us — Shu Fang, Two Sigma"
+    url: "https://www.youtube.com/watch?v=wCIYViPd4SU"
+draft: false
+---
+## What happened
+In a talk published 2026-09-03, Shu Fang of quant fund Two Sigma described [how the firm runs cloud-based coding agents like Claude Code under every employee's own full user identity](https://www.youtube.com/watch?v=wCIYViPd4SU) rather than a separate machine identity. Two Sigma tried the conventional approach first — a "shoe" user paired with a "shoe-agent" service account — and it collapsed: permissions drift out of sync, software licensing has to be paid twice, and systems like Google Workspace can't reconcile two identities touching the same data.
+
+## Why it matters
+Running the agent as the human unlocks its full capability, but creates two problems anyone building agent access has to solve: you can no longer tell a human-taken action from an agent-taken one, and giving an agent open web access hands it exfiltration and prompt-injection risk on top of a real user's permissions.
+
+## How it works
+1. **Attribute every action.** Two Sigma threads a trace-ID-style header through every agent call — MCP (Model Context Protocol) clients, skills, tool invocations — so each action carries a replayable chain showing whether a human or the agent triggered it, while the underlying identity stays the person's.
+2. **Cut off open web access.** Native web search and fetch tools are blocked entirely for agents.
+3. **Replace it with a bounded index.** Agents query Google's Web Grounding for Enterprise instead, a cached search/fetch index that lives inside the company's own VPC (virtual private cloud) boundary, so there's no open internet egress to leak data through.
+4. **Accept the lag.** That cached index runs 6-24 hours behind the live web, trading freshness for a contained blast radius.
+
+> Two Sigma frames the whole design as tuning a risk/return ratio: keep most of an agent's value, cut most of the security exposure.
+
+## The catch
+The trace-ID header only protects you if every tool and skill actually propagates it — Fang's own audience Q&A raised header spoofing as an open question the team is still working through. And a 6-24 hour stale index is a real gap when an agent needs current information. This is one regulated fund's specific tradeoff, not a universal recipe.
+
+[Access & Identity](/guide/access-and-identity/)

@@ -1,0 +1,38 @@
+---
+title: "Intuit's failover agent picks the plan; a deterministic API pulls the trigger"
+date: 2026-09-05
+summary: "Intuit's production failover agent, live eight months, lets a model decide what to do while a separate deterministic API — one it never holds credentials for — decides how it's executed."
+takeaways:
+  - "Gate every agent-triggered production action behind a deterministic API the agent calls but can never bypass: the model decides what to do, existing systems decide how, and the model never holds credentials."
+  - "Encode operational runbook knowledge as versioned, typed skill files instead of leaving failover judgment as tribal knowledge in engineers' heads."
+  - "Reserve human-in-the-loop approval for destructive or policy-gated actions, and bound the blast radius with cooldowns, circuit breakers, and allowlists."
+tags: ["reliability", "disaster-recovery", "mcp", "guardrails"]
+sourceName: "AWS Machine Learning Blog"
+sourceUrl: "https://aws.amazon.com/blogs/machine-learning/how-intuit-built-an-agentic-disaster-recovery-assistant-with-amazon-bedrock/"
+sources:
+  - title: "How Intuit built an agentic disaster recovery assistant with Amazon Bedrock"
+    url: "https://aws.amazon.com/blogs/machine-learning/how-intuit-built-an-agentic-disaster-recovery-assistant-with-amazon-bedrock/"
+  - title: "Run agent-driven Amazon SageMaker HyperPod operations with InstantStart"
+    url: "https://aws.amazon.com/blogs/machine-learning/run-agent-driven-amazon-sagemaker-hyperpod-operations-with-instantstart/"
+draft: false
+---
+## What happened
+On 2026-09-04, AWS published how [Intuit built EWOK Agent](https://aws.amazon.com/blogs/machine-learning/how-intuit-built-an-agentic-disaster-recovery-assistant-with-amazon-bedrock/), an AI layer on Amazon Bedrock that lets on-call engineers trigger production failovers with a plain-language request like "failover payments-gateway in production," from Intuit's engineering portal or IDE via MCP (Model Context Protocol). Intuit's existing orchestration system, EWOK, already executed failovers reliably; what it lacked was judgment. As the post puts it, "EWOK solved execution but not decision-making" — knowing which recovery workflow applies, or how to handle a change-freeze exception, lived in engineers' heads. After eight months in production, that judgment is now encoded, not tribal.
+
+## Why it matters
+Letting a model reason freely over production infrastructure is a blast-radius problem. Intuit's fix: the model only ever decides *what* to do; a separate, deterministic system decides *how* it's executed, and holds no credentials itself.
+
+## How it works
+1. **Runbooks become skills.** Operational knowledge is written as versioned Markdown files with YAML input/output schemas, compiled into Bedrock Converse API tool specifications the model can call.
+2. **A thin agent loop.** A small self-managed loop (LangChain's ChatBedrockConverse) handles model calls, branches on stop reasons, and feeds structured results back — with Bedrock Guardrails wrapping every invocation against prompt injection.
+3. **Deterministic execution only.** Skill execution routes to existing EWOK APIs, not the model; per-service queues, cooldowns, circuit breakers, and region allowlists bound what can happen.
+4. **Humans approve the risky part.** Destructive or policy-gated actions, like overriding a change freeze, require human-in-the-loop sign-off, logged to audit and change records.
+
+The same separation shows up in [Amazon SageMaker HyperPod InstantStart](https://aws.amazon.com/blogs/machine-learning/run-agent-driven-amazon-sagemaker-hyperpod-operations-with-instantstart/), also published the same day: its agent calls the exact same guarded, idempotent REST APIs the web UI uses, rather than raw CLI or SDK access, so validation and state checks aren't duplicated for the agent path.
+
+> The agent decides what to do; a deterministic API decides how it's done, and never holds the keys.
+
+## The catch
+This is one company's eight months, not an industry norm, and it only works because EWOK's APIs were already reliable and idempotent before the agent showed up — the agent adds judgment, not the safety net. Skills still need maintaining as runbooks change, and destructive actions still wait on a human.
+
+[Reliability](/guide/reliability/)

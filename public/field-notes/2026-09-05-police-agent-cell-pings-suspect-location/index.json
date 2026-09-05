@@ -1,0 +1,28 @@
+{
+  "type": "note",
+  "slug": "police-agent-cell-pings-suspect-location",
+  "title": "A police agent stitches scattered cell pings into a suspect's location",
+  "date": "2026-09-05",
+  "summary": "Peregrine's cold-case agent ingests 200-300GB of mixed video, audio, and paper evidence and runs unattended for under an hour to cross-reference clues that would take detectives weeks to piece together by hand.",
+  "domain": "architecture-and-orchestration",
+  "tags": [
+    "architecture-and-orchestration",
+    "multimodal-agents",
+    "long-running-agents",
+    "public-sector-ai"
+  ],
+  "takeaways": [
+    "Structure one agent to ingest a whole messy evidence corpus at once, video, audio, PDFs, scans, and let it run unattended for an hour instead of chaining separate tools per file type.",
+    "Before trusting an agent's conclusions in a high-stakes domain, validate it by reproducing a case with a known, already-verified outcome.",
+    "Every agent-surfaced lead still needs independent human verification; a single validation case is not a measured accuracy rate."
+  ],
+  "sourceName": "Peregrine (YouTube)",
+  "sourceUrl": "https://www.youtube.com/watch?v=NkXJBU2YLUQ",
+  "sources": [
+    {
+      "title": "Ben Rudolph, Peregrine — 300GB of evidence, one agent, one hour",
+      "url": "https://www.youtube.com/watch?v=NkXJBU2YLUQ"
+    }
+  ],
+  "body": "## What happened\nIn a talk published 2026-09-02, Ben Rudolph of [Peregrine](https://www.youtube.com/watch?v=NkXJBU2YLUQ) described the company's cold-case agent: point it at 200-300GB of investigative evidence — body-cam and surveillance video, audio interviews, scanned images, PDFs, even old paper case files — and let it run unattended for 30 to 60 minutes. The team validated it on a case where a wrongly convicted man had already been exonerated: they fed in the original evidence to see if the agent could reproduce the detectives' findings on its own, and eventually it did. It's now deployed in several US police departments, including a Wisconsin county case with 300GB of data, where it cross-referenced scattered cell call detail records (CDRs, the location/time pings a phone leaves on cell towers) to place a suspect both at the crime scene and where the body was found.\n\n## Why it matters\nDetectives on high-profile cases are stuck manually watching and listening through hundreds of gigabytes of mixed-format evidence, sometimes still stored on paper. Orchestrating one agent that ingests all of it together, rather than running separate tools per file type, is what compresses that review into under an hour.\n\n## How it works\n1. **Ingest everything as one corpus.** Video, audio, images, PDFs, and paper scans go in together, not as separate per-format pipelines.\n2. **Let it run long, unattended.** The agent works for 30-60 minutes rather than answering a single prompt.\n3. **Cross-reference across record types.** It correlates disparate sources, like CDR tower pings, against the timeline to place a suspect in two locations.\n4. **Validate against a known-true case before trusting new ones.** Peregrine tested reproduction of a solved, exonerated case before deploying to live investigations.\n\n> An agent that can connect scattered cell pings across 300GB of evidence is only trustworthy once you've proven it reasons the way a human investigator would.\n\n## The catch\nThe only accuracy check described is one validation run against a single already-solved case, not a measured false-positive or false-negative rate across real deployments. In a domain where an agent's inference can affect a criminal conviction, that's a thin evidence base for trusting its conclusions at face value; every agent-surfaced lead still needs independent human verification, not just faster review.\n\n[Architecture & Orchestration](/guide/architecture-and-orchestration/)"
+}
