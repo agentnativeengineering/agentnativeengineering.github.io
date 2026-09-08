@@ -1,0 +1,37 @@
+---
+title: "87% of Copilot's LLM calls fire after the user stops typing"
+date: 2026-09-08
+summary: "A production-scale trace of 13.5M GitHub Copilot coding-agent sessions shows the agent, not the user, drives most LLM traffic, breaking the request model that vLLM-style serving systems were built for."
+takeaways:
+  - "In production coding agents, the agent itself generates most of the traffic: 87% of GitHub Copilot's LLM calls in a 13.5M-session telemetry study were agent-initiated, arriving in tightly coupled 1:1 pairs with tool calls, which breaks serving systems designed for independent, user-triggered requests."
+  - "Prompts dwarf completions (median 68K prompt tokens vs 247 completion tokens) and prefix caches that hit high rates inside a turn collapse at turn boundaries, model switches, and context compaction."
+  - "Cross-turn idle gaps are bimodal but predictable, making them a legitimate trigger for KV-cache offloading and container hibernation rather than a fixed timeout."
+tags: ["observability", "llm-serving", "kv-cache", "coding-agents"]
+sourceName: "Kiran Hombal's Blog"
+sourceUrl: "https://kstark007.github.io/blog/agentic-coding-in-the-wild/"
+sources:
+  - title: "Agentic Coding in the Wild — a visual reading"
+    url: "https://kstark007.github.io/blog/agentic-coding-in-the-wild/"
+  - title: "Agentic Coding in the Wild: Characterizing GitHub Copilot Traces at Production Scale (arXiv)"
+    url: "https://arxiv.org/abs/2608.00101"
+  - title: "Hacker News discussion"
+    url: "https://news.ycombinator.com/item?id=49601640"
+draft: false
+---
+## What happened
+In a [visual reading](https://kstark007.github.io/blog/agentic-coding-in-the-wild/) published 2026-09-07, a walkthrough of a Microsoft Azure Research and UIUC study unpacks a paper that measured one week of anonymized GitHub Copilot coding-agent telemetry: 13.5M sessions, 3.2M users, 760.5M LLM calls, 774.7M tool calls. The headline: 87% of those LLM calls were agent-initiated, not triggered by a person typing — after one user message, the agent runs a mean of 6.6 more model calls on its own before handing control back. LLM calls and tool calls track almost exactly 1:1 across the whole distribution, and prompts dwarf completions (median 68K prompt tokens vs 247 completion tokens). The paper was widely discussed on [Hacker News](https://news.ycombinator.com/item?id=49601640).
+
+## Why it matters
+Serving systems like vLLM and SGLang schedule, cache, and admit work at the granularity of one independent, stateless request — the chatbot model. A coding agent breaks every one of those assumptions: calls are sequentially dependent on prior tool output, execution alternates between GPU and CPU/tool work, and a KV cache (the reused attention state that makes repeated prefixes cheap) that hits high rates inside a turn collapses at turn boundaries, model switches, and context compaction. Teams running agent traffic on chatbot-era serving defaults are eating cache misses and idle GPU time they never see coming.
+
+## How it works
+1. **Turn shape drives resource use.** The paper defines six recurring turn shapes and five developer archetypes spanning a 50x range in resource use — capacity planning needs to bucket by turn shape and archetype, rather than simple user counts.
+2. **Idle time is predictable.** Cross-turn idle gaps are bimodal but forecastable, making them a legitimate trigger for KV-cache offloading and container hibernation instead of a fixed timeout.
+3. **Session-aware recommendations.** The authors call for session- and workflow-aware infrastructure: cache retention priority, model pinning across a turn, incremental context compaction, and archetype-aware service-level objectives (SLOs).
+
+> A single user message unfolds into an autonomous loop the server never asked for, and infrastructure has to plan for that loop, not the message.
+
+## The catch
+This is a sampled, US-region trace from one product over one week, structural metadata only, no prompts or code, so the exact ratios (the 1:1 coupling, the 87% figure) may shift for other agents, languages, or regions. The authors present it as a first characterization, and the numbers will move as agent products change.
+
+[Observability](/guide/observability/)

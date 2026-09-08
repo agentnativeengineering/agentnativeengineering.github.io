@@ -1,0 +1,34 @@
+---
+title: "Stripe forces its internal agent through three data tiers before raw SQL"
+date: 2026-09-08
+summary: "Stripe's internal agent Kai, used weekly by 86% of employees and run by fewer than 10 engineers, avoids brute-forcing its data warehouse by routing every data request through cheaper fallback tiers before it's allowed to write a raw query."
+takeaways:
+  - "An internal agent given free rein over a data warehouse will brute-force queries until something breaks, so route every data request through cheaper fallbacks first and let it write raw SQL only as a last resort."
+  - "Stripe's Kai runs on per-team \"Projects\" that fix which tools an agent can use and which actions need human approval, so HR can get a locked-down agent without disabling tools company-wide."
+  - "Kai reached 10,000+ weekly users with fewer than 10 engineers because Stripe had already built a resilient data warehouse, developer platform, and skill-authoring tools to build on."
+tags: ["architecture-and-orchestration", "internal-agents", "governance", "skills"]
+sourceName: "How I Develop Artificial Intelligence (YouTube)"
+sourceUrl: "https://www.youtube.com/watch?v=AbZODZ_4VaM"
+sources:
+  - title: "Stripe built a company brain: Meet Kai"
+    url: "https://www.youtube.com/watch?v=AbZODZ_4VaM"
+draft: false
+---
+## What happened
+In a video published 2026-09-07, Sharad, an engineering manager at Stripe, described building [Kai](https://www.youtube.com/watch?v=AbZODZ_4VaM), Stripe's internal "company brain" agent that roughly 86% of employees now use every week. A team that started at 1.5 engineers for two weeks to ship a first version now runs Kai for more than 10,000 weekly users with fewer than 10 people, leaning on coding agents and Stripe's existing data and developer platforms instead of adding headcount.
+
+## Why it matters
+Sharad says agents are "very creative" at working around limits: some "started to cheat," and unconstrained data queries could "nearly disable the main systems" by brute-forcing Stripe's Trino-based data warehouse. Handing 10,000 employees a direct line to production data infrastructure, with no fallback layer, is a reliability and blast-radius problem before it's ever a productivity win.
+
+## How it works
+1. **Personalized context.** Each employee's org-chart position, projects, and optional Slack/Drive/email access shape what Kai already knows before it has to ask.
+2. **Projects as governance.** A per-team "Project" fixes the default model, which tools are allowed, and which actions require human-in-the-loop approval, letting HR run a locked-down Kai without disabling tools company-wide.
+3. **Tiered data fallback.** A data request first checks existing reports, then a curated analytics layer, and only as a last resort writes a raw query against the warehouse.
+4. **Skill marketplace with decay.** Any employee can author a skill in an IDE-like editor; of roughly 2,000 skills, any unused for about 30 days gets pruned automatically.
+
+> Agents are very creative in disabling your infrastructure.
+
+## The catch
+This is a self-reported case from a single interview, not an audited benchmark; there's no external number on Kai's accuracy or the ongoing cost of running 2,000 live skills. Stripe is explicit that the whole approach rests on years of prior investment in a resilient warehouse, developer platform, and data catalog. A team without that groundwork would hit the same brute-force failures Stripe describes, only sooner.
+
+[Architecture & Orchestration](/guide/architecture-and-orchestration/)
