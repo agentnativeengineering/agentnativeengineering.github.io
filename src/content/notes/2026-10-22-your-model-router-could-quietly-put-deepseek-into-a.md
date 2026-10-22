@@ -18,7 +18,7 @@ sources:
   - title: "DeepSeek-V4.1-Flash-1017 arrives just as the U.S. government bans it from agencies: what enterprises should do (VentureBeat)"
     url: "https://venturebeat.com/security/deepseek-v4-1-flash-1017-arrives-with-improved-benchmarks-just-as-the-u-s-government-bans-it-from-agencies-what-enterprises-should-do"
 upstream: "aidailybrief/2026-10-20"
-draft: false
+draft: true
 ---
 
 ## The Takeaway
