@@ -20,7 +20,7 @@ sources:
   - title: "Artificial Analysis benchmarks how 36 AI models communicate"
     url: "https://runtimewire.com/article/artificial-analysis-personalitybench-language-model-style"
 upstream: "aidailybrief/2026-10-20"
-draft: false
+draft: true
 ---
 
 ## The Takeaway
