@@ -1,0 +1,42 @@
+name: Pipeline PR
+
+# The content pipeline (agentnativeengineering/content-pipeline) pushes one
+# `pipeline/adb-<date>-<slug>` branch per drafted note. This opens the PR for it, so a human
+# reviews every pipeline note before it reaches main.
+on:
+  push:
+    branches: ['pipeline/**']
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  open-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 2
+      - name: Open the PR if there isn't one
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          if [ -n "$(gh pr list --head "$BRANCH" --state open --json number --jq '.[].number')" ]; then
+            echo "PR already open for $BRANCH"; exit 0
+          fi
+          file="$(git diff --name-only HEAD~1 HEAD -- src/content/notes | head -1)"
+          title="$(git log -1 --format=%s)"
+          {
+            echo "Drafted by the content pipeline from \`$BRANCH\`."
+            echo
+            git log -1 --format=%b
+            echo
+            echo "**Note:** \`$file\`"
+            echo
+            echo "Review the claims against the linked sources, then merge to publish."
+          } > body.md
+          gh pr create --base main --head "$BRANCH" --title "$title" --body-file body.md --label pipeline 2>/dev/null \
+            || gh pr create --base main --head "$BRANCH" --title "$title" --body-file body.md

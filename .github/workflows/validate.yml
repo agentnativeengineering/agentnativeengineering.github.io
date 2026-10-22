@@ -6,7 +6,9 @@ on:
   pull_request:
     branches: [main]
   push:
-    branches: [main]
+    # pipeline/** too: PRs opened by the pipeline-pr workflow don't trigger pull_request runs,
+    # so the branch push is what puts the Validate check on those PRs.
+    branches: [main, 'pipeline/**']
   workflow_dispatch:
 
 jobs:
