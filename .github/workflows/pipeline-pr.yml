@@ -38,5 +38,7 @@ jobs:
             echo
             echo "Review the claims against the linked sources, then merge to publish."
           } > body.md
-          gh pr create --base main --head "$BRANCH" --title "$title" --body-file body.md --label pipeline 2>/dev/null \
-            || gh pr create --base main --head "$BRANCH" --title "$title" --body-file body.md
+          # Needs the org setting "Allow GitHub Actions to create and approve pull requests".
+          # Without it, warn (the branch is still pushed) rather than put a red check on the note.
+          gh pr create --base main --head "$BRANCH" --title "$title" --body-file body.md --label pipeline \
+            || echo "::warning::Could not open a PR for $BRANCH. Enable 'Allow GitHub Actions to create and approve pull requests' for the org, or open it by hand."
