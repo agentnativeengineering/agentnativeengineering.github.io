@@ -17,8 +17,6 @@ sources:
     url: "https://www.theregister.com/security/2026/10/20/deepseek-deep-sixed-at-all-us-federal-civilian-agencies/5304010"
   - title: "DeepSeek-V4.1-Flash-1017 arrives just as the U.S. government bans it from agencies: what enterprises should do (VentureBeat)"
     url: "https://venturebeat.com/security/deepseek-v4-1-flash-1017-arrives-with-improved-benchmarks-just-as-the-u-s-government-bans-it-from-agencies-what-enterprises-should-do"
-  - title: "US orders federal agencies to remove DeepSeek, even in other apps (madrobot)"
-    url: "https://madrobot.blog/2026/10/19/us-bans-deepseek-federal-agencies-dhs-order-remove-third-party/"
 upstream: "aidailybrief/2026-10-20"
 draft: false
 ---
@@ -28,9 +26,8 @@ A procurement ban based on where a model came from only works if you can answer,
 
 ## The details
 - On 2026-10-20 the [Federal Register published DHS's order](https://thefederalregister.org/documents/2026-21447/notice-of-order-regarding-exclusion-and-removal-of-deepseek-products-from-federal-civilian-executive-branch-information-) under the Federal Acquisition Supply Chain Security Act. It requires removal of "all DeepSeek and DeepSeek-affiliate products" and "third-party products and services developed using DeepSeek implementations" from federal civilian IT. The signed order appears only as images in the notice's appendix.
-- According to [madrobot](https://madrobot.blog/2026/10/19/us-bans-deepseek-federal-agencies-dhs-order-remove-third-party/), the order is dated July 24, 2026, and it doesn't list which third-party products it covers.
 - Katie Moussouris of Luta Security told [The Register](https://www.theregister.com/security/2026/10/20/deepseek-deep-sixed-at-all-us-federal-civilian-agencies/5304010) that the order "doesn't say what 'developed using' means" and "could technically cover any model derived from DeepSeek."
-- The same piece notes that routers like OpenRouter and Vercel AI Gateway choose a provider for you by default, so agencies could end up using DeepSeek models without meaning to.
+- The same piece notes that [gateways like OpenRouter and Vercel AI Gateway pick a provider for you by default](https://www.theregister.com/security/2026/10/20/deepseek-deep-sixed-at-all-us-federal-civilian-agencies/5304010), so agencies could end up using DeepSeek models without meaning to.
 - [VentureBeat](https://venturebeat.com/security/deepseek-v4-1-flash-1017-arrives-with-improved-benchmarks-just-as-the-u-s-government-bans-it-from-agencies-what-enterprises-should-do) argues that running the weights on a US server doesn't change the procurement answer. It advises asking vendors to name their base models, including fine-tunes, and where those models run.
 
 ## Why it matters
