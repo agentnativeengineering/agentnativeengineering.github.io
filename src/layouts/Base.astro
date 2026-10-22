@@ -4,6 +4,8 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 
 interface Props {
+  // Unlisted pages (draft notes) are reachable by URL but asked to stay out of search.
+  noindex?: boolean;
   title?: string;
   description?: string;
   ogType?: 'website' | 'article';
@@ -19,6 +21,7 @@ const {
   image = '/logo.png',
   jsonLd = [],
   active = null,
+  noindex = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -49,6 +52,7 @@ const schemas = [siteSchema, ...jsonLd];
     <meta name="color-scheme" content="light" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />

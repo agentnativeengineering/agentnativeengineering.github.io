@@ -21,7 +21,7 @@ export async function getStaticPaths() {
   const epByNote = new Map<string, { id: string; title: string }>();
   for (const ep of episodes) for (const c of ep.data.covers) if (!epByNote.has(c)) epByNote.set(c, { id: ep.id, title: ep.data.title });
 
-  return notes.map((note, i) => ({
+  const listed = notes.map((note, i) => ({
     params: { slug: note.id },
     props: {
       note,
@@ -29,11 +29,26 @@ export async function getStaticPaths() {
       episode: epByNote.get(note.id) ?? null,
       newer: notes[i - 1] ?? null,
       older: notes[i + 1] ?? null,
+      unlisted: false,
     },
   }));
+  // Draft notes are unlisted: built at their URL for review and sharing, marked noindex, and left
+  // out of the stream, prev/next, RSS, sitemap and agent feeds (all of which filter on !draft).
+  const unlisted = (await getCollection('notes', ({ data }) => data.draft)).map((note) => ({
+    params: { slug: note.id },
+    props: {
+      note,
+      domain: note.data.domain ? domainBySlug.get(note.data.domain) ?? null : null,
+      episode: null,
+      newer: null,
+      older: null,
+      unlisted: true,
+    },
+  }));
+  return [...listed, ...unlisted];
 }
 
-const { note, domain, episode, newer, older } = Astro.props;
+const { note, domain, episode, newer, older, unlisted } = Astro.props;
 const { title, date, summary, tags, takeaways } = note.data;
 
 const accent = domain ? accentOf(domain.phase) : '#b8430f';
@@ -86,7 +101,7 @@ const jsonLd = [
 ];
 ---
 
-<Base active="notes" title={`${title} — Agent Native Engineering`} description={summary} ogType="article" jsonLd={jsonLd}>
+<Base active="notes" title={`${title} — Agent Native Engineering`} description={summary} ogType="article" jsonLd={jsonLd} noindex={unlisted}>
   <div class="wrap" data-r="pad">
     <article class="article" style={`--accent:${accent}`}>
       <a class="backlink" href="/field-notes/">← Daily Notes</a>
